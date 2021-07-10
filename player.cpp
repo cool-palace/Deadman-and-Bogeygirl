@@ -7,6 +7,7 @@
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
     // set graphic
     setPixmap(QPixmap(":/images/player.png"));
+    setScale(3);
 }
 
 void Player::keyPressEvent(QKeyEvent *event){
@@ -18,10 +19,10 @@ void Player::keyPressEvent(QKeyEvent *event){
             setPos(0, y());
         }
     else if (event->key() == Qt::Key_Right){
-        if (pos().x() + 10 < 800 - 16)
+        if (pos().x() + 10 < 800 - boundingRect().width()*scale())
             setPos(x()+10,y());
         else if (pos().x() + 10 < 800)
-            setPos(800 - 16, y());
+            setPos(800 - boundingRect().width()*scale(), y());
     }
     else if (event->key() == Qt::Key_Up){
         if (pos().y() > 10)
@@ -31,10 +32,10 @@ void Player::keyPressEvent(QKeyEvent *event){
         qDebug() << y();
     }
     else if (event->key() == Qt::Key_Down){
-        if (pos().y() < 600 - 32 - 10)
+        if (pos().y() < 600 - boundingRect().height()*scale() - 10)
             setPos(x(),y()+10);
-        else if (pos().y() < 600 - 32)
-            setPos(x(),600-32);
+        else if (pos().y() < 600 - boundingRect().height()*scale())
+            setPos(x(),600-boundingRect().height()*scale());
         qDebug() << y();
     }
 
