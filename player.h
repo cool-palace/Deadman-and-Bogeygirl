@@ -11,9 +11,15 @@ class Player : public QObject, public QGraphicsPixmapItem{
 public:
     Player(QGraphicsItem * parent=0);
     void keyPressEvent(QKeyEvent * event);
+    bool isMovable = true;
+    void setMovable();
+    void setImmobile();
+
+public slots:
+    //void dialog();
 
 signals:
-
+    void inRange();
 };
 
 #endif // PLAYER_H

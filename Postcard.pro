@@ -10,12 +10,14 @@ CONFIG += c++11
 
 SOURCES += \
     button.cpp \
+    deadman.cpp \
     game.cpp \
     main.cpp \
     player.cpp
 
 HEADERS += \
     button.h \
+    deadman.h \
     game.h \
     player.h
 

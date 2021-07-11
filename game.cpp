@@ -8,13 +8,12 @@ Game::Game(QWidget* parent)
     scene = new QGraphicsScene();
     scene->setSceneRect(0,0,800,600); // make the scene 800x600 instead of infinity by infinity (default)
 
-
     // make the newly created scene the scene to visualize (since Game is a QGraphicsView Widget,
     // it can be used to visualize scenes)
     setScene(scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFixedSize(800,600);
+    setFixedSize(scene->width(),scene->height());
 
 }
 
@@ -23,12 +22,21 @@ void Game::start(){
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
 
+    // create the dead man
+    deadman = new Deadman();
+    deadman->setPos(400,100); // TODO generalize to always be in the middle bottom of screen
+
+    // add the dead man to the scene
+    scene->addItem(deadman);
+
     // create the player
     player = new Player();
     player->setPos(400,300); // TODO generalize to always be in the middle bottom of screen
     // make the player focusable and set it to be the current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
+
+    connect(player,SIGNAL(inRange()),this->deadman,SLOT(talk()));
     // add the player to the scene
     scene->addItem(player);
 
@@ -38,7 +46,7 @@ void Game::start(){
 void Game::displayMainMenu(){
     // create the title text
     QGraphicsTextItem* titleText = new QGraphicsTextItem(QString("Открыточка"));
-    QFont titleFont("comic sans",50);
+    QFont titleFont("Comic Sans",50);
     titleText->setFont(titleFont);
     int txPos = this->width()/2 - titleText->boundingRect().width()/2;
     int tyPos = 150;
