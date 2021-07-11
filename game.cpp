@@ -29,6 +29,10 @@ void Game::start(){
     // add the dead man to the scene
     scene->addItem(deadman);
 
+    // create a dialog box
+    dialogbox = new DialogBox();
+    scene->addItem(dialogbox);
+
     // create the player
     player = new Player();
     player->setPos(400,300); // TODO generalize to always be in the middle bottom of screen
@@ -36,7 +40,9 @@ void Game::start(){
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
 
-    connect(player,SIGNAL(inRange()),this->deadman,SLOT(talk()));
+
+    //connect(player,SIGNAL(inRange()),this->deadman,SLOT(talk()));
+    connect(player,SIGNAL(inRange()),this->dialogbox,SLOT(showbox()));
     // add the player to the scene
     scene->addItem(player);
 

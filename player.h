@@ -19,7 +19,7 @@ public slots:
     //void dialog();
 
 signals:
-    void inRange();
+    bool inRange();
 };
 
 #endif // PLAYER_H

@@ -7,7 +7,7 @@
 
 extern Game * game; // there is an external global object called game
 extern Deadman * deadman; // there is an external global object called deadman
-int step = 10;
+int step = 32;
 
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
     // set graphic
@@ -25,35 +25,43 @@ void Player::setImmobile() {
 
 void Player::keyPressEvent(QKeyEvent *event){
 
+    // if a dialog box is open, player can't move until she presses the space button
+    if (game->dialogbox->isVisible()) {
+        if (event->key() == Qt::Key_Space) {
+        game->dialogbox->hide();
+        }
+        return;
+    }
+
+
     // calculating new position
     QPointF newPos = pos();
-    if (event->key() == Qt::Key_Left) {
+    if (event->key() == Qt::Key_Left || event->key() == Qt::Key_A) {
         if (x() > 0) {
             if (x()-step > 0) {
                 newPos.setX(x()-step);
             } else newPos.setX(0);
         }
     }
-    else if (event->key() == Qt::Key_Right){
+    else if (event->key() == Qt::Key_Right || event->key() == Qt::Key_D){
         if (x() < game->scene->width() - boundingRect().width()*scale()) {
             if (x()+step < game->scene->width() - boundingRect().width()*scale()) {
                 newPos.setX(x()+step);
             } else newPos.setX(game->scene->width() - boundingRect().width()*scale());
         }
     }
-    else if (event->key() == Qt::Key_Up){
+    else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_W){
         if (y() > 0) {
             if (y()-step > 0) {
                 newPos.setY(y()-step);
             } else newPos.setY(0);
         }
     }
-    else if (event->key() == Qt::Key_Down){
+    else if (event->key() == Qt::Key_Down || event->key() == Qt::Key_S){
         if (y() < game->scene->height() - boundingRect().height()*scale()) {
             if (y() + step < game->scene->height() - boundingRect().height()*scale()) {
                 newPos.setY(y()+step);
             } else newPos.setY(game->scene->height() - boundingRect().height()*scale());
-        qDebug() << y();
         }
     }
 
@@ -67,7 +75,6 @@ void Player::keyPressEvent(QKeyEvent *event){
         setImmobile();
         for (int i = 1, n = colliding_items.size(); i < n; ++i) {
             if (typeid(*(colliding_items[i])) == typeid(Deadman)) {
-            //game->deadman->talk();
                 emit inRange();
             }
         }

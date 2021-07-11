@@ -6,6 +6,7 @@
 #include <QGraphicsScene>
 #include "player.h"
 #include "deadman.h"
+#include "dialogbox.h"
 //#include "Score.h"
 //#include "Health.h"
 
@@ -22,6 +23,7 @@ public:
     QGraphicsScene * scene;
     Player * player;
     Deadman * deadman;
+    DialogBox * dialogbox;
 //    Score * score;
 //    Health * health;
 

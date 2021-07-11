@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     button.cpp \
     deadman.cpp \
+    dialogbox.cpp \
     game.cpp \
     main.cpp \
     player.cpp
@@ -18,6 +19,7 @@ SOURCES += \
 HEADERS += \
     button.h \
     deadman.h \
+    dialogbox.h \
     game.h \
     player.h
 
@@ -30,3 +32,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res.qrc
+
+DISTFILES +=
