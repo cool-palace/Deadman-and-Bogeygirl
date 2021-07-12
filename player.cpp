@@ -28,7 +28,7 @@ void Player::keyPressEvent(QKeyEvent *event){
     // if a dialog box is open, player can't move until she presses the space button
     if (game->dialogbox->isVisible()) {
         if (event->key() == Qt::Key_Space) {
-        game->dialogbox->hide();
+            game->dialogbox->hide();
         }
         return;
     }

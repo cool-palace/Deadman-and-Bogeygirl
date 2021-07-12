@@ -10,6 +10,9 @@ class DialogBox : public QObject, public QGraphicsItemGroup
     Q_OBJECT
 public:
     DialogBox(QGraphicsItem * parent=0);
+    QGraphicsRectItem * background;
+    QGraphicsPixmapItem * avatar;
+    QGraphicsTextItem * line;
 
 public slots:
     void showbox();
