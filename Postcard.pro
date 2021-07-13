@@ -14,14 +14,16 @@ SOURCES += \
     dialogbox.cpp \
     game.cpp \
     main.cpp \
-    player.cpp
+    player.cpp \
+    speechline.cpp
 
 HEADERS += \
     button.h \
     deadman.h \
     dialogbox.h \
     game.h \
-    player.h
+    player.h \
+    speechline.h
 
 FORMS +=
 

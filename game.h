@@ -24,8 +24,8 @@ public:
     Player * player;
     Deadman * deadman;
     DialogBox * dialogbox;
-//    Score * score;
-//    Health * health;
+//    QGraphicsTextItem * line;
+//    QGraphicsPixmapItem * avatar;
 
 public slots:
     void start();

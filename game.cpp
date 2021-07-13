@@ -40,9 +40,11 @@ void Game::start(){
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
 
+    connect(player,SIGNAL(dialogCall(int)),this->deadman,SLOT(talk(int)));
+    connect(player,SIGNAL(next(int)),this->deadman,SLOT(talk(int)));
+    connect(deadman,SIGNAL(getbox(Speechline*)),dialogbox,SLOT(showbox(Speechline*)));
+    connect(deadman,SIGNAL(over()),dialogbox,SLOT(hidebox()));
 
-    //connect(player,SIGNAL(inRange()),this->deadman,SLOT(talk()));
-    connect(player,SIGNAL(inRange()),this->dialogbox,SLOT(showbox()));
     // add the player to the scene
     scene->addItem(player);
 

@@ -4,18 +4,17 @@
 #include <QObject>
 #include <QGraphicsItem>
 #include <QGraphicsItemGroup>
+#include "speechline.h"
 
-class DialogBox : public QObject, public QGraphicsItemGroup
+class DialogBox : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 public:
     DialogBox(QGraphicsItem * parent=0);
-    QGraphicsRectItem * background;
-    QGraphicsPixmapItem * avatar;
-    QGraphicsTextItem * line;
 
 public slots:
-    void showbox();
+    void showbox(Speechline* speechline);
+    void hidebox();
 
 signals:
 

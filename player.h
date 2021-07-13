@@ -14,12 +14,14 @@ public:
     bool isMovable = true;
     void setMovable();
     void setImmobile();
+    int currentLineIndex = 0;
 
 public slots:
     //void dialog();
 
 signals:
-    bool inRange();
+    void dialogCall(int i);
+    void next(int i);
 };
 
 #endif // PLAYER_H
