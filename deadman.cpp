@@ -12,11 +12,12 @@ Deadman::Deadman(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
 }
 
 void Deadman::talk(int lineIndex) {
-    if (lineIndex < speech.size()) {
-        emit getbox(&speech[lineIndex]);
-        qDebug() << "Line get";
+    QVector<Speechline> sp;
+    if (!introduced) sp = speech;
+    else sp = speech2;
+    if (lineIndex < sp.size()) {
+        emit getbox(&sp[lineIndex]);
     } else {
         emit over();
-        qDebug() << "Dialog over";
     }
 }

@@ -10,7 +10,7 @@ class DialogBox : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 public:
-    DialogBox(QGraphicsItem * parent=0);
+    DialogBox(QGraphicsItem * parent = nullptr);
 
 public slots:
     void showbox(Speechline* speechline);

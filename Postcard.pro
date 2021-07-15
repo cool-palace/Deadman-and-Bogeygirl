@@ -1,4 +1,5 @@
 QT       += core gui
+QT  += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,19 +11,27 @@ CONFIG += c++11
 
 SOURCES += \
     button.cpp \
+    chalk.cpp \
     deadman.cpp \
     dialogbox.cpp \
+    digit.cpp \
     game.cpp \
     main.cpp \
     player.cpp \
+    riddle.cpp \
+    riddlebox.cpp \
     speechline.cpp
 
 HEADERS += \
     button.h \
+    chalk.h \
     deadman.h \
     dialogbox.h \
+    digit.h \
     game.h \
     player.h \
+    riddle.h \
+    riddlebox.h \
     speechline.h
 
 FORMS +=

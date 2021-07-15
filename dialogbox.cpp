@@ -70,6 +70,7 @@ void DialogBox::showbox(Speechline* speechline) {
 
 void DialogBox::hidebox() {
     game->player->currentLineIndex = 0;
+    game->deadman->introduced = true;
     hide();
 }
 

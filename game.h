@@ -7,6 +7,9 @@
 #include "player.h"
 #include "deadman.h"
 #include "dialogbox.h"
+
+#include <QVector>
+#include <riddle.h>
 //#include "Score.h"
 //#include "Health.h"
 
@@ -27,8 +30,12 @@ public:
 //    QGraphicsTextItem * line;
 //    QGraphicsPixmapItem * avatar;
 
+    QVector<Riddle> riddles =
+        {{"Две средние цифры года твоего рождения, повторённые дважды", "0000"}};
+
 public slots:
     void start();
+    void asmr();
 
 };
 
