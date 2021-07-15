@@ -14,58 +14,78 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::darkBlue);
 
-//    QGraphicsRectItem * background = new QGraphicsRectItem(this);
-//    QGraphicsPixmapItem * avatar = new QGraphicsPixmapItem(this);
-//    QGraphicsTextItem * line = new QGraphicsTextItem(this);
-
-    // set backgroung
-//    background->setRect(0,450,800,150);
-//    background->setBrush(brush);
-
     setRect(0,450,800,150);
     setBrush(brush);
 
-//    // set avatar
-//    avatar->setPixmap(QPixmap(speechline->speaker));
-//    avatar->setPos(0,450);
+    line = new QGraphicsTextItem(this);
+    avatar = new QGraphicsPixmapItem(this);
 
-//    // set text
-//    line->setPlainText(speechline->line);
-//    line->setDefaultTextColor(Qt::white);
-//    line->setPos(150, 450);
-//    line->setScale(2);
-//    line->setTextWidth(700/line->scale());
+    avatar->setPos(0,450);
 
-//    // composing
-//    addToGroup(background);
-//    addToGroup(avatar);
-//    addToGroup(line);
+    line->setDefaultTextColor(Qt::white);
+    line->setPos(150, 450);
+    line->setScale(2);
+    line->setTextWidth(700/line->scale());
 
-//    delete avatar;
-//    delete line;
+    setEnabled(true);
+
     hide();
 }
 
-void DialogBox::showbox(Speechline* speechline) {
-    hide();
-    QList<QGraphicsItem *> children = childItems();
-    for (int i = 0, n = children.size(); i < n; ++i) {
-        delete children[i];
-    }
+void DialogBox::keyPressEvent(QKeyEvent *event){
 
-    QGraphicsTextItem * line = new QGraphicsTextItem(this);
-    QGraphicsPixmapItem * avatar = new QGraphicsPixmapItem(this);
+    // if a dialog box is open, player can't move until she presses the space button
+//    if (isVisible()) {
+        if (event->key() == Qt::Key_Space) {
+            if (start == end) {
+                hide();
+                ungrabKeyboard();
+//                setEnabled(false);
+//                this->clearFocus();
+//                game->player->setFocus();
+                qDebug() << "Hiding";
+            } else {
+                ++start;
+                getBox(start, end);
+            }
+            //++currentLineIndex;
+//            emit game->player->next(game->player->currentLineIndex);
 
-    avatar->setPixmap(QPixmap(speechline->speaker));
+            qDebug() << "Trying to get the next line";
+            //game->dialogbox->hide();
+        }
+//        return;
+//    }
+}
+
+//void DialogBox::showbox(Speechline* speechline) {
+void DialogBox::getBox(int in_start, int in_end) {
+
+    start = in_start;
+    end = in_end;
+//    QList<QGraphicsItem *> children = childItems();
+//    for (int i = 0, n = children.size(); i < n; ++i) {
+//        delete children[i];
+//    }
+
+//    QGraphicsTextItem * line = new QGraphicsTextItem(this);
+//    QGraphicsPixmapItem * avatar = new QGraphicsPixmapItem(this);
+//    line = new QGraphicsTextItem(this);
+//    avatar = new QGraphicsPixmapItem(this);
+
+//    avatar->setPixmap(QPixmap(speechline->speaker));
+    avatar->setPixmap(QPixmap(game->speech[start].speaker));
     avatar->setPos(0,450);
 
-    line->setPlainText(speechline->line);
+//    line->setPlainText(speechline->line);
+    line->setPlainText(game->speech[start].line);
     line->setDefaultTextColor(Qt::white);
     line->setPos(150, 450);
     line->setScale(2);
     line->setTextWidth(700/line->scale());
 
     show();
+    grabKeyboard();
 }
 
 void DialogBox::hidebox() {

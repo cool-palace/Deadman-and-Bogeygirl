@@ -20,7 +20,8 @@ public slots:
     //void dialog();
 
 signals:
-    void dialogCall(int i);
+//    void dialogCall(int i);
+    void dialogCall(int start, int end);
     void next(int i);
 };
 

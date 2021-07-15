@@ -67,7 +67,7 @@ void RiddleBox::showRiddle(Riddle * riddle) {
 
     connect(confirmButton,SIGNAL(clicked()),this,SLOT(checkAnswer()));
 
-    connect(this,SIGNAL(wrongAnswer()),game->deadman,SLOT(game->deadman->talk(int)));
+    //connect(this,SIGNAL(wrongAnswer()),game->deadman,SLOT(game->deadman->talk(int)));
 
     show();
 

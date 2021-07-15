@@ -26,15 +26,15 @@ void Player::setImmobile() {
 void Player::keyPressEvent(QKeyEvent *event){
 
     // if a dialog box is open, player can't move until she presses the space button
-    if (game->dialogbox->isVisible()) {
-        if (event->key() == Qt::Key_Space) {
-            ++currentLineIndex;
-            emit next(currentLineIndex);
-            qDebug() << "Trying to get the next line";
-            //game->dialogbox->hide();
-        }
-        return;
-    }
+//    if (game->dialogbox->isVisible()) {
+//        if (event->key() == Qt::Key_Space) {
+//            ++currentLineIndex;
+//            emit next(currentLineIndex);
+//            qDebug() << "Trying to get the next line";
+//            //game->dialogbox->hide();
+//        }
+//        return;
+//    }
 
     // calculating new position
 
@@ -78,7 +78,9 @@ void Player::keyPressEvent(QKeyEvent *event){
         setImmobile();
         for (int i = 1, n = colliding_items.size(); i < n; ++i) {
             if (typeid(*(colliding_items[i])) == typeid(Deadman)) {
-                emit dialogCall(0);
+                if (game->dialogbox->end == 0) {
+                    emit dialogCall(0,1);
+                } else emit dialogCall(2,2);
                 qDebug() << "Trying to get dialog";
             }
         }

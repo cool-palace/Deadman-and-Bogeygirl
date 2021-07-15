@@ -15,8 +15,6 @@ public slots:
     void increase();
     void decrease();
 
-
-
 };
 
 #endif // DIGIT_H

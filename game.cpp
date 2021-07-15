@@ -33,6 +33,7 @@ void Game::start(){
 
     // create a dialog box
     dialogbox = new DialogBox();
+    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
     scene->addItem(dialogbox);
 
     // create the player
@@ -42,10 +43,11 @@ void Game::start(){
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
 
-    connect(player,SIGNAL(dialogCall(int)),this->deadman,SLOT(talk(int)));
-    connect(player,SIGNAL(next(int)),this->deadman,SLOT(talk(int)));
-    connect(deadman,SIGNAL(getbox(Speechline*)),dialogbox,SLOT(showbox(Speechline*)));
-    connect(deadman,SIGNAL(over()),dialogbox,SLOT(hidebox()));
+//    connect(player,SIGNAL(dialogCall(int)),this->deadman,SLOT(talk(int)));
+//    connect(player,SIGNAL(next(int)),this->deadman,SLOT(talk(int)));
+//    connect(deadman,SIGNAL(getbox(Speechline*)),dialogbox,SLOT(showbox(Speechline*)));
+//    connect(deadman,SIGNAL(over()),dialogbox,SLOT(hidebox()));
+    connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
 
     // add the player to the scene
     scene->addItem(player);
@@ -68,8 +70,8 @@ void Game::displayMainMenu(){
     int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
-    //connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
-    connect(playButton,SIGNAL(clicked()),this,SLOT(asmr()));
+    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
+    //connect(playButton,SIGNAL(clicked()),this,SLOT(asmr()));
     scene->addItem(playButton);
 
     // create the quit button

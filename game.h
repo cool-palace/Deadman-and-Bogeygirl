@@ -33,6 +33,12 @@ public:
     QVector<Riddle> riddles =
         {{"Две средние цифры года твоего рождения, повторённые дважды", "0000"}};
 
+    QVector<Speechline> speech = {{":/images/player.png", "Привет"},
+                                 {":/images/player.png", "Как тебя зовут?"},
+                                 {":/images/player.png", "Я уже видел тебя"},
+                                 {":/images/deadman.png", "Что-то не совпадает. Попробуй проверить ответ."},
+                                 {":/images/deadman.png", "Всё верно!"}};
+
 public slots:
     void start();
     void asmr();
