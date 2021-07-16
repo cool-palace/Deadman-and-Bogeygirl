@@ -15,6 +15,8 @@ public:
     void setMovable();
     void setImmobile();
     int currentLineIndex = 0;
+    bool left = true;
+    //QPointF diff;
 
 public slots:
     //void dialog();
@@ -22,7 +24,7 @@ public slots:
 signals:
 //    void dialogCall(int i);
     void dialogCall(int start, int end);
-    void next(int i);
+    void goingOut();
 };
 
 #endif // PLAYER_H

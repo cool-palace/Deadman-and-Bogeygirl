@@ -7,7 +7,8 @@
 #include "player.h"
 #include "deadman.h"
 #include "dialogbox.h"
-
+#include "chalk.h"
+#include "riddlebox.h"
 #include <QVector>
 #include <riddle.h>
 //#include "Score.h"
@@ -21,27 +22,29 @@ public:
 
     // public methods
     void displayMainMenu();
+//    void keyPressEvent(QKeyEvent * event);
 
     // public attributes
     QGraphicsScene * scene;
     Player * player;
     Deadman * deadman;
     DialogBox * dialogbox;
+    Chalk * chalk;
+    RiddleBox * riddlebox;
+    QPointF currentViewPos = {0, 0};
+    QGraphicsPixmapItem * exit;
+
 //    QGraphicsTextItem * line;
 //    QGraphicsPixmapItem * avatar;
 
-    QVector<Riddle> riddles =
-        {{"Две средние цифры года твоего рождения, повторённые дважды", "0000"}};
+    const static QVector<Riddle> riddles;
 
-    QVector<Speechline> speech = {{":/images/player.png", "Привет"},
-                                 {":/images/player.png", "Как тебя зовут?"},
-                                 {":/images/player.png", "Я уже видел тебя"},
-                                 {":/images/deadman.png", "Что-то не совпадает. Попробуй проверить ответ."},
-                                 {":/images/deadman.png", "Всё верно!"}};
+    const static QVector<Speechline> speech;
 
 public slots:
     void start();
     void asmr();
+    void outside();
 
 };
 

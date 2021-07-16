@@ -9,5 +9,7 @@
         <file>asmr-4.png</file>
         <file>asmr-5.png</file>
         <file>parchment.png</file>
+        <file>bg-big.png</file>
+        <file>exit.png</file>
     </qresource>
 </RCC>

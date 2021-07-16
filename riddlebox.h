@@ -17,15 +17,14 @@ public:
     QString answer;
 
 public slots:
-    void showRiddle(Riddle * riddle);
+    void showRiddle(const Riddle * riddle);
     void checkAnswer();
     //void checkAnswer(Riddle *riddle, Digit *digits[]);
    // void hideRiddle();
 
 signals:
     //void checkAnswer(Riddle *riddle, Digit *digits[]);
-    void wrongAnswer();
-    void rightAnswer();
+    void result(int, int);
 
 };
 

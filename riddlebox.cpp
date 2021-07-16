@@ -18,7 +18,7 @@ RiddleBox::RiddleBox(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(pa
 //    }
 }
 
-void RiddleBox::showRiddle(Riddle * riddle) {
+void RiddleBox::showRiddle(const Riddle * riddle) {
     // hide();
     //delete digits[4];
 
@@ -32,7 +32,8 @@ void RiddleBox::showRiddle(Riddle * riddle) {
     question->setHtml(riddle->question);
     question->setDefaultTextColor(Qt::black);
     question->setFont({"Comic Sans", 18});
-    qreal textWidth = (question->boundingRect().width()-200) / question->scale();
+//    qreal textWidth = (question->boundingRect().width()-200) / question->scale();
+    qreal textWidth = 500;
     question->setTextWidth(textWidth);
 
     // memorizing the answer
@@ -78,11 +79,11 @@ void RiddleBox::checkAnswer() {
     for (int i = 0; i < answer.size(); ++i) {
         s.setNum(digits[i]->value);
         if (s != answer[i]) {
-            emit wrongAnswer();
+            emit result(3,3);
             qDebug() << "wrong";
             return;
         }
     }
-    emit rightAnswer();
+    emit result(4,4);
     qDebug() << "right";
 }

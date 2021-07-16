@@ -24,7 +24,7 @@ void Chalk::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         setPixmap(QPixmap(":/images/asmr-5.png"));
         break;
     case 4:
-        emit cracked(&game->riddles[0]);
+        emit cracked(&game->riddles[3]);
         qDebug() << "Cracked" << cracksCount;
     }
     if (cracksCount < 5) ++cracksCount;

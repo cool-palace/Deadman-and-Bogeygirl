@@ -13,15 +13,15 @@ public:
     DialogBox(QGraphicsItem * parent = nullptr);
     QGraphicsTextItem * line;
     QGraphicsPixmapItem * avatar;
-    int start = 0, end = 0;
+    static int start;
+    static int end;// Важно: либо перенести потом в Game, либо что-то ещё сделать, чтобы значения сохранялись
     void keyPressEvent(QKeyEvent * event);
 
 public slots:
-//    void showbox(Speechline* speechline);
     void getBox(int start, int end);
-    void hidebox();
 
 signals:
+    void chalkCall();
 
 };
 

@@ -7,6 +7,9 @@
 
 extern Game * game; // there is an external global object called game
 
+int DialogBox::start = 0;
+int DialogBox::end = 0;
+
 DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (parent)
 {
     // set the brush
@@ -34,63 +37,51 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
 
 void DialogBox::keyPressEvent(QKeyEvent *event){
 
-    // if a dialog box is open, player can't move until she presses the space button
-//    if (isVisible()) {
-        if (event->key() == Qt::Key_Space) {
-            if (start == end) {
-                hide();
-                ungrabKeyboard();
-//                setEnabled(false);
-//                this->clearFocus();
-//                game->player->setFocus();
-                qDebug() << "Hiding";
-            } else {
-                ++start;
-                getBox(start, end);
+    if (event->key() == Qt::Key_Space) {
+        if (start == end) {
+            hide();
+            game->player->setFocus();
+            if (end == 1) {
+                emit chalkCall();
+                qDebug() << "Trying to get the chalk";
+            } else if (end == 4) {
+                // Тут можно просто hide() в качестве альтернативы
+                game->chalk->~Chalk();
+                game->riddlebox->~RiddleBox();
+                game->exit->show();
             }
-            //++currentLineIndex;
-//            emit game->player->next(game->player->currentLineIndex);
 
-            qDebug() << "Trying to get the next line";
-            //game->dialogbox->hide();
+        } else {
+            ++start;
+            getBox(start, end);
         }
-//        return;
-//    }
+        qDebug() << "Trying to get the next line";
+    }
 }
 
-//void DialogBox::showbox(Speechline* speechline) {
 void DialogBox::getBox(int in_start, int in_end) {
 
     start = in_start;
     end = in_end;
-//    QList<QGraphicsItem *> children = childItems();
-//    for (int i = 0, n = children.size(); i < n; ++i) {
-//        delete children[i];
-//    }
 
-//    QGraphicsTextItem * line = new QGraphicsTextItem(this);
-//    QGraphicsPixmapItem * avatar = new QGraphicsPixmapItem(this);
-//    line = new QGraphicsTextItem(this);
-//    avatar = new QGraphicsPixmapItem(this);
+    int xPos = 0, yPos = 450;
 
-//    avatar->setPixmap(QPixmap(speechline->speaker));
+    if (game->scene->width() > 800) {
+        xPos += game->player->x() + game->player->boundingRect().width() / 2 - game->sceneRect().width() / 2;
+        yPos += game->player->y() + game->player->boundingRect().height() / 2 - game->sceneRect().height() / 2;
+        setRect(xPos,yPos,800,150);
+    }
+
     avatar->setPixmap(QPixmap(game->speech[start].speaker));
-    avatar->setPos(0,450);
+    avatar->setPos(xPos,yPos);
 
-//    line->setPlainText(speechline->line);
     line->setPlainText(game->speech[start].line);
     line->setDefaultTextColor(Qt::white);
-    line->setPos(150, 450);
+    line->setPos(xPos+150,yPos);
     line->setScale(2);
     line->setTextWidth(700/line->scale());
 
     show();
     grabKeyboard();
-}
-
-void DialogBox::hidebox() {
-    game->player->currentLineIndex = 0;
-    game->deadman->introduced = true;
-    hide();
 }
 

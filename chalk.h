@@ -19,7 +19,7 @@ public:
     //void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 signals:
-    void cracked(Riddle * riddle);
+    void cracked(const Riddle * riddle);
 
 };
 
