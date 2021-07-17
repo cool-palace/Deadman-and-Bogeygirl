@@ -2,6 +2,7 @@
 #include "button.h"
 #include <QKeyEvent>
 #include <QGraphicsTextItem>
+#include "snackgame.h"
 
 Game::Game(QWidget* parent)
 {
@@ -21,15 +22,17 @@ Game::Game(QWidget* parent)
 void Game::start(){
     // clear the screen
     scene->clear();
-    setBackgroundBrush(QBrush(QImage(":/images/bg-big.png")));
+    setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
     scene->setSceneRect(0,0,800,600);
-    //setBackgroundBrush(QBrush(QImage(":/images/bg-big.png")));
+    setSceneRect(0,0,800,600);
+    currentViewPos = {0, 0};
 
     // create the dead man
     deadman = new Deadman();
-    int dxPos = this->width()/2 - deadman->boundingRect().width()/2;
+    int dxPos = scene->width()/2 - deadman->boundingRect().width()/2*deadman->scale();
     int dyPos = 100;
-    deadman->setPos(dxPos, dyPos); // TODO generalize to always be in the middle bottom of screen
+    deadman->setPos(dxPos, dyPos);
+    deadman->setFlag(QGraphicsItem::ItemIsFocusable);
 
     // add the dead man to the scene
     scene->addItem(deadman);
@@ -42,18 +45,21 @@ void Game::start(){
     // create an exit
     exit = new QGraphicsPixmapItem();
     exit->setPixmap(QPixmap(":/images/exit.png"));
-    int exPos = this->width()/2 - exit->boundingRect().width()/2;
-    int eyPos = this->height() - exit->boundingRect().height();
+    int exPos = scene->width()/2 - exit->boundingRect().width()/2;
+    int eyPos = scene->height() - exit->boundingRect().height();
     exit->setPos(exPos, eyPos);
-    exit->hide();
+    //exit->hide();
+    exit->show();
     scene->addItem(exit);
 
     // create the player
     player = new Player();
-    int pxPos = this->width()/2 - player->boundingRect().width()/2;
-    int pyPos = this->height()/2 - player->boundingRect().height()/2;
-    player->setPos(pxPos,pyPos); // TODO generalize to always be in the middle bottom of screen
+//    int pxPos = scene->width()/2 - player->boundingRect().width()*player->scale()/2;
+//    int pyPos = scene->height()/2 - player->boundingRect().height()*player->scale()/2;
+//    player->setPos(pxPos,pyPos); // TODO generalize to always be in the middle bottom of screen
+    player->setPos(380,450);
     // make the player focusable and set it to be the current focus
+    player->setMovable();
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
 
@@ -82,7 +88,8 @@ void Game::displayMainMenu(){
     int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
-    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
+    //connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
+    connect(playButton,SIGNAL(clicked()),this,SLOT(snacks_game()));
 //    connect(playButton,SIGNAL(clicked()),this,SLOT(asmr()));
 //    connect(playButton,SIGNAL(clicked()),this,SLOT(outside()));
     scene->addItem(playButton);
@@ -119,13 +126,15 @@ void Game::outside() {
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg-big.png")));
     scene->setSceneRect(0,0,2400,1800);
+    setSceneRect(800,0,800,600);
+    currentViewPos = {800, 0};
 
-    // create the dead man
-//    deadman = new Deadman();
-//    deadman->setPos(400,100);
-
-    // add the dead man to the scene
-//    scene->addItem(deadman);
+    // create the cave
+    cave = new Cave();
+    int cxPos = scene->width()/2 - cave->boundingRect().width()*cave->scale()/2;
+    int cyPos = 0;
+    cave->setPos(cxPos, cyPos);
+    scene->addItem(cave);
 
     // create a dialog box
     dialogbox = new DialogBox();
@@ -134,15 +143,16 @@ void Game::outside() {
 
     // create the player
     player = new Player();
-    int pxPos = this->width()/2 - player->boundingRect().width()/2;
-    int pyPos = this->height()/2 - player->boundingRect().height()/2;
-    player->setPos(pxPos,pyPos); // TODO generalize to always be in the middle bottom of screen
+    int pxPos = scene->width()/2 - player->boundingRect().width()/2;
+    int pyPos = cyPos + cave->boundingRect().height()*cave->scale()+5;
+    player->setPos(pxPos,pyPos);
     // make the player focusable and set it to be the current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     //centerOn(player);
 
     connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
+    connect(player,SIGNAL(goingIn()),this,SLOT(start()));
     //connect(dialogbox,SIGNAL(chalkCall()),this,SLOT(asmr()));
 
     // add the player to the scene
@@ -151,19 +161,51 @@ void Game::outside() {
     show();
 }
 
+void Game::snacks_game() {
+    scene->clear();
+    //setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
+    //scene->setSceneRect(0,0,800,600);
+    //setSceneRect(0,0,800,600);
+
+    // create a dialog box
+    dialogbox = new DialogBox();
+    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+
+    player = new Player();
+    player->hide(); // тут проверить, скорее всего можно убрать и диалог не будет бросать сегфолт
+
+    SnackGame * snackGame = new SnackGame();
+    scene->addItem(snackGame);
+    scene->addItem(dialogbox);
+
+    connect(snackGame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    show();
+}
+
 const QVector<Riddle> Game::riddles =
     {{"Две средние цифры года твоего рождения, повторённые дважды", "0000"},
      {"Средние две цифры - это последние цифры твоего предыдущего номера телефона, а цифры по краям повторяют соседние для них", "4499"},
      {"Первая цифра - номер дня недели,<br>в который ты получила эту открытку,<br>"
       "а последние две - номер твоего дома", "324"},
-     {"Для каждой буквы из своего имени<br>возьми их порядковые номера в алфавите и сложи их все вместе.<br>В результате поменяй цифры местами", "67"}
+     {"Для каждой буквы из своего имени<br>возьми их порядковые номера в алфавите и сложи их все вместе. В полученной сумме поменяй цифры местами", "67"}
 
 
     };
 
-const QVector<Speechline> Game::speech = {{":/images/player.png", "Привет"},
+const QVector<Speechline> Game::speech = {{":/images/player.png", "Привет"}, //0//
                              {":/images/player.png", "Как тебя зовут?"},
                              {":/images/player.png", "Я уже видел тебя"},
                              {":/images/deadman.png", "Что-то не совпадает. Попробуй проверить ответ."},
-                             {":/images/deadman.png", "Всё верно!"}};
+                             {":/images/deadman.png", "Всё верно!"},
+                             {":/images/player.png", "Вроде вкусно, но надо сравнить..."}, //5
+                             {":/images/player.png", "Бе... По сравнению с тем, вообще невкусно!"}, // разница сырков -4
+                             {":/images/player.png", "Ну такое..."},
+                             {":/images/player.png", "Предыдущий мне понравился больше."},
+                             {":/images/player.png", "Ничего, но тот был получше."},
+                             {":/images/player.png", "Вкус такой же. Надо попробовать другие."},   //10 разница сырков 0
+                             {":/images/player.png", "На вкус чуть получше, чем тот."},
+                             {":/images/player.png", "Вкусненько, этот мне нравится больше."},
+                             {":/images/player.png", "Очень вкусно, намного лучше предыдущего!"},
+                             {":/images/player.png", "Это лучший сырок, который я пробовала!"},      //14
+                                         };
 

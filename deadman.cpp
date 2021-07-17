@@ -11,13 +11,19 @@ Deadman::Deadman(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
     setScale(3);
 }
 
-void Deadman::talk(int lineIndex) {
-    QVector<Speechline> sp;
-    if (!introduced) sp = speech;
-    else sp = speech2;
-    if (lineIndex < sp.size()) {
-        emit getbox(&sp[lineIndex]);
-    } else {
-        emit over();
-    }
+void Deadman::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    this->setPos(mapToScene(event->pos()));
+}
+
+void Deadman::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    this->setCursor(QCursor(Qt::ClosedHandCursor));
+    Q_UNUSED(event);
+}
+
+void Deadman::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    this->setCursor(QCursor(Qt::ArrowCursor));
+    Q_UNUSED(event);
 }

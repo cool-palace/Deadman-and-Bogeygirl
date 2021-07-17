@@ -83,6 +83,13 @@ void Player::keyPressEvent(QKeyEvent *event){
                     emit dialogCall(0,1);
                 } else emit dialogCall(2,2);
                     qDebug() << "Trying to get dialog";
+            } else if (typeid(*(colliding_items[i])) == typeid(Cave)) {
+                setImmobile();
+                for (int i = 1, n = colliding_items.size(); i < n; ++i) {
+                    if (typeid(*(colliding_items[i])) == typeid(QGraphicsRectItem))
+                        emit goingIn();
+                        return;
+                }
             } else if (typeid(*(colliding_items[i])) == typeid(QGraphicsPixmapItem)) {
                 emit goingOut();
                 return;

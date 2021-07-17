@@ -9,6 +9,7 @@
 #include "dialogbox.h"
 #include "chalk.h"
 #include "riddlebox.h"
+#include "cave.h"
 #include <QVector>
 #include <riddle.h>
 //#include "Score.h"
@@ -33,6 +34,7 @@ public:
     RiddleBox * riddlebox;
     QPointF currentViewPos = {0, 0};
     QGraphicsPixmapItem * exit;
+    Cave * cave;
 
 //    QGraphicsTextItem * line;
 //    QGraphicsPixmapItem * avatar;
@@ -45,6 +47,7 @@ public slots:
     void start();
     void asmr();
     void outside();
+    void snacks_game();
 
 };
 

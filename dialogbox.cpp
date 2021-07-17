@@ -83,5 +83,6 @@ void DialogBox::getBox(int in_start, int in_end) {
 
     show();
     grabKeyboard();
+    grabMouse();
 }
 

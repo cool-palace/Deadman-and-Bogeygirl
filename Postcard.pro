@@ -11,6 +11,7 @@ CONFIG += c++11
 
 SOURCES += \
     button.cpp \
+    cave.cpp \
     chalk.cpp \
     deadman.cpp \
     dialogbox.cpp \
@@ -20,10 +21,13 @@ SOURCES += \
     player.cpp \
     riddle.cpp \
     riddlebox.cpp \
+    snack.cpp \
+    snackgame.cpp \
     speechline.cpp
 
 HEADERS += \
     button.h \
+    cave.h \
     chalk.h \
     deadman.h \
     dialogbox.h \
@@ -32,6 +36,8 @@ HEADERS += \
     player.h \
     riddle.h \
     riddlebox.h \
+    snack.h \
+    snackgame.h \
     speechline.h
 
 FORMS +=
@@ -43,5 +49,3 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res.qrc
-
-DISTFILES +=

@@ -3,13 +3,24 @@
         <file>player.png</file>
         <file>bg.png</file>
         <file>deadman.png</file>
-        <file>asmr-1.png</file>
-        <file>asmr-2.png</file>
-        <file>asmr-3.png</file>
-        <file>asmr-4.png</file>
-        <file>asmr-5.png</file>
+        <file>asmr.png</file>
         <file>parchment.png</file>
         <file>bg-big.png</file>
         <file>exit.png</file>
+        <file>cave.png</file>
+        <file>cracks.png</file>
+        <file>syrok-small-1.png</file>
+        <file>syrok-small-2.png</file>
+        <file>syrok-small-3.png</file>
+        <file>syrok-small-4.png</file>
+        <file>syrok-small-5.png</file>
+        <file>slot.png</file>
+    </qresource>
+    <qresource prefix="/sounds">
+        <file>crush-1.wav</file>
+        <file>crush-2.wav</file>
+        <file>crush-3.wav</file>
+        <file>crush-4.wav</file>
+        <file>crush-5.wav</file>
     </qresource>
 </RCC>
