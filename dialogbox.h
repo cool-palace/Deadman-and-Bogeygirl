@@ -22,6 +22,7 @@ public slots:
 
 signals:
     void chalkCall();
+    void snackgameCall();
 
 };
 

@@ -23,7 +23,8 @@ SOURCES += \
     riddlebox.cpp \
     snack.cpp \
     snackgame.cpp \
-    speechline.cpp
+    speechline.cpp \
+    tree.cpp
 
 HEADERS += \
     button.h \
@@ -38,7 +39,8 @@ HEADERS += \
     riddlebox.h \
     snack.h \
     snackgame.h \
-    speechline.h
+    speechline.h \
+    tree.h
 
 FORMS +=
 
@@ -49,3 +51,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res.qrc
+
+DISTFILES +=

@@ -24,10 +24,6 @@ SnackGame::SnackGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
         snack_slots[i]->setRect(i*156+offset,300, 136, 100);
         snack_slots[i]->setBrush(brush);
 
-//        snack_slots[i] = new QGraphicsPixmapItem(this);
-//        snack_slots[i]->setPixmap(QPixmap(":/images/slot.png"));
-//        snack_slots[i]->setPos(i*156+offset,300);
-
         number[i] = new QGraphicsTextItem(snack_slots[i]);
         QString str = "<p style=\"text-align:center;\">#%1</p>";
         number[i]->setHtml(str.arg(5 - i));
@@ -52,14 +48,12 @@ void SnackGame::checkAnswer() {
             && snack_slots[1]->collidesWithItem(snacks[1])
             && snack_slots[2]->collidesWithItem(snacks[4])
             && snack_slots[3]->collidesWithItem(snacks[0])
-            && snack_slots[4]->collidesWithItem(snacks[3]))
-    {
-
-        emit result(4,4);
+            && snack_slots[4]->collidesWithItem(snacks[3])) {
+        emit result(16,16);
         qDebug() << "right";
         return;
     }
-    emit result(3,3);
+    emit result(15,15);
     qDebug() << "wrong";
 
 }

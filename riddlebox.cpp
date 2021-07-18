@@ -19,8 +19,6 @@ RiddleBox::RiddleBox(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(pa
 }
 
 void RiddleBox::showRiddle(const Riddle * riddle) {
-    // hide();
-    //delete digits[4];
 
     QList<QGraphicsItem *> children = childItems();
     for (int i = 0, n = children.size(); i < n; ++i) {
@@ -47,7 +45,6 @@ void RiddleBox::showRiddle(const Riddle * riddle) {
 
     Button ** upButtons = new Button*[digitsCount];
     Button ** downButtons = new Button*[digitsCount];
-    //Digit ** digits = new Digit*[digitsCount];
 
     for (int i = 0; i < digitsCount; ++i) {
         qreal offset = xPos + (textWidth - 100 * digitsCount - 20 * (digitsCount - 1)) / 2;
@@ -67,8 +64,6 @@ void RiddleBox::showRiddle(const Riddle * riddle) {
     confirmButton->setPos(boundingRect().width()/2 - confirmButton->boundingRect().width()/2, 475);
 
     connect(confirmButton,SIGNAL(clicked()),this,SLOT(checkAnswer()));
-
-    //connect(this,SIGNAL(wrongAnswer()),game->deadman,SLOT(game->deadman->talk(int)));
 
     show();
 

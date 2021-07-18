@@ -11,19 +11,19 @@ Deadman::Deadman(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
     setScale(3);
 }
 
-void Deadman::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    this->setPos(mapToScene(event->pos()));
-}
+//void Deadman::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+//{
+//    this->setPos(mapToScene(event->pos()));
+//}
 
-void Deadman::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    this->setCursor(QCursor(Qt::ClosedHandCursor));
-    Q_UNUSED(event);
-}
+//void Deadman::mousePressEvent(QGraphicsSceneMouseEvent *event)
+//{
+//    this->setCursor(QCursor(Qt::ClosedHandCursor));
+//    Q_UNUSED(event);
+//}
 
-void Deadman::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    this->setCursor(QCursor(Qt::ArrowCursor));
-    Q_UNUSED(event);
-}
+//void Deadman::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+//{
+//    this->setCursor(QCursor(Qt::ArrowCursor));
+//    Q_UNUSED(event);
+//}

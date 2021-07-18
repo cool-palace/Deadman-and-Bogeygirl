@@ -88,8 +88,8 @@ void Game::displayMainMenu(){
     int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
-    //connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
-    connect(playButton,SIGNAL(clicked()),this,SLOT(snacks_game()));
+    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
+    //connect(playButton,SIGNAL(clicked()),this,SLOT(snacks_game()));
 //    connect(playButton,SIGNAL(clicked()),this,SLOT(asmr()));
 //    connect(playButton,SIGNAL(clicked()),this,SLOT(outside()));
     scene->addItem(playButton);
@@ -136,6 +136,12 @@ void Game::outside() {
     cave->setPos(cxPos, cyPos);
     scene->addItem(cave);
 
+    tree = new Tree();
+    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
+    int tyPos = 600;
+    tree -> setPos(txPos,tyPos);
+    scene->addItem(tree);
+
     // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
@@ -143,8 +149,9 @@ void Game::outside() {
 
     // create the player
     player = new Player();
-    int pxPos = scene->width()/2 - player->boundingRect().width()/2;
-    int pyPos = cyPos + cave->boundingRect().height()*cave->scale()+5;
+    int pxPos = scene->width()/2 - player->boundingRect().width()*player->scale()/2;
+    //int pyPos = cyPos + cave->boundingRect().height()*cave->scale()+5;
+    int pyPos = cave->boundingRect().height()*cave->scale()+5;
     player->setPos(pxPos,pyPos);
     // make the player focusable and set it to be the current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
@@ -154,6 +161,7 @@ void Game::outside() {
     connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
     connect(player,SIGNAL(goingIn()),this,SLOT(start()));
     //connect(dialogbox,SIGNAL(chalkCall()),this,SLOT(asmr()));
+    connect(dialogbox,SIGNAL(snackgameCall()),this,SLOT(snacks_game()));
 
     // add the player to the scene
     scene->addItem(player);
@@ -162,23 +170,23 @@ void Game::outside() {
 }
 
 void Game::snacks_game() {
-    scene->clear();
+    //scene->clear();
     //setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
-    //scene->setSceneRect(0,0,800,600);
-    //setSceneRect(0,0,800,600);
+    scene->setSceneRect(0,0,800,600);
+    setSceneRect(0,0,800,600);
 
     // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
 
-    player = new Player();
-    player->hide(); // тут проверить, скорее всего можно убрать и диалог не будет бросать сегфолт
+//    player = new Player();
+//    player->hide(); // тут проверить, скорее всего можно убрать и диалог не будет бросать сегфолт
 
-    SnackGame * snackGame = new SnackGame();
-    scene->addItem(snackGame);
+    snackgame = new SnackGame();
+    scene->addItem(snackgame);
     scene->addItem(dialogbox);
 
-    connect(snackGame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    connect(snackgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
     show();
 }
 
@@ -196,7 +204,7 @@ const QVector<Speechline> Game::speech = {{":/images/player.png", "Привет"
                              {":/images/player.png", "Как тебя зовут?"},
                              {":/images/player.png", "Я уже видел тебя"},
                              {":/images/deadman.png", "Что-то не совпадает. Попробуй проверить ответ."},
-                             {":/images/deadman.png", "Всё верно!"},
+                             {":/images/deadman.png", "Молодец, всё сходится!"},
                              {":/images/player.png", "Вроде вкусно, но надо сравнить..."}, //5
                              {":/images/player.png", "Бе... По сравнению с тем, вообще невкусно!"}, // разница сырков -4
                              {":/images/player.png", "Ну такое..."},
@@ -206,6 +214,8 @@ const QVector<Speechline> Game::speech = {{":/images/player.png", "Привет"
                              {":/images/player.png", "На вкус чуть получше, чем тот."},
                              {":/images/player.png", "Вкусненько, этот мне нравится больше."},
                              {":/images/player.png", "Очень вкусно, намного лучше предыдущего!"},
-                             {":/images/player.png", "Это лучший сырок, который я пробовала!"},      //14
+                             {":/images/player.png", "Это лучший сырок, который я пробовала!"},
+                             {":/images/kalina.png", "Распробуй сырки получше, пока что-то не совсем правильно."}, //15
+                             {":/images/kalina.png", "Всё правильно, спасибо за обзор на сырки!"},
                                          };
 

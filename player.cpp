@@ -77,19 +77,29 @@ void Player::keyPressEvent(QKeyEvent *event){
 
     if (colliding_items.size() > 1) {
         for (int i = 1, n = colliding_items.size(); i < n; ++i){
+
             if (typeid(*(colliding_items[i])) == typeid(Deadman)){
                 setImmobile();
                 if (game->dialogbox->end == 0) {
                     emit dialogCall(0,1);
                 } else emit dialogCall(2,2);
                     qDebug() << "Trying to get dialog";
+
             } else if (typeid(*(colliding_items[i])) == typeid(Cave)) {
                 setImmobile();
                 for (int i = 1, n = colliding_items.size(); i < n; ++i) {
+                    // Здесь рект - вход в пещеру
                     if (typeid(*(colliding_items[i])) == typeid(QGraphicsRectItem))
                         emit goingIn();
                         return;
                 }
+
+            } else if (typeid(*(colliding_items[i])) == typeid(Tree)) {
+                setImmobile();
+                if (game->dialogbox->end == 0) {
+                    emit dialogCall(0,1);
+                } else emit dialogCall(2,2);
+
             } else if (typeid(*(colliding_items[i])) == typeid(QGraphicsPixmapItem)) {
                 emit goingOut();
                 return;

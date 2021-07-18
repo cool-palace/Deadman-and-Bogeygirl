@@ -12,6 +12,8 @@
 #include "cave.h"
 #include <QVector>
 #include <riddle.h>
+#include "snackgame.h"
+#include "tree.h"
 //#include "Score.h"
 //#include "Health.h"
 
@@ -35,6 +37,8 @@ public:
     QPointF currentViewPos = {0, 0};
     QGraphicsPixmapItem * exit;
     Cave * cave;
+    SnackGame * snackgame;
+    Tree * tree;
 
 //    QGraphicsTextItem * line;
 //    QGraphicsPixmapItem * avatar;
