@@ -14,6 +14,9 @@
 #include <riddle.h>
 #include "snackgame.h"
 #include "tree.h"
+#include "kids.h"
+#include "dog.h"
+#include "redwhite.h"
 //#include "Score.h"
 //#include "Health.h"
 
@@ -39,6 +42,9 @@ public:
     Cave * cave;
     SnackGame * snackgame;
     Tree * tree;
+    Kids * kids;
+    Dog * dog[1];
+    RedWhite * kb;
 
 //    QGraphicsTextItem * line;
 //    QGraphicsPixmapItem * avatar;

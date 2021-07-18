@@ -1,5 +1,5 @@
 #include "player.h"
-#include "deadman.h"
+#include "redwhite.h"
 #include "game.h"
 #include <QGraphicsScene>
 #include <QKeyEvent>
@@ -58,10 +58,10 @@ void Player::keyPressEvent(QKeyEvent *event){
         }
     }
     else if (event->key() == Qt::Key_Down || event->key() == Qt::Key_S){
-        if (y() < game->scene->height() - boundingRect().height()*scale() - 30) {
-            if (y() + step < game->scene->height() - boundingRect().height()*scale() - 30) {
+        if (y() < game->scene->height() - boundingRect().height()*scale()) {
+            if (y() + step < game->scene->height() - boundingRect().height()*scale() ) {
                 diff.setY(step);
-            } else diff.setY(game->scene->height() - boundingRect().height()*scale() - 30 - y());
+            } else diff.setY(game->scene->height() - boundingRect().height()*scale() - y());
         }
     }
 
@@ -74,33 +74,62 @@ void Player::keyPressEvent(QKeyEvent *event){
     rect->hide();
 
     QList<QGraphicsItem *> colliding_items = rect->collidingItems();
+    QList<QGraphicsItem *> child_items = childItems();
+
+
+    for (int i = 0; i < child_items.size(); ++i) {
+        for (int j = 0; j < colliding_items.size(); ++j) {
+            if (colliding_items[j] == child_items[i]) {
+                colliding_items.removeAt(j);
+                --j;
+            }
+        }
+    }
 
     if (colliding_items.size() > 1) {
         for (int i = 1, n = colliding_items.size(); i < n; ++i){
+            //react(colliding_items[i]);
 
-            if (typeid(*(colliding_items[i])) == typeid(Deadman)){
+            if (dynamic_cast<Deadman*>(colliding_items[i])) {
                 setImmobile();
                 if (game->dialogbox->end == 0) {
                     emit dialogCall(0,1);
                 } else emit dialogCall(2,2);
-                    qDebug() << "Trying to get dialog";
 
-            } else if (typeid(*(colliding_items[i])) == typeid(Cave)) {
+            } else if (dynamic_cast<Cave*>(colliding_items[i])) {
                 setImmobile();
                 for (int i = 1, n = colliding_items.size(); i < n; ++i) {
                     // Здесь рект - вход в пещеру
-                    if (typeid(*(colliding_items[i])) == typeid(QGraphicsRectItem))
+                    if (dynamic_cast<QGraphicsRectItem*>(colliding_items[i]))
                         emit goingIn();
                         return;
                 }
 
-            } else if (typeid(*(colliding_items[i])) == typeid(Tree)) {
+            } else if (dynamic_cast<Tree*>(colliding_items[i])) {
                 setImmobile();
                 if (game->dialogbox->end == 0) {
                     emit dialogCall(0,1);
                 } else emit dialogCall(2,2);
 
-            } else if (typeid(*(colliding_items[i])) == typeid(QGraphicsPixmapItem)) {
+            } else if (dynamic_cast<Kids*>(colliding_items[i])) {
+                if (childItems().empty()) {
+                    setImmobile();
+                    emit dialogCall(17,20);
+                }
+
+//            } else if (dynamic_cast<Dog*>(colliding_items[i])) {
+//                emit dialogCall(21,21);
+//                colliding_items[i]->setParentItem(this);
+
+            } else if (dynamic_cast<RedWhite*>(colliding_items[i])) {
+
+                //if (child_items.size() == 3) {
+                    emit dialogCall(22,22);
+                    //qDebug() << "22 22 failed";
+                //} else qDebug() << "22 22 failed";
+
+
+            } else if (dynamic_cast<QGraphicsPixmapItem*>(colliding_items[i])) {
                 emit goingOut();
                 return;
             }
@@ -119,3 +148,12 @@ void Player::keyPressEvent(QKeyEvent *event){
     }
 
 }
+
+//template <typename T> void Player::react(T* object) { qDebug() << "template";};
+
+//template <> void Player::react(Deadman* object) {
+//    setImmobile();
+//    if (game->dialogbox->end == 0) {
+//        emit dialogCall(0,1);
+//    } else emit dialogCall(2,2);
+//};

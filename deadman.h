@@ -12,6 +12,7 @@ class Deadman : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     Deadman(QGraphicsItem *parent = nullptr);
+    int val;
 //    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 //    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 //    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

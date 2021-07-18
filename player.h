@@ -14,9 +14,11 @@ public:
     bool isMovable = true;
     void setMovable();
     void setImmobile();
-    int currentLineIndex = 0;
-    bool left = true;
+//    int currentLineIndex = 0;
+//    bool left = true;
     //QPointF diff;
+
+//    template <typename T> void react(T* object);
 
 public slots:
     //void dialog();

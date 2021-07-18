@@ -15,6 +15,9 @@
         <file>syrok-small-4.png</file>
         <file>syrok-small-5.png</file>
         <file>tree.png</file>
+        <file>kids.png</file>
+        <file>dog.png</file>
+        <file>kb.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>crush-1.wav</file>

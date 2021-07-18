@@ -4,6 +4,7 @@
 #include <QRectF>
 #include <QKeyEvent>
 #include <QDebug>
+#include "redwhite.h"
 
 extern Game * game; // there is an external global object called game
 
@@ -60,6 +61,21 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 delete game->snackgame;
                 game->scene->setSceneRect(0,0,2400,1800);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
+                break;
+            case 20:
+                // Гуляем и ловим собак
+                game->kids->setParentItem(game->player);
+                game->kids->setScale(1);
+                game->kids->setPos(20,3);
+                for (int i = 0; i < 1; ++i) {
+                    game->dog[i] = new Dog();
+                    game->dog[i]->setPos(rand()%2400+180,rand()%1800+250);
+                    game->scene->addItem(game->dog[i]);
+                }
+                break;
+            case 21:
+                game->kb->show();
+                //
                 break;
             }
 

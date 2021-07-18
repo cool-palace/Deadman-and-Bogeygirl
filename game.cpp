@@ -88,10 +88,10 @@ void Game::displayMainMenu(){
     int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
-    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
+//    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
     //connect(playButton,SIGNAL(clicked()),this,SLOT(snacks_game()));
 //    connect(playButton,SIGNAL(clicked()),this,SLOT(asmr()));
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(outside()));
+    connect(playButton,SIGNAL(clicked()),this,SLOT(outside()));
     scene->addItem(playButton);
 
     // create the quit button
@@ -125,9 +125,13 @@ void Game::outside() {
     // clear the screen
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg-big.png")));
-    scene->setSceneRect(0,0,2400,1800);
-    setSceneRect(800,0,800,600);
-    currentViewPos = {800, 0};
+//    QBrush brush;
+//    brush.setStyle(Qt::Dense1Pattern);
+//    brush.setColor(QColor(0,0,0,100));
+//    setBackgroundBrush(brush);
+    scene->setSceneRect(0,0,2760,2130);
+    setSceneRect(980,0,800,600);
+    currentViewPos = {980, 0};
 
     // create the cave
     cave = new Cave();
@@ -136,11 +140,22 @@ void Game::outside() {
     cave->setPos(cxPos, cyPos);
     scene->addItem(cave);
 
-    tree = new Tree();
-    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
-    int tyPos = 600;
-    tree -> setPos(txPos,tyPos);
-    scene->addItem(tree);
+//    tree = new Tree();
+//    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
+//    int tyPos = 600;
+//    tree -> setPos(txPos,tyPos);
+//    scene->addItem(tree);
+
+    kids = new Kids();
+    int kxPos = scene->width()/2 - kids->boundingRect().width()*kids->scale()/2;
+    int kyPos = 600;
+    kids -> setPos(kxPos,kyPos);
+    scene->addItem(kids);
+
+    kb = new RedWhite();
+    kb->setPos(2170,1441);
+    scene->addItem(kb);
+    kb->hide();
 
     // create a dialog box
     dialogbox = new DialogBox();
@@ -161,7 +176,7 @@ void Game::outside() {
     connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
     connect(player,SIGNAL(goingIn()),this,SLOT(start()));
     //connect(dialogbox,SIGNAL(chalkCall()),this,SLOT(asmr()));
-    connect(dialogbox,SIGNAL(snackgameCall()),this,SLOT(snacks_game()));
+    //connect(dialogbox,SIGNAL(snackgameCall()),this,SLOT(snacks_game()));
 
     // add the player to the scene
     scene->addItem(player);
@@ -217,5 +232,14 @@ const QVector<Speechline> Game::speech = {{":/images/player.png", "Привет"
                              {":/images/player.png", "Это лучший сырок, который я пробовала!"},
                              {":/images/kalina.png", "Распробуй сырки получше, пока что-то не совсем правильно."}, //15
                              {":/images/kalina.png", "Всё правильно, спасибо за обзор на сырки!"},
+                             {":/images/kids.png", "Привет, пойдём гулять!"}, // 17
+                             {":/images/player.png", "А куда вы идёте?"},
+                             {":/images/kids.png", "В красное и белое!"},
+                             {":/images/player.png", "Какие хорошие дети... Пойдём."},   // 20
+                             {":/images/player.png", "Привет! Пойдём с нами!"},   // 21
+                             {":/images/kids.png", "Ура! Мы дошли до красного и белого!"}
+
+
+
                                          };
 

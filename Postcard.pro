@@ -16,9 +16,12 @@ SOURCES += \
     deadman.cpp \
     dialogbox.cpp \
     digit.cpp \
+    dog.cpp \
     game.cpp \
+    kids.cpp \
     main.cpp \
     player.cpp \
+    redwhite.cpp \
     riddle.cpp \
     riddlebox.cpp \
     snack.cpp \
@@ -33,8 +36,11 @@ HEADERS += \
     deadman.h \
     dialogbox.h \
     digit.h \
+    dog.h \
     game.h \
+    kids.h \
     player.h \
+    redwhite.h \
     riddle.h \
     riddlebox.h \
     snack.h \
