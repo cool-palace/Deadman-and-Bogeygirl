@@ -141,11 +141,11 @@ void Game::outside() {
     cave->setPos(cxPos, cyPos);
     scene->addItem(cave);
 
-//    tree = new Tree();
-//    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
-//    int tyPos = 600;
-//    tree -> setPos(txPos,tyPos);
-//    scene->addItem(tree);
+    tree = new Tree();
+    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
+    int tyPos = 600;
+    tree -> setPos(txPos,tyPos);
+    scene->addItem(tree);
 
 //    kids = new Kids();
 //    int kxPos = scene->width()/2 - kids->boundingRect().width()*kids->scale()/2;
@@ -158,11 +158,11 @@ void Game::outside() {
 //    scene->addItem(kb);
 //    kb->hide();
 
-    unicorn = new Unicorn();
-    int uxPos = scene->width()/2 - unicorn->boundingRect().width()*unicorn->scale()/2;
-    int uyPos = 600;
-    unicorn->setPos(uxPos,uyPos);
-    scene->addItem(unicorn);
+//    unicorn = new Unicorn();
+//    int uxPos = scene->width()/2 - unicorn->boundingRect().width()*unicorn->scale()/2;
+//    int uyPos = 600;
+//    unicorn->setPos(uxPos,uyPos);
+//    scene->addItem(unicorn);
 
     // create a dialog box
     dialogbox = new DialogBox();
@@ -183,7 +183,7 @@ void Game::outside() {
     connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
     connect(player,SIGNAL(goingIn()),this,SLOT(start()));
     //connect(dialogbox,SIGNAL(chalkCall()),this,SLOT(asmr()));
-    //connect(dialogbox,SIGNAL(snackgameCall()),this,SLOT(snacks_game()));
+    connect(dialogbox,SIGNAL(snackgameCall()),this,SLOT(snacks_game()));
     connect(dialogbox,SIGNAL(dyegameCall()),this,SLOT(dye_game()));
 
     // add the player to the scene
@@ -247,6 +247,7 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Я уже видел тебя"},
     {":/images/deadman.png", "Что-то не совпадает. Попробуй проверить ответ."},
     {":/images/deadman.png", "Молодец, всё сходится!"},
+    // Отсюда можно переписать
     {":/images/player.png", "Вроде вкусно, но надо сравнить..."}, //5
     {":/images/player.png", "Бе... По сравнению с тем, вообще невкусно!"}, // разница сырков -4
     {":/images/player.png", "Ну такое..."},
@@ -259,6 +260,7 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Это лучший сырок, который я пробовала!"},
     {":/images/kalina.png", "Распробуй сырки получше, пока что-то не совсем правильно."}, //15
     {":/images/kalina.png", "Всё правильно, спасибо за обзор на сырки!"},
+    // Досюда можно переписать
     {":/images/kids.png", "Привет, пойдём гулять!"}, // 17
     {":/images/player.png", "А куда вы идёте?"},
     {":/images/kids.png", "В красное и белое!"},
@@ -266,6 +268,7 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Привет! Пойдём с нами!"},   // 21
     {":/images/kids.png", "Ура! Мы дошли до красного и белого!"},
     {":/images/kids.png", "Спасибо, что погуляла с нами вместе! Возьми этот мел."},
+
     {":/images/unicorn.png", "Ох, что же делать..."}, // 24
     {":/images/player.png", "А что случилось, единорожка?"},
     {":/images/unicorn.png", "Я купила пищевых красителей и чернил, но флакончики у них похожие, и теперь я не могу отличить, что из них можко использовать для коктейлей..."},
@@ -276,6 +279,28 @@ const QVector<Speechline> Game::speech = {
     {":/images/unicorn.png", "Хм, нет, что-то не сходится. Попробуй проверить получше."}, //
     {":/images/unicorn.png", "Ура, теперь я могу спокойно использовать красители! Спасибо за помощь!"}, // 32
     {":/images/unicorn.png", "Спасибо за помощь! У меня есть мел, можешь его взять."}, // 33
+
+    {":/images/player.png", "Что стоишь, качаясь, тонкая рябина..."}, // 34
+    {":/images/kalina.png", "Я не рябина, я калина!"},
+    {":/images/player.png", "Ой... Извини, я не знала... что ты можешь разговаривать..."},
+    {":/images/kalina.png", "Да забей, всё норм. Скажи, у тебя же есть язык?"},
+    {":/images/player.png", "Что за странный вопрос?"},
+    {":/images/kalina.png", "Если да, то помоги мне кое в чём. Мне нужно сделать обзор на сырки, но сама я не могу их попробовать. Можешь сделать это за меня?"},
+    {":/images/player.png", "Пробовать сырки? Конечно, помогу!"}, // 40
+    {":/images/player.png", "Вроде вкусно, но надо сравнить..."},
+    {":/images/player.png", "Бе... По сравнению с тем, вообще невкусно!"}, // разница сырков -4
+    {":/images/player.png", "Ну такое..."},
+    {":/images/player.png", "Предыдущий мне понравился больше."},
+    {":/images/player.png", "Ничего, но тот был получше."},
+    {":/images/player.png", "Вкус такой же. Надо попробовать другие."},   //46 разница сырков 0
+    {":/images/player.png", "На вкус чуть получше, чем тот."},
+    {":/images/player.png", "Вкусненько, этот мне нравится больше."},
+    {":/images/player.png", "Очень вкусно, намного лучше предыдущего!"},
+    {":/images/player.png", "Это лучший сырок, который я пробовала!"},
+    {":/images/kalina.png", "Похоже, ты ещё не расположила все сырки по местам."}, // 51
+    {":/images/kalina.png", "Распробуй сырки получше, пока мне кажется, что что-то не совсем правильно."}, //
+    {":/images/kalina.png", "Всё правильно!"}, //53
+    {":/images/kalina.png", "Спасибо за обзор на сырки! Вот тебе мел за помощь!"}, //
 
 
                                          };

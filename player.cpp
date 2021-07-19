@@ -107,9 +107,7 @@ void Player::keyPressEvent(QKeyEvent *event){
 
             } else if (dynamic_cast<Tree*>(colliding_items[i])) {
                 setImmobile();
-                if (game->dialogbox->end == 0) {
-                    emit dialogCall(0,1);
-                } else emit dialogCall(2,2);
+                emit dialogCall(Game::kalinaSeqStart,Game::kalinaSeqStart+6);
 
             } else if (dynamic_cast<Kids*>(colliding_items[i])) {
                 if (childItems().empty()) {

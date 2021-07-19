@@ -58,9 +58,9 @@ DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
 void DyeGame::checkAnswer() {
 
     QList<QGraphicsItem *> colliding_items = dye_slot->collidingItems();
-    for (int i = 0; i < colliding_items.size(); ++i) {
-        qDebug() << colliding_items[i];
-    }
+//    for (int i = 0; i < colliding_items.size(); ++i) {
+//        qDebug() << colliding_items[i];
+//    }
     // Два объекта сталкиваются со слотом изначально, поэтому при правильном решении должно быть всего 4
     if (colliding_items.size() < 3) {
         emit result(28,28);

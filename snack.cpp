@@ -1,6 +1,7 @@
 #include "snack.h"
 #include "QCursor"
 #include <QDebug>
+#include "game.h"
 
 Snack::Snack(int id, QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(parent)
 {
@@ -46,11 +47,11 @@ void Snack::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void Snack::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (last_taste == 0) {
-        emit degustation(5,5);
+        emit degustation(Game::kalinaSeqStart+7,Game::kalinaSeqStart+7);
     } else {
         int taste_diff = this->taste - last_taste;
         qDebug() << taste_diff;
-        emit degustation(taste_diff+10,taste_diff+10);
+        emit degustation(taste_diff+Game::kalinaSeqStart+12,taste_diff+Game::kalinaSeqStart+12);
     }
     last_taste = this->taste;
 }

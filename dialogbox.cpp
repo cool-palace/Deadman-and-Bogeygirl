@@ -47,8 +47,8 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case 1:
                 // Первый диалог
                 //emit chalkCall();
-                emit snackgameCall();
-                qDebug() << "Trying to get the chalk";
+//                emit snackgameCall();
+//                qDebug() << "Trying to get the chalk";
                 break;
             case 4:
                 // Закрыть загадку
@@ -57,12 +57,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 delete game->riddlebox;
                 game->exit->show();
                 break;
-            case 16:
-                // Зыкрыть сырки
-                delete game->snackgame;
-                game->scene->setSceneRect(0,0,2760,2130);
-                game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
-                break;
+
             case 20:
                 // Гуляем и ловим собак
                 game->kids->setParentItem(game->player);
@@ -93,7 +88,20 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 getBox(33,33);
                 break;
+
+            case Game::kalinaSeqStart+6:
+                emit snackgameCall();
+                break;
+
+            case Game::kalinaSeqStart+19:
+                // Зыкрыть сырки
+                delete game->snackgame;
+                game->scene->setSceneRect(0,0,2760,2130);
+                game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
+                getBox(Game::kalinaSeqStart+20,Game::kalinaSeqStart+20);
+                break;
             }
+
 
 
 

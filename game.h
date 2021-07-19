@@ -54,6 +54,9 @@ public:
     const static QVector<Riddle> riddles;
 
     const static QVector<Speechline> speech;
+    constexpr static int unicornSeqStart = 24;
+    constexpr static int kalinaSeqStart = 34;
+
 
 public slots:
     void start();

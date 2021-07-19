@@ -2,6 +2,6 @@
 
 Tree::Tree(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/tree.png"));
+    setPixmap(QPixmap(":/images/kalina.png"));
     setScale(1);
 }
