@@ -88,10 +88,11 @@ void Game::displayMainMenu(){
     int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
+    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
     //connect(playButton,SIGNAL(clicked()),this,SLOT(snacks_game()));
 //    connect(playButton,SIGNAL(clicked()),this,SLOT(asmr()));
-    connect(playButton,SIGNAL(clicked()),this,SLOT(outside()));
+//    connect(playButton,SIGNAL(clicked()),this,SLOT(outside()));
+//    connect(playButton,SIGNAL(clicked()),this,SLOT(dye_game()));
     scene->addItem(playButton);
 
     // create the quit button
@@ -146,16 +147,22 @@ void Game::outside() {
 //    tree -> setPos(txPos,tyPos);
 //    scene->addItem(tree);
 
-    kids = new Kids();
-    int kxPos = scene->width()/2 - kids->boundingRect().width()*kids->scale()/2;
-    int kyPos = 600;
-    kids -> setPos(kxPos,kyPos);
-    scene->addItem(kids);
+//    kids = new Kids();
+//    int kxPos = scene->width()/2 - kids->boundingRect().width()*kids->scale()/2;
+//    int kyPos = 600;
+//    kids -> setPos(kxPos,kyPos);
+//    scene->addItem(kids);
 
-    kb = new RedWhite();
-    kb->setPos(2170,1441);
-    scene->addItem(kb);
-    kb->hide();
+//    kb = new RedWhite();
+//    kb->setPos(2170,1441);
+//    scene->addItem(kb);
+//    kb->hide();
+
+    unicorn = new Unicorn();
+    int uxPos = scene->width()/2 - unicorn->boundingRect().width()*unicorn->scale()/2;
+    int uyPos = 600;
+    unicorn->setPos(uxPos,uyPos);
+    scene->addItem(unicorn);
 
     // create a dialog box
     dialogbox = new DialogBox();
@@ -177,6 +184,7 @@ void Game::outside() {
     connect(player,SIGNAL(goingIn()),this,SLOT(start()));
     //connect(dialogbox,SIGNAL(chalkCall()),this,SLOT(asmr()));
     //connect(dialogbox,SIGNAL(snackgameCall()),this,SLOT(snacks_game()));
+    connect(dialogbox,SIGNAL(dyegameCall()),this,SLOT(dye_game()));
 
     // add the player to the scene
     scene->addItem(player);
@@ -205,6 +213,24 @@ void Game::snacks_game() {
     show();
 }
 
+void Game::dye_game() {
+    //scene->clear();
+    //setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
+    scene->setSceneRect(0,0,800,600);
+    setSceneRect(0,0,800,600);
+
+    // create a dialog box
+    dialogbox = new DialogBox();
+    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+
+    dyegame = new DyeGame();
+    scene->addItem(dyegame);
+    scene->addItem(dialogbox);
+
+    connect(dyegame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    show();
+}
+
 const QVector<Riddle> Game::riddles =
     {{"Две средние цифры года твоего рождения, повторённые дважды", "0000"},
      {"Средние две цифры - это последние цифры твоего предыдущего номера телефона, а цифры по краям повторяют соседние для них", "4499"},
@@ -215,30 +241,41 @@ const QVector<Riddle> Game::riddles =
 
     };
 
-const QVector<Speechline> Game::speech = {{":/images/player.png", "Привет"}, //0//
-                             {":/images/player.png", "Как тебя зовут?"},
-                             {":/images/player.png", "Я уже видел тебя"},
-                             {":/images/deadman.png", "Что-то не совпадает. Попробуй проверить ответ."},
-                             {":/images/deadman.png", "Молодец, всё сходится!"},
-                             {":/images/player.png", "Вроде вкусно, но надо сравнить..."}, //5
-                             {":/images/player.png", "Бе... По сравнению с тем, вообще невкусно!"}, // разница сырков -4
-                             {":/images/player.png", "Ну такое..."},
-                             {":/images/player.png", "Предыдущий мне понравился больше."},
-                             {":/images/player.png", "Ничего, но тот был получше."},
-                             {":/images/player.png", "Вкус такой же. Надо попробовать другие."},   //10 разница сырков 0
-                             {":/images/player.png", "На вкус чуть получше, чем тот."},
-                             {":/images/player.png", "Вкусненько, этот мне нравится больше."},
-                             {":/images/player.png", "Очень вкусно, намного лучше предыдущего!"},
-                             {":/images/player.png", "Это лучший сырок, который я пробовала!"},
-                             {":/images/kalina.png", "Распробуй сырки получше, пока что-то не совсем правильно."}, //15
-                             {":/images/kalina.png", "Всё правильно, спасибо за обзор на сырки!"},
-                             {":/images/kids.png", "Привет, пойдём гулять!"}, // 17
-                             {":/images/player.png", "А куда вы идёте?"},
-                             {":/images/kids.png", "В красное и белое!"},
-                             {":/images/player.png", "Какие хорошие дети... Пойдём."},   // 20
-                             {":/images/player.png", "Привет! Пойдём с нами!"},   // 21
-                             {":/images/kids.png", "Ура! Мы дошли до красного и белого!"}
-
+const QVector<Speechline> Game::speech = {
+    {":/images/player.png", "Привет"}, //0//
+    {":/images/player.png", "Как тебя зовут?"},
+    {":/images/player.png", "Я уже видел тебя"},
+    {":/images/deadman.png", "Что-то не совпадает. Попробуй проверить ответ."},
+    {":/images/deadman.png", "Молодец, всё сходится!"},
+    {":/images/player.png", "Вроде вкусно, но надо сравнить..."}, //5
+    {":/images/player.png", "Бе... По сравнению с тем, вообще невкусно!"}, // разница сырков -4
+    {":/images/player.png", "Ну такое..."},
+    {":/images/player.png", "Предыдущий мне понравился больше."},
+    {":/images/player.png", "Ничего, но тот был получше."},
+    {":/images/player.png", "Вкус такой же. Надо попробовать другие."},   //10 разница сырков 0
+    {":/images/player.png", "На вкус чуть получше, чем тот."},
+    {":/images/player.png", "Вкусненько, этот мне нравится больше."},
+    {":/images/player.png", "Очень вкусно, намного лучше предыдущего!"},
+    {":/images/player.png", "Это лучший сырок, который я пробовала!"},
+    {":/images/kalina.png", "Распробуй сырки получше, пока что-то не совсем правильно."}, //15
+    {":/images/kalina.png", "Всё правильно, спасибо за обзор на сырки!"},
+    {":/images/kids.png", "Привет, пойдём гулять!"}, // 17
+    {":/images/player.png", "А куда вы идёте?"},
+    {":/images/kids.png", "В красное и белое!"},
+    {":/images/player.png", "Какие хорошие дети... Пойдём."},   // 20
+    {":/images/player.png", "Привет! Пойдём с нами!"},   // 21
+    {":/images/kids.png", "Ура! Мы дошли до красного и белого!"},
+    {":/images/kids.png", "Спасибо, что погуляла с нами вместе! Возьми этот мел."},
+    {":/images/unicorn.png", "Ох, что же делать..."}, // 24
+    {":/images/player.png", "А что случилось, единорожка?"},
+    {":/images/unicorn.png", "Я купила пищевых красителей и чернил, но флакончики у них похожие, и теперь я не могу отличить, что из них можко использовать для коктейлей..."},
+    {":/images/unicorn.png", "Помоги мне отделить одно от другого, пожалуйста?"}, // 27
+    {":/images/unicorn.png", "Но ты ещё ничего не выбрала..."}, // 28
+    {":/images/unicorn.png", "Чернил было два флакончика, а ты выбрала только один... Добавь ещё, и тогда проверим."}, // 29
+    {":/images/unicorn.png", "Похоже, ты выбрала слишком много. Лишних флаконов должно быть только два."}, // 30
+    {":/images/unicorn.png", "Хм, нет, что-то не сходится. Попробуй проверить получше."}, //
+    {":/images/unicorn.png", "Ура, теперь я могу спокойно использовать красители! Спасибо за помощь!"}, // 32
+    {":/images/unicorn.png", "Спасибо за помощь! У меня есть мел, можешь его взять."}, // 33
 
 
                                          };

@@ -28,8 +28,9 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
 
     line->setDefaultTextColor(Qt::white);
     line->setPos(150, 450);
-    line->setScale(2);
-    line->setTextWidth(700/line->scale());
+    //line->setScale(2);
+    line->setFont({"Comic Sans", 16});
+    line->setTextWidth(550/line->scale());
 
     setEnabled(true);
 
@@ -59,7 +60,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case 16:
                 // Зыкрыть сырки
                 delete game->snackgame;
-                game->scene->setSceneRect(0,0,2400,1800);
+                game->scene->setSceneRect(0,0,2760,2130);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 break;
             case 20:
@@ -75,7 +76,22 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 break;
             case 21:
                 game->kb->show();
-                //
+                break;
+            case 23: {
+                QList<QGraphicsItem *> child_items = game->player->childItems();
+                for (int i = 0; i < child_items.size(); ++i) {
+                    child_items[i]->setParentItem(0);
+                }
+                break; }
+            case 27:
+                emit dyegameCall();
+                break;
+            case 32:
+                // Закрыть красители
+                delete game->dyegame;
+                game->scene->setSceneRect(0,0,2760,2130);
+                game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
+                getBox(33,33);
                 break;
             }
 
@@ -106,10 +122,9 @@ void DialogBox::getBox(int in_start, int in_end) {
     avatar->setPos(xPos,yPos);
 
     line->setPlainText(game->speech[start].line);
-    line->setDefaultTextColor(Qt::white);
+    //line->setDefaultTextColor(Qt::white);
     line->setPos(xPos+150,yPos);
-    line->setScale(2);
-    line->setTextWidth(700/line->scale());
+    line->setTextWidth(650/line->scale());
 
     show();
     grabKeyboard();

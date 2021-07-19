@@ -122,12 +122,12 @@ void Player::keyPressEvent(QKeyEvent *event){
 //                colliding_items[i]->setParentItem(this);
 
             } else if (dynamic_cast<RedWhite*>(colliding_items[i])) {
+                setImmobile();
+                emit dialogCall(22,23);
 
-                //if (child_items.size() == 3) {
-                    emit dialogCall(22,22);
-                    //qDebug() << "22 22 failed";
-                //} else qDebug() << "22 22 failed";
-
+            } else if (dynamic_cast<Unicorn*>(colliding_items[i])) {
+                setImmobile();
+                emit dialogCall(24,27);
 
             } else if (dynamic_cast<QGraphicsPixmapItem*>(colliding_items[i])) {
                 emit goingOut();

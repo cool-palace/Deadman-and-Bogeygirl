@@ -13,12 +13,12 @@
 #include <QVector>
 #include <riddle.h>
 #include "snackgame.h"
+#include "dyegame.h"
 #include "tree.h"
 #include "kids.h"
 #include "dog.h"
 #include "redwhite.h"
-//#include "Score.h"
-//#include "Health.h"
+#include "unicorn.h"
 
 class Game: public QGraphicsView{
     Q_OBJECT
@@ -41,10 +41,12 @@ public:
     QGraphicsPixmapItem * exit;
     Cave * cave;
     SnackGame * snackgame;
+    DyeGame * dyegame;
     Tree * tree;
     Kids * kids;
     Dog * dog[1];
     RedWhite * kb;
+    Unicorn * unicorn;
 
 //    QGraphicsTextItem * line;
 //    QGraphicsPixmapItem * avatar;
@@ -58,6 +60,7 @@ public slots:
     void asmr();
     void outside();
     void snacks_game();
+    void dye_game();
 
 };
 

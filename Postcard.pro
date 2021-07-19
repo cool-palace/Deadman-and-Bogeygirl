@@ -17,6 +17,8 @@ SOURCES += \
     dialogbox.cpp \
     digit.cpp \
     dog.cpp \
+    dye.cpp \
+    dyegame.cpp \
     game.cpp \
     kids.cpp \
     main.cpp \
@@ -27,7 +29,8 @@ SOURCES += \
     snack.cpp \
     snackgame.cpp \
     speechline.cpp \
-    tree.cpp
+    tree.cpp \
+    unicorn.cpp
 
 HEADERS += \
     button.h \
@@ -37,6 +40,8 @@ HEADERS += \
     dialogbox.h \
     digit.h \
     dog.h \
+    dye.h \
+    dyegame.h \
     game.h \
     kids.h \
     player.h \
@@ -46,7 +51,8 @@ HEADERS += \
     snack.h \
     snackgame.h \
     speechline.h \
-    tree.h
+    tree.h \
+    unicorn.h
 
 FORMS +=
 

@@ -10,7 +10,7 @@ Button::Button(QString name, QGraphicsItem *parent): QGraphicsRectItem(parent){
 
     text = new QGraphicsTextItem(name,this);
 
-    if (name != "Больше" && name != "Меньше" && name != "Готово") {
+    if (name != "Больше" && name != "Меньше" && name != "Готово" && name != "Сбросить") {
         setRect(0,0,200,50);
         brush.setColor(Qt::darkGreen);
         // draw the text
