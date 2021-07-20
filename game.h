@@ -15,12 +15,14 @@
 #include "snackgame.h"
 #include "dyegame.h"
 #include "dancegame.h"
+#include "voltorbgame.h"
 #include "tree.h"
 #include "kids.h"
 #include "dog.h"
 #include "redwhite.h"
 #include "unicorn.h"
 #include "couple.h"
+#include "thinker.h"
 
 class Game: public QGraphicsView{
     Q_OBJECT
@@ -45,12 +47,14 @@ public:
     SnackGame * snackgame;
     DyeGame * dyegame;
     DanceGame * dancegame;
+    VoltorbGame * voltorbgame;
     Tree * tree;
     Kids * kids;
     Dog * dog[1];
     RedWhite * kb;
     Unicorn * unicorn;
     Couple * couple;
+    Thinker * thinker;
 
 //    QGraphicsTextItem * line;
 //    QGraphicsPixmapItem * avatar;
@@ -61,6 +65,7 @@ public:
     constexpr static int unicornSeqStart = 24;
     constexpr static int kalinaSeqStart = 34;
     constexpr static int coupleSeqStart = 55;
+    constexpr static int thinkerSeqStart = 65;
 
 
 public slots:
@@ -70,6 +75,7 @@ public slots:
     void snacks_game();
     void dye_game();
     void dance_game();
+    void voltorb_game();
 
 };
 

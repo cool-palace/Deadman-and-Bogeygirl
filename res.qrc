@@ -25,6 +25,16 @@
         <file>dye-small-5.png</file>
         <file>unicorn.png</file>
         <file>couple.png</file>
+        <file>thinker.png</file>
+        <file>tile.png</file>
+        <file>tile-yellow.png</file>
+        <file>tile-0.png</file>
+        <file>tile-1.png</file>
+        <file>tile-2.png</file>
+        <file>tile-3.png</file>
+        <file>bomb.png</file>
+        <file>tile-flag.png</file>
+        <file>tile-flag-yellow.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>crush-1.wav</file>

@@ -88,14 +88,16 @@ DanceGame::DanceGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
 
 }
 
-//DanceGame::~DanceGame() {
-//    delete sprite;
-//    delete cond_bg;
-//    delete conditions;
-//    delete score;
-//    delete timer;
-//    delete[] directions[4];
-//}
+DanceGame::~DanceGame() {
+    delete sprite;
+    delete cond_bg;
+    delete conditions;
+    delete score;
+    delete timer;
+    for (int i = 0; i < 4; ++i) {
+        delete directions[i];
+    }
+}
 
 void DanceGame::keyPressEvent(QKeyEvent * event) {
 

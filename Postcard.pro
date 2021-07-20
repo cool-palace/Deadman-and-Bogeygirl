@@ -11,6 +11,7 @@ CONFIG += c++11
 
 SOURCES += \
     button.cpp \
+    card.cpp \
     cave.cpp \
     chalk.cpp \
     couple.cpp \
@@ -31,11 +32,14 @@ SOURCES += \
     snack.cpp \
     snackgame.cpp \
     speechline.cpp \
+    thinker.cpp \
     tree.cpp \
-    unicorn.cpp
+    unicorn.cpp \
+    voltorbgame.cpp
 
 HEADERS += \
     button.h \
+    card.h \
     cave.h \
     chalk.h \
     couple.h \
@@ -48,6 +52,7 @@ HEADERS += \
     dyegame.h \
     game.h \
     kids.h \
+    npc.h \
     player.h \
     redwhite.h \
     riddle.h \
@@ -55,8 +60,10 @@ HEADERS += \
     snack.h \
     snackgame.h \
     speechline.h \
+    thinker.h \
     tree.h \
-    unicorn.h
+    unicorn.h \
+    voltorbgame.h
 
 FORMS +=
 

@@ -25,6 +25,7 @@ signals:
     void snackgameCall();
     void dyegameCall();
     void dancegameCall();
+    void voltorbgameCall();
 
 };
 

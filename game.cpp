@@ -164,11 +164,17 @@ void Game::outside() {
 //    unicorn->setPos(uxPos,uyPos);
 //    scene->addItem(unicorn);
 
-    couple = new Couple();
-    int cpxPos = scene->width()/2 - couple->boundingRect().width()*couple->scale()/2;
-    int cpyPos = 600;
-    couple->setPos(cpxPos,cpyPos);
-    scene->addItem(couple);
+//    couple = new Couple();
+//    int cpxPos = scene->width()/2 - couple->boundingRect().width()*couple->scale()/2;
+//    int cpyPos = 600;
+//    couple->setPos(cpxPos,cpyPos);
+//    scene->addItem(couple);
+
+    thinker = new Thinker();
+    int thxPos = scene->width()/2 - thinker->boundingRect().width()*thinker->scale()/2;
+    int thyPos = 600;
+    thinker->setPos(thxPos,thyPos);
+    scene->addItem(thinker);
 
     // create a dialog box
     dialogbox = new DialogBox();
@@ -192,6 +198,7 @@ void Game::outside() {
     connect(dialogbox,SIGNAL(snackgameCall()),this,SLOT(snacks_game()));
     connect(dialogbox,SIGNAL(dyegameCall()),this,SLOT(dye_game()));
     connect(dialogbox,SIGNAL(dancegameCall()),this,SLOT(dance_game()));
+    connect(dialogbox,SIGNAL(voltorbgameCall()),this,SLOT(voltorb_game()));
 
     // add the player to the scene
     scene->addItem(player);
@@ -259,6 +266,23 @@ void Game::dance_game() {
     show();
 }
 
+void Game::voltorb_game() {
+    scene->setSceneRect(0,0,800,600);
+    setSceneRect(0,0,800,600);
+
+    // create a dialog box
+    dialogbox = new DialogBox();
+    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+
+    voltorbgame = new VoltorbGame();
+    scene->addItem(voltorbgame);
+
+    scene->addItem(dialogbox);
+
+    connect(voltorbgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    show();
+}
+
 const QVector<Riddle> Game::riddles =
     {{"Две средние цифры года твоего рождения, повторённые дважды", "0000"},
      {"Средние две цифры - это последние цифры твоего предыдущего номера телефона, а цифры по краям повторяют соседние для них", "4499"},
@@ -275,6 +299,7 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Я уже видел тебя"},
     {":/images/deadman.png", "Что-то не совпадает. Попробуй проверить ответ."},
     {":/images/deadman.png", "Молодец, всё сходится!"},
+
     // Отсюда можно переписать
     {":/images/player.png", "Вроде вкусно, но надо сравнить..."}, //5
     {":/images/player.png", "Бе... По сравнению с тем, вообще невкусно!"}, // разница сырков -4
@@ -289,6 +314,7 @@ const QVector<Speechline> Game::speech = {
     {":/images/kalina.png", "Распробуй сырки получше, пока что-то не совсем правильно."}, //15
     {":/images/kalina.png", "Всё правильно, спасибо за обзор на сырки!"},
     // Досюда можно переписать
+
     {":/images/kids.png", "Привет, пойдём гулять!"}, // 17
     {":/images/player.png", "А куда вы идёте?"},
     {":/images/kids.png", "В красное и белое!"},
@@ -341,5 +367,21 @@ const QVector<Speechline> Game::speech = {
     {":/images/couple.png", "Отлично станцевала, молодец)))"},
     {":/images/couple.png", "Держи, заслужила) Вышло очень забавно)))"}, // 64
 
+    {":/images/thinker.png", "Если я открою эту клетку, то могу победить. С другой стороны, риск слишком велик... Стоит ли всё же делать этот ход?"}, // 65
+    {":/images/thinker.png", "Как же сложно делать выбор..."},
+    {":/images/player.png", "Что ты делаешь?"},
+    {":/images/thinker.png", "Я играю в одну игру, но уже битый час стою на одном месте, не в силах сходить..."},
+    {":/images/player.png", "Почему так?"},
+    {":/images/thinker.png", "Это сложно... Если я ошибусь, то проиграю и придётся начинать с самого начала..."},
+    {":/images/player.png", "Но ты же не сможешь выиграть, если не будешь ходить?"},
+    {":/images/thinker.png", "А в чём заключается победа? Это тоже философский вопрос. Аристотель говорил, что рассудительный стремится к отсутствию страданий, а не к наслаждению. Тогда, выходит, настоящая победа состоит в том, чтобы не проиграть."},
+    {":/images/player.png", "Что за бред... Это просто игра!"},
+    {":/images/player.png", "Строишь всякие рассуждения, просто чтобы оправдаться за то, что ты боишься. Ты не философ, ты филофоб!"},
+    {":/images/player.png", "Давай я тебе покажу, как надо!"}, //75
+    {":/images/thinker.png", "У тебя и правда получилось!"},
+    {":/images/thinker.png", "Спасибо, ты и правда помогла мне взглянуть на вещи под другим углом."},
+    {":/images/thinker.png", "\"Несчастная судьба многих людей — следствие несделанного ими выбора. Они ни живые, ни мертвые. Жизнь оказывается бременем, бесцельным занятием, а дела — лишь средством защиты от мук бытия в царстве теней.\""},
+    {":/images/thinker.png", "Это Эрих Фромм. Я так много думал, но никогда бы мне не пришла в голову мысль о том, что я сам окажусь в подобной ловушке разума."},
+    {":/images/thinker.png", "Возьми немного мела в подарок."}, // 80
                                          };
 

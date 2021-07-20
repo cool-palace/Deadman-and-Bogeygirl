@@ -12,7 +12,7 @@ class DanceGame : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     DanceGame(QGraphicsItem *parent = nullptr);
-    //~DanceGame();
+    ~DanceGame();
     //QGraphicsTextItem * text[5] = {nullptr};
     void keyPressEvent(QKeyEvent * event);
     QTimer * timer;

@@ -114,9 +114,21 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 getBox(Game::coupleSeqStart+9,Game::coupleSeqStart+9);
                 break;
+
+            case Game::thinkerSeqStart+10:
+                // Открыть сапёра
+                emit voltorbgameCall();
+                break;
+
+            case Game::thinkerSeqStart+11:
+                // Закрыть сапёра
+//                disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
+//                delete game->dancegame;
+                game->scene->setSceneRect(0,0,2760,2130);
+                game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
+                getBox(Game::thinkerSeqStart+12,Game::thinkerSeqStart+15);
+                break;
             }
-
-
 
 
         } else {
