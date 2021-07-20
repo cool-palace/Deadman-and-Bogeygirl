@@ -24,6 +24,7 @@
         <file>dye-small-4.png</file>
         <file>dye-small-5.png</file>
         <file>unicorn.png</file>
+        <file>couple.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>crush-1.wav</file>

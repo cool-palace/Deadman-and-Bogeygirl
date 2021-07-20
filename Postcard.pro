@@ -13,6 +13,8 @@ SOURCES += \
     button.cpp \
     cave.cpp \
     chalk.cpp \
+    couple.cpp \
+    dancegame.cpp \
     deadman.cpp \
     dialogbox.cpp \
     digit.cpp \
@@ -36,6 +38,8 @@ HEADERS += \
     button.h \
     cave.h \
     chalk.h \
+    couple.h \
+    dancegame.h \
     deadman.h \
     dialogbox.h \
     digit.h \

@@ -24,6 +24,7 @@ signals:
     void chalkCall();
     void snackgameCall();
     void dyegameCall();
+    void dancegameCall();
 
 };
 

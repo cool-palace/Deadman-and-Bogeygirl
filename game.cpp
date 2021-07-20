@@ -141,11 +141,11 @@ void Game::outside() {
     cave->setPos(cxPos, cyPos);
     scene->addItem(cave);
 
-    tree = new Tree();
-    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
-    int tyPos = 600;
-    tree -> setPos(txPos,tyPos);
-    scene->addItem(tree);
+//    tree = new Tree();
+//    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
+//    int tyPos = 600;
+//    tree -> setPos(txPos,tyPos);
+//    scene->addItem(tree);
 
 //    kids = new Kids();
 //    int kxPos = scene->width()/2 - kids->boundingRect().width()*kids->scale()/2;
@@ -163,6 +163,12 @@ void Game::outside() {
 //    int uyPos = 600;
 //    unicorn->setPos(uxPos,uyPos);
 //    scene->addItem(unicorn);
+
+    couple = new Couple();
+    int cpxPos = scene->width()/2 - couple->boundingRect().width()*couple->scale()/2;
+    int cpyPos = 600;
+    couple->setPos(cpxPos,cpyPos);
+    scene->addItem(couple);
 
     // create a dialog box
     dialogbox = new DialogBox();
@@ -185,6 +191,7 @@ void Game::outside() {
     //connect(dialogbox,SIGNAL(chalkCall()),this,SLOT(asmr()));
     connect(dialogbox,SIGNAL(snackgameCall()),this,SLOT(snacks_game()));
     connect(dialogbox,SIGNAL(dyegameCall()),this,SLOT(dye_game()));
+    connect(dialogbox,SIGNAL(dancegameCall()),this,SLOT(dance_game()));
 
     // add the player to the scene
     scene->addItem(player);
@@ -228,6 +235,27 @@ void Game::dye_game() {
     scene->addItem(dialogbox);
 
     connect(dyegame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    show();
+}
+
+void Game::dance_game() {
+    //scene->clear();
+    //setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
+    scene->setSceneRect(0,0,800,600);
+    setSceneRect(0,0,800,600);
+
+    // create a dialog box
+    dialogbox = new DialogBox();
+    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+
+    dancegame = new DanceGame();
+    scene->addItem(dancegame);
+    dancegame->setFlag(QGraphicsItem::ItemIsFocusable);
+    dancegame->setFocus();
+
+    scene->addItem(dialogbox);
+
+    connect(dancegame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
     show();
 }
 
@@ -302,6 +330,16 @@ const QVector<Speechline> Game::speech = {
     {":/images/kalina.png", "Всё правильно!"}, //53
     {":/images/kalina.png", "Спасибо за обзор на сырки! Вот тебе мел за помощь!"}, //
 
+    {":/images/player.png", "Привет, у вас случайно нет мела?"}, // 55
+    {":/images/couple.png", "Ну да, есть немного) Паровоз, паровоз..."},
+    {":/images/player.png", "А поделитесь со мной? Мне очень надо."},
+    {":/images/couple.png", "Хорошо) Паровоз, паровоз..."},
+    {":/images/player.png", "Такие спокойные... Словно на своей волне... О чём они говорят?"},
+    {":/images/couple.png", "Только тогда потанцуй для нас немного)"},
+    {":/images/player.png", "Эх, не могут просто так отдать..."},
+    {":/images/couple.png", "Мы любим песню про паровоз, давай под неё, чтобы было смешнее)"},
+    {":/images/couple.png", "Отлично станцевала, молодец)))"},
+    {":/images/couple.png", "Держи, заслужила) Вышло очень забавно)))"}, // 64
 
                                          };
 

@@ -100,6 +100,20 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 getBox(Game::kalinaSeqStart+20,Game::kalinaSeqStart+20);
                 break;
+
+            case Game::coupleSeqStart+7:
+                // Открыть танец
+                emit dancegameCall();
+                break;
+
+            case Game::coupleSeqStart+8:
+                // Закрыть танец
+                disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
+                delete game->dancegame;
+                game->scene->setSceneRect(0,0,2760,2130);
+                game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
+                getBox(Game::coupleSeqStart+9,Game::coupleSeqStart+9);
+                break;
             }
 
 

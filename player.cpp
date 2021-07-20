@@ -127,6 +127,10 @@ void Player::keyPressEvent(QKeyEvent *event){
                 setImmobile();
                 emit dialogCall(24,27);
 
+            } else if (dynamic_cast<Couple*>(colliding_items[i])) {
+                setImmobile();
+                emit dialogCall(Game::coupleSeqStart,Game::coupleSeqStart+7);
+
             } else if (dynamic_cast<QGraphicsPixmapItem*>(colliding_items[i])) {
                 emit goingOut();
                 return;

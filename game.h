@@ -14,11 +14,13 @@
 #include <riddle.h>
 #include "snackgame.h"
 #include "dyegame.h"
+#include "dancegame.h"
 #include "tree.h"
 #include "kids.h"
 #include "dog.h"
 #include "redwhite.h"
 #include "unicorn.h"
+#include "couple.h"
 
 class Game: public QGraphicsView{
     Q_OBJECT
@@ -42,11 +44,13 @@ public:
     Cave * cave;
     SnackGame * snackgame;
     DyeGame * dyegame;
+    DanceGame * dancegame;
     Tree * tree;
     Kids * kids;
     Dog * dog[1];
     RedWhite * kb;
     Unicorn * unicorn;
+    Couple * couple;
 
 //    QGraphicsTextItem * line;
 //    QGraphicsPixmapItem * avatar;
@@ -56,6 +60,7 @@ public:
     const static QVector<Speechline> speech;
     constexpr static int unicornSeqStart = 24;
     constexpr static int kalinaSeqStart = 34;
+    constexpr static int coupleSeqStart = 55;
 
 
 public slots:
@@ -64,6 +69,7 @@ public slots:
     void outside();
     void snacks_game();
     void dye_game();
+    void dance_game();
 
 };
 
