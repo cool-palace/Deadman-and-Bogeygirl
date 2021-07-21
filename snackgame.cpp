@@ -1,23 +1,21 @@
 #include "snackgame.h"
 #include <QDebug>
 #include "game.h"
-#include "button.h"
 
 extern Game * game;
 
 SnackGame::SnackGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/images/bg.png"));
-    //QGraphicsRectItem ** snack_slots = new QGraphicsRectItem*[5];
-    QGraphicsTextItem ** number = new QGraphicsTextItem * [5];
+
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(QColor(255,174,201,100));
 
-    QGraphicsRectItem * cond_bg = new QGraphicsRectItem(this);
+    cond_bg = new QGraphicsRectItem(this);
     cond_bg->setRect(50,30, 700, 100);
     cond_bg->setBrush(brush);
 
-    QGraphicsTextItem * conditions = new QGraphicsTextItem(this); //Оценить вкус сырка самого по себе сложно, но если сравнить с другим, то легко оценить разницу.
+    conditions = new QGraphicsTextItem(this);
     QString cond = "Попробуй сырки двойным кликом и расположи их в порядке улучшения вкуса. При этом вкусовые ощущения от каждого сырка будут зависеть<br>от того, какой из них ты попробовала последним.";
     QString str1 = "<p style=\"text-align:center;\">%1</p>";
     conditions->setHtml(str1.arg(cond));
@@ -36,22 +34,32 @@ SnackGame::SnackGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
         snack_slots[i]->setRect(i*156+offset,300+20, 136, 100);
         snack_slots[i]->setBrush(brush);
 
-        number[i] = new QGraphicsTextItem(snack_slots[i]);
+        number[i] = new QGraphicsTextItem(this);
         QString str = "<p style=\"text-align:center;\">#%1</p>";
         number[i]->setHtml(str.arg(5 - i));
         number[i]->setFont({"Comic Sans", 30});
         number[i]->setTextWidth(136);
         number[i]->setPos(i*156+offset,320+20);
-        number[i]->setZValue(11);
 
         connect(snacks[i],SIGNAL(degustation(int, int)),game->dialogbox,SLOT(getBox(int, int)));
     }
 
-    Button * confirmButton = new Button("Готово",this);
+    confirmButton = new Button("Готово",this);
     confirmButton->setPos(boundingRect().width()/2 - confirmButton->boundingRect().width()/2, 475);
 
     connect(confirmButton,SIGNAL(clicked()),this,SLOT(checkAnswer()));
+}
 
+SnackGame::~SnackGame() {
+    delete cond_bg;
+    delete conditions;
+    delete confirmButton;
+
+    for (int i = 0; i < 5; ++i) {
+        delete snacks[i];
+        delete snack_slots[i];
+        delete number[i];
+    }
 }
 
 void SnackGame::checkAnswer() {

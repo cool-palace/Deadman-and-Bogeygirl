@@ -1,6 +1,5 @@
 #include "dyegame.h"
 #include "game.h"
-#include "button.h"
 #include <QDebug>
 
 extern Game * game;
@@ -8,7 +7,6 @@ extern Game * game;
 DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/images/bg.png"));
-    //QGraphicsRectItem ** snack_slots = new QGraphicsRectItem*[5];
 
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(QColor(255,174,201,100));
@@ -18,11 +16,11 @@ DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
     dye_slot->setRect(offset,140, 200, 300);
     dye_slot->setBrush(brush);
 
-    QGraphicsRectItem * cond_bg = new QGraphicsRectItem(this);
+    cond_bg = new QGraphicsRectItem(this);
     cond_bg->setRect(50,30, 700, 100);
     cond_bg->setBrush(brush);
 
-    QGraphicsTextItem * conditions = new QGraphicsTextItem(this); //
+    conditions = new QGraphicsTextItem(this); //
     QString cond = "Всего флаконов с чернилами два, и они стоят рядом друг с другом.<br>При этом в крайних флаконах налито одно и то же,<br>а в самом большом и самом маленьком флаконах — разные жидкости.";
     QString str1 = "<p style=\"text-align:center;\">%1</p>";
     conditions->setHtml(str1.arg(cond));
@@ -30,13 +28,12 @@ DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
     conditions->setTextWidth(700);
     conditions->setPos(50,40);
 
-    QGraphicsTextItem * text = new QGraphicsTextItem(dye_slot);
+    text = new QGraphicsTextItem(this);
     QString str = "<p style=\"text-align:center;\">Найди чернила и помести их сюда.</p>";
     text->setHtml(str);
     text->setFont({"Comic Sans", 12});
     text->setTextWidth(180);
     text->setPos(offset+10,270);
-    text->setZValue(11);
 
     for (int i = 0; i < 5; ++i) {
         int offset = 60;
@@ -45,14 +42,27 @@ DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
         dyes[i]->setZValue(10);
     }
 
-    Button * confirmButton = new Button("Готово",this);
+    confirmButton = new Button("Готово",this);
     confirmButton->setPos(boundingRect().width()/2 - confirmButton->boundingRect().width()/2, 475);
     connect(confirmButton,SIGNAL(clicked()),this,SLOT(checkAnswer()));
 
-    Button * resetButton = new Button("Сбросить",this);
+    resetButton = new Button("Сбросить",this);
     resetButton->setPos(600, 475);
     connect(resetButton,SIGNAL(clicked()),this,SLOT(reset()));
 
+}
+
+DyeGame::~DyeGame() {
+    delete dye_slot;
+    delete cond_bg;
+    delete conditions;
+    delete text;
+    delete confirmButton;
+    delete resetButton;
+
+    for (int i = 0; i < 5; ++i) {
+        delete dyes[i];
+    }
 }
 
 void DyeGame::checkAnswer() {
@@ -63,25 +73,25 @@ void DyeGame::checkAnswer() {
 //    }
     // Два объекта сталкиваются со слотом изначально, поэтому при правильном решении должно быть всего 4
     if (colliding_items.size() < 3) {
-        emit result(28,28);
+        emit result(Game::unicornSeqStart+4,Game::unicornSeqStart+4);
         return;
     }
     if (colliding_items.size() < 4) {
-        emit result(29,29);
+        emit result(Game::unicornSeqStart+5,Game::unicornSeqStart+5);
         return;
     }
     if (colliding_items.size() > 4) {
-        emit result(30,30);
+        emit result(Game::unicornSeqStart+6,Game::unicornSeqStart+6);
         return;
     }
 
     if (dyes[2]->collidesWithItem(dye_slot)
             && dyes[3]->collidesWithItem(dye_slot)) {
-        emit result(32,32);
+        emit result(Game::unicornSeqStart+8,Game::unicornSeqStart+8);
         qDebug() << "right";
         return;
     }
-    emit result(31,31);
+    emit result(Game::unicornSeqStart+7,Game::unicornSeqStart+7);
     qDebug() << "wrong";
 
 }

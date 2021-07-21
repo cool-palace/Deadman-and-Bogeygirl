@@ -50,9 +50,8 @@ public:
     Unicorn * unicorn;
     Couple * couple;
     Thinker * thinker;
+    QVector<QMediaPlayer *> crushSound {5};
 
-//    QGraphicsTextItem * line;
-//    QGraphicsPixmapItem * avatar;
 
     const static QVector<Riddle> riddles;
 

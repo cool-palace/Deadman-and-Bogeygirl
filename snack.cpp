@@ -24,6 +24,7 @@ Snack::Snack(int id, QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(pa
         taste = 3;
         break;
     }
+    setAcceptHoverEvents(true);
 }
 
 void Snack::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -50,10 +51,17 @@ void Snack::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
         emit degustation(Game::kalinaSeqStart+7,Game::kalinaSeqStart+7);
     } else {
         int taste_diff = this->taste - last_taste;
-        qDebug() << taste_diff;
         emit degustation(taste_diff+Game::kalinaSeqStart+12,taste_diff+Game::kalinaSeqStart+12);
     }
     last_taste = this->taste;
+}
+
+void Snack::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
+    setCursor(QCursor(Qt::OpenHandCursor));
+}
+
+void Snack::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
+    setCursor(QCursor(Qt::ArrowCursor));
 }
 
 int Snack::last_taste = 0;

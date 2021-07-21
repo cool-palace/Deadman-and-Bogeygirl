@@ -6,17 +6,15 @@
 #include <QGraphicsSceneMouseEvent>
 #include "snack.h"
 #include <QBrush>
+#include <button.h>
 
 class SnackGame : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    SnackGame(QGraphicsItem* parent=NULL);
-    Snack * snacks[5] = {nullptr};
-    QGraphicsRectItem * snack_slots[5] = {nullptr};
-//    QGraphicsPixmapItem * snack_slots[5] = {nullptr};
-    int last_taste = 0;
-    //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    SnackGame(QGraphicsItem* parent = nullptr);
+    ~SnackGame();
+
 public slots:
     void checkAnswer();
 
@@ -25,6 +23,12 @@ signals:
 
 private:
     QBrush brush;
+    Snack * snacks[5];
+    QGraphicsRectItem * snack_slots[5];
+    QGraphicsTextItem * number[5];
+    QGraphicsRectItem * cond_bg;
+    QGraphicsTextItem * conditions;
+    Button * confirmButton;
 };
 
 #endif // SNACKGAME_H

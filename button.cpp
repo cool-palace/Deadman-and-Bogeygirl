@@ -34,6 +34,10 @@ Button::Button(QString name, QGraphicsItem *parent): QGraphicsRectItem(parent){
     setAcceptHoverEvents(true);
 }
 
+Button::~Button() {
+    delete text;
+}
+
 void Button::mousePressEvent(QGraphicsSceneMouseEvent *event){
     emit clicked();
 }

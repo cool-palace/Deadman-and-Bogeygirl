@@ -47,16 +47,14 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             switch (end) {
             case 1:
                 // Первый диалог
-                //emit chalkCall();
-//                emit snackgameCall();
+                emit chalkCall();
 //                qDebug() << "Trying to get the chalk";
                 break;
             case 4:
                 // Закрыть загадку
-                // Тут можно просто hide() в качестве альтернативы
-                delete game->chalk;
+                //game->exit->show();
                 delete game->riddlebox;
-                game->exit->show();
+//                game->riddlebox->hide();
                 break;
 
             case 20:
@@ -129,7 +127,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case Game::thinkerSeqStart+14:
                 // Закрыть сапёра
 //                disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
-//                delete game->dancegame;
+                delete game->voltorbgame;
                 game->scene->setSceneRect(0,0,2760,2130);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 getBox(Game::thinkerSeqStart+15,Game::thinkerSeqStart+18);

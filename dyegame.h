@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsRectItem>
 #include "dye.h"
+#include "button.h"
 #include <QBrush>
 
 class DyeGame : public QObject, public QGraphicsPixmapItem
@@ -11,8 +12,7 @@ class DyeGame : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     DyeGame(QGraphicsItem *parent = nullptr);
-    Dye * dyes[5] = {nullptr};
-    QGraphicsRectItem * dye_slot;
+    ~DyeGame();
 
 public slots:
     void checkAnswer();
@@ -23,6 +23,13 @@ signals:
 
 private:
     QBrush brush;
+    Dye * dyes[5];
+    QGraphicsRectItem * dye_slot;
+    QGraphicsRectItem * cond_bg;
+    QGraphicsTextItem * conditions;
+    QGraphicsTextItem * text;
+    Button * confirmButton;
+    Button * resetButton;
 };
 
 #endif // DYEGAME_H

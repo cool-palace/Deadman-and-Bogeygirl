@@ -1,6 +1,4 @@
 #include "riddlebox.h"
-#include "button.h"
-#include "digit.h"
 #include <QGraphicsScene>
 #include "game.h"
 #include <QDebug>
@@ -12,21 +10,12 @@ RiddleBox::RiddleBox(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(pa
     setPixmap(QPixmap(":/images/parchment.png"));
     setPos(50, 10);
     hide();
-
-//    for (int i = 0; i < 4; ++i) {
-//        digits[i] = new Digit(0);
-//    }
 }
 
 void RiddleBox::showRiddle(const Riddle * riddle) {
 
-    QList<QGraphicsItem *> children = childItems();
-    for (int i = 0, n = children.size(); i < n; ++i) {
-        delete children[i];
-    }
-
     // writing the question
-    QGraphicsTextItem * question = new QGraphicsTextItem(this);
+    question = new QGraphicsTextItem(this);
     question->setHtml(riddle->question);
     question->setDefaultTextColor(Qt::black);
     question->setFont({"Comic Sans", 18});
@@ -41,10 +30,11 @@ void RiddleBox::showRiddle(const Riddle * riddle) {
     int yPos = 100;
     question->setPos(xPos,yPos);
 
-    int digitsCount = riddle->answer.length();
+    digitsCount = riddle->answer.length();
 
-    Button ** upButtons = new Button*[digitsCount];
-    Button ** downButtons = new Button*[digitsCount];
+    upButtons = new Button*[digitsCount];
+    downButtons = new Button*[digitsCount];
+    digits = new Digit*[digitsCount];
 
     for (int i = 0; i < digitsCount; ++i) {
         qreal offset = xPos + (textWidth - 100 * digitsCount - 20 * (digitsCount - 1)) / 2;
@@ -60,13 +50,21 @@ void RiddleBox::showRiddle(const Riddle * riddle) {
         connect(downButtons[i],SIGNAL(clicked()),digits[i],SLOT(decrease()));
     }
 
-    Button * confirmButton = new Button("Готово",this);
+    confirmButton = new Button("Готово",this);
     confirmButton->setPos(boundingRect().width()/2 - confirmButton->boundingRect().width()/2, 475);
 
     connect(confirmButton,SIGNAL(clicked()),this,SLOT(checkAnswer()));
 
     show();
 
+}
+
+RiddleBox::~RiddleBox() {
+    delete[] upButtons;
+    delete[] downButtons;
+    delete[] digits;
+    delete question;
+    delete confirmButton;
 }
 
 void RiddleBox::checkAnswer() {
@@ -80,5 +78,7 @@ void RiddleBox::checkAnswer() {
         }
     }
     emit result(4,4);
+    //delete this;
+    //return;
     qDebug() << "right";
 }

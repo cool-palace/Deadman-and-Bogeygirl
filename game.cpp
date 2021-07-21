@@ -32,9 +32,6 @@ void Game::start(){
     int dxPos = scene->width()/2 - deadman->boundingRect().width()/2*deadman->scale();
     int dyPos = 100;
     deadman->setPos(dxPos, dyPos);
-    deadman->setFlag(QGraphicsItem::ItemIsFocusable);
-
-    // add the dead man to the scene
     scene->addItem(deadman);
 
     // create a dialog box
@@ -105,9 +102,17 @@ void Game::displayMainMenu(){
 }
 
 void Game::asmr() {
-    //scene->clear();
+
+    for (int i = 0; i < crushSound.size(); ++i) {
+        crushSound[i] = new QMediaPlayer();
+        QString str = "qrc:/sounds/crush-%1.wav";
+        crushSound[i]->setMedia(QUrl(str.arg(i+1)));
+    }
+
     chalk = new Chalk();
     scene->addItem(chalk);
+    chalk->setFlag(QGraphicsItem::ItemIsFocusable);
+    chalk->setFocus();
 
     riddlebox = new RiddleBox();
     scene->addItem(riddlebox);
@@ -119,7 +124,6 @@ void Game::asmr() {
 
     connect(chalk,SIGNAL(cracked(const Riddle *)),riddlebox,SLOT(showRiddle(const Riddle *)));
     connect(riddlebox,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
-
 }
 
 void Game::outside() {
@@ -141,11 +145,11 @@ void Game::outside() {
     cave->setPos(cxPos, cyPos);
     scene->addItem(cave);
 
-//    tree = new Tree();
-//    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
-//    int tyPos = 600;
-//    tree -> setPos(txPos,tyPos);
-//    scene->addItem(tree);
+    tree = new Tree();
+    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
+    int tyPos = 600;
+    tree -> setPos(txPos,tyPos);
+    scene->addItem(tree);
 
 //    kids = new Kids();
 //    int kxPos = scene->width()/2 - kids->boundingRect().width()*kids->scale()/2;
@@ -170,11 +174,11 @@ void Game::outside() {
 //    couple->setPos(cpxPos,cpyPos);
 //    scene->addItem(couple);
 
-    thinker = new Thinker();
-    int thxPos = scene->width()/2 - thinker->boundingRect().width()*thinker->scale()/2;
-    int thyPos = 600;
-    thinker->setPos(thxPos,thyPos);
-    scene->addItem(thinker);
+//    thinker = new Thinker();
+//    int thxPos = scene->width()/2 - thinker->boundingRect().width()*thinker->scale()/2;
+//    int thyPos = 600;
+//    thinker->setPos(thxPos,thyPos);
+//    scene->addItem(thinker);
 
     // create a dialog box
     dialogbox = new DialogBox();

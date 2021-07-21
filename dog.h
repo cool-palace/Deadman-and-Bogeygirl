@@ -10,6 +10,7 @@ class Dog : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     Dog(QGraphicsItem *parent = nullptr);
+    ~Dog();
     QTimer * timer;
     static int caught_count;
 

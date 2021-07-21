@@ -18,6 +18,8 @@ Digit::Digit(int digit,  QGraphicsItem* parent) : QGraphicsTextItem(parent)
     setAcceptHoverEvents(false);
 }
 
+Digit::~Digit() {}
+
 void Digit::increase() {
     if (value < 9) ++value;
     else value = 0;

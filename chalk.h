@@ -11,18 +11,22 @@ class Chalk : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Chalk(QGraphicsItem* parent=NULL);
-    QGraphicsPixmapItem * cracks;
-    QVector<QMediaPlayer *> crushSound {5};
-    QPointF start = {0, 0};
-    int cracksCount = 0;
+    Chalk(QGraphicsItem* parent = nullptr);
+    ~Chalk();
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 signals:
     void cracked(const Riddle * riddle);
+
+private:
+    QGraphicsPixmapItem * cracks;
+    QPointF start = {0, 0};
+    int cracksCount = 0;
 
 };
 

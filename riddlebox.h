@@ -7,25 +7,30 @@
 #include <QSpinBox>
 #include "riddle.h"
 #include "digit.h"
+#include "button.h"
 
 class RiddleBox : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
     RiddleBox(QGraphicsItem * parent = nullptr);
-    Digit * digits[4] = {nullptr};
-    QString answer;
+    ~RiddleBox();
 
 public slots:
     void showRiddle(const Riddle * riddle);
     void checkAnswer();
-    //void checkAnswer(Riddle *riddle, Digit *digits[]);
-   // void hideRiddle();
 
 signals:
-    //void checkAnswer(Riddle *riddle, Digit *digits[]);
     void result(int, int);
 
+private:
+    QGraphicsTextItem * question;
+    int digitsCount;
+    Button ** upButtons;
+    Button ** downButtons;
+    Button * confirmButton;
+    Digit ** digits;
+    QString answer;
 };
 
 #endif // RIDDLEBOX_H

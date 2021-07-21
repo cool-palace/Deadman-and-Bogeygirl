@@ -16,6 +16,10 @@ Dog::Dog(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
     timer->start(100);
 }
 
+Dog::~Dog(){
+    delete timer;
+}
+
 void Dog::move(){
 
     QList<QGraphicsItem *> colliding_items = collidingItems();

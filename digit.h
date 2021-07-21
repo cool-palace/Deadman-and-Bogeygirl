@@ -8,12 +8,13 @@ class Digit : public QGraphicsTextItem
     Q_OBJECT
 public:
     Digit(int digit, QGraphicsItem* parent=NULL);
-    //void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    ~Digit();
     int value;
+    //void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 public slots:
     void increase();
-    void decrease();
+    void decrease(); 
 
 };
 
