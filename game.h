@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include "player.h"
-#include "deadman.h"
+#include "npc.h"
 #include "dialogbox.h"
 #include "chalk.h"
 #include "riddlebox.h"
@@ -16,13 +16,8 @@
 #include "dyegame.h"
 #include "dancegame.h"
 #include "voltorbgame.h"
-#include "tree.h"
-#include "kids.h"
 #include "dog.h"
 #include "redwhite.h"
-#include "unicorn.h"
-#include "couple.h"
-#include "thinker.h"
 
 class Game: public QGraphicsView{
     Q_OBJECT

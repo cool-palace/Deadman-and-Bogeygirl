@@ -14,17 +14,15 @@ SOURCES += \
     card.cpp \
     cave.cpp \
     chalk.cpp \
-    couple.cpp \
     dancegame.cpp \
-    deadman.cpp \
     dialogbox.cpp \
     digit.cpp \
     dog.cpp \
     dye.cpp \
     dyegame.cpp \
     game.cpp \
-    kids.cpp \
     main.cpp \
+    npc.cpp \
     player.cpp \
     redwhite.cpp \
     riddle.cpp \
@@ -32,9 +30,6 @@ SOURCES += \
     snack.cpp \
     snackgame.cpp \
     speechline.cpp \
-    thinker.cpp \
-    tree.cpp \
-    unicorn.cpp \
     voltorbgame.cpp
 
 HEADERS += \
@@ -42,16 +37,13 @@ HEADERS += \
     card.h \
     cave.h \
     chalk.h \
-    couple.h \
     dancegame.h \
-    deadman.h \
     dialogbox.h \
     digit.h \
     dog.h \
     dye.h \
     dyegame.h \
     game.h \
-    kids.h \
     npc.h \
     player.h \
     redwhite.h \
@@ -60,9 +52,6 @@ HEADERS += \
     snack.h \
     snackgame.h \
     speechline.h \
-    thinker.h \
-    tree.h \
-    unicorn.h \
     voltorbgame.h
 
 FORMS +=

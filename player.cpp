@@ -6,7 +6,6 @@
 #include <QDebug>
 
 extern Game * game; // there is an external global object called game
-extern Deadman * deadman; // there is an external global object called deadman
 int step = 32;
 
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
