@@ -24,17 +24,18 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
     line = new QGraphicsTextItem(this);
     avatar = new QGraphicsPixmapItem(this);
 
-    avatar->setPos(0,450);
-
     line->setDefaultTextColor(Qt::white);
-    line->setPos(150, 450);
-    //line->setScale(2);
     line->setFont({"Comic Sans", 16});
-    line->setTextWidth(550/line->scale());
+    line->setTextWidth(640);
 
     setEnabled(true);
 
     hide();
+}
+
+DialogBox::~DialogBox() {
+    delete line;
+    delete avatar;
 }
 
 void DialogBox::keyPressEvent(QKeyEvent *event){
@@ -120,13 +121,18 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 emit voltorbgameCall();
                 break;
 
-            case Game::thinkerSeqStart+11:
+            case Game::thinkerSeqStart+11: case Game::thinkerSeqStart+12: case Game::thinkerSeqStart+13:
+                // Открыть сапёра
+                game->voltorbgame->reset();
+                break;
+
+            case Game::thinkerSeqStart+14:
                 // Закрыть сапёра
 //                disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
 //                delete game->dancegame;
                 game->scene->setSceneRect(0,0,2760,2130);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
-                getBox(Game::thinkerSeqStart+12,Game::thinkerSeqStart+15);
+                getBox(Game::thinkerSeqStart+15,Game::thinkerSeqStart+18);
                 break;
             }
 
@@ -135,7 +141,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             ++start;
             getBox(start, end);
         }
-        qDebug() << "Trying to get the next line";
+
     }
 }
 
@@ -153,12 +159,16 @@ void DialogBox::getBox(int in_start, int in_end) {
     }
 
     avatar->setPixmap(QPixmap(game->speech[start].speaker));
-    avatar->setPos(xPos,yPos);
 
-    line->setPlainText(game->speech[start].line);
-    //line->setDefaultTextColor(Qt::white);
-    line->setPos(xPos+150,yPos);
-    line->setTextWidth(650/line->scale());
+    if (game->speech[start].speaker.contains("player")) {
+        avatar->setPos(xPos+650,yPos);
+        line->setHtml(right_aligned_str.arg(game->speech[start].line));
+        line->setPos(xPos+10,yPos+10);
+    } else {
+        avatar->setPos(xPos,yPos);
+        line->setPlainText(game->speech[start].line);
+        line->setPos(xPos+150,yPos+10);
+    }
 
     show();
     grabKeyboard();

@@ -15,11 +15,15 @@ public:
     bool flipped = false;
     bool flagged = false;
 
+    void flip();
+    void change(int level);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 signals:
+    void pointCardOpen(int);
+    void explode(int);
 
 };
 

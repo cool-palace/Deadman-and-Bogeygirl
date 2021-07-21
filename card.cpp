@@ -3,9 +3,15 @@
 
 Card::Card(int level, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/tile.png"));
+    change(level);
+}
 
-    if (level > 7) level = 7;
+void Card::change(int level) {
+    setPixmap(QPixmap(":/images/tile.png"));
+    flipped = false;
+    flagged = false;
+
+    if (level > 3) level = 3;
     int rng = rand() % 100;
 
     switch (level) {
@@ -28,22 +34,32 @@ Card::Card(int level, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(pa
         else if (rng < 100 && rng >= 85) value = 3; // 15%
         break;
     }
-
     setAcceptHoverEvents(true);
+}
 
+void Card::flip() {
+    flipped = true;
+    setAcceptHoverEvents(false);
+    QString str = ":/images/tile-%1.png";
+    setPixmap(QPixmap(str.arg(value)));
 }
 
 void Card::mousePressEvent(QGraphicsSceneMouseEvent *event){
 
     if (event->button() == Qt::LeftButton && !flipped) {
-        flipped = true;
-        setAcceptHoverEvents(false);
-        QString str = ":/images/tile-%1.png";
-        setPixmap(QPixmap(str.arg(value)));
+        flip();
+        if (value > 1) emit pointCardOpen(value);
+        else if (value == 0) emit explode(value);
 
-    } else if (event->button() == Qt::RightButton) {
-        flagged = true;
-        setPixmap(QPixmap(":/images/tile-flag-yellow.png"));
+    } else if (event->button() == Qt::RightButton && !flipped) {
+        if (!flagged) {
+            flagged = true;
+            setPixmap(QPixmap(":/images/tile-flag-yellow.png"));
+        } else {
+            flagged = false;
+            setPixmap(QPixmap(":/images/tile-yellow.png"));
+        }
+
     }
 }
 
