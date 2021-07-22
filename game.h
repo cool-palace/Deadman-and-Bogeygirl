@@ -37,19 +37,21 @@ public:
     Chalk * chalk;
     RiddleBox * riddlebox;
     QPointF currentViewPos = {0, 0};
-    QGraphicsPixmapItem * exit;
+    Exit * exit;
     Cave * cave;
+    Entrance * entrance;
     SnackGame * snackgame;
     DyeGame * dyegame;
     DanceGame * dancegame;
     VoltorbGame * voltorbgame;
     Tree * tree;
     Kids * kids;
-    Dog * dog[1];
+    Dog * dog;
     RedWhite * kb;
     Unicorn * unicorn;
     Couple * couple;
     Thinker * thinker;
+    Snake * snake[2];
     QVector<QMediaPlayer *> crushSound {5};
 
 
@@ -59,11 +61,11 @@ public:
 
     constexpr static int worldSize = 2760;
     constexpr static int unicornSeqStart = 24;
-    constexpr static int kalinaSeqStart = 34;
-    constexpr static int coupleSeqStart = 56;
-    constexpr static int thinkerSeqStart = 66;
-    constexpr static int kidsSeqStart = 85;
-
+    constexpr static int kalinaSeqStart = 41;
+    constexpr static int coupleSeqStart = 63;
+    constexpr static int thinkerSeqStart = 73;
+    constexpr static int kidsSeqStart = 92;
+    constexpr static int snakeSeqStart = 110;
 
 public slots:
     void start();

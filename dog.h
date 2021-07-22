@@ -11,14 +11,27 @@ class Dog : public QObject, public QGraphicsPixmapItem
 public:
     Dog(QGraphicsItem *parent = nullptr);
     ~Dog();
-    QTimer * timer;
-    static int caught_count;
 
 public slots:
     void move();
 
-//signals:
-//    void dialogCall(int start, int end);
+private:
+    QTimer * timer;
+};
+
+class Snake : public QObject, public QGraphicsPixmapItem
+{
+    Q_OBJECT
+public:
+    Snake(int id, QGraphicsItem *parent = nullptr);
+    ~Snake();
+
+public slots:
+    void start();
+    void move();
+
+private:
+    QTimer * timer;
 };
 
 #endif // DOG_H

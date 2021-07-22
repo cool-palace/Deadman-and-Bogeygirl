@@ -21,6 +21,7 @@ public:
     Kids(QGraphicsItem *parent = nullptr);
 };
 
+
 class Thinker : public QGraphicsPixmapItem
 {
 public:

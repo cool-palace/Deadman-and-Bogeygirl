@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/images">
-        <file>player.png</file>
         <file>bg.png</file>
         <file>deadman.png</file>
         <file>asmr.png</file>
@@ -35,6 +34,14 @@
         <file>bomb.png</file>
         <file>tile-flag.png</file>
         <file>tile-flag-yellow.png</file>
+        <file>cave-entrance.png</file>
+        <file>player-left.png</file>
+        <file>player-right.png</file>
+        <file>bullet.png</file>
+        <file>snake-1.png</file>
+        <file>snake-1-shot.png</file>
+        <file>snake-2.png</file>
+        <file>snake-2-shot.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>crush-1.wav</file>

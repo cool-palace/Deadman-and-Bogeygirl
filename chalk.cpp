@@ -29,7 +29,7 @@ void Chalk::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (cracksCount < 5) {
             // Добавить выбор загадки потом
             if (cracksCount == 4) {
-                emit cracked(&game->riddles[0]);
+                emit cracked(&game->riddles[4]);
                 delete this;
                 return;
             }

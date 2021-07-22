@@ -4,8 +4,16 @@ Cave::Cave(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
     // set graphic
     setPixmap(QPixmap(":/images/cave.png"));
-    QGraphicsRectItem * exit = new QGraphicsRectItem(this);
-    exit->setRect(43,64,7,16);
-    exit->show();
-    setScale(3);
+}
+
+Entrance::Entrance(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
+{
+    // set graphic
+    setPixmap(QPixmap(":/images/cave-entrance.png"));
+}
+
+Exit::Exit(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
+{
+    // set graphic
+    setPixmap(QPixmap(":/images/exit.png"));
 }

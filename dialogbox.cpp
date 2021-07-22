@@ -36,6 +36,7 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
 DialogBox::~DialogBox() {
     delete line;
     delete avatar;
+    qDebug() << "db del";
 }
 
 void DialogBox::keyPressEvent(QKeyEvent *event){
@@ -60,12 +61,11 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case Game::kidsSeqStart+10:
                 // Гуляем и ловим собак
                 game->kids->setParentItem(game->player);
-                game->kids->setScale(1);
-                game->kids->setPos(20,3);
+                game->kids->setPos(60,9);
                 for (int i = 0; i < 1; ++i) {
-                    game->dog[i] = new Dog();
-                    game->dog[i]->setPos(300,2000);
-                    game->scene->addItem(game->dog[i]);
+                    game->dog = new Dog();
+                    game->dog->setPos(300,2000);
+                    game->scene->addItem(game->dog);
                 }
                 break;
 
@@ -84,15 +84,15 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 }
                 break; }
 
-            case 27:
+            case Game::unicornSeqStart+3:
                 emit dyegameCall();
                 break;
-            case 32:
+            case Game::unicornSeqStart+8:
                 // Закрыть красители
                 delete game->dyegame;
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
-                getBox(33,33);
+                getBox(Game::unicornSeqStart+9,Game::unicornSeqStart+16);
                 break;
 
             case Game::kalinaSeqStart+6:
@@ -116,7 +116,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 // Закрыть танец
                 disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
                 delete game->dancegame;
-                game->scene->setSceneRect(0,0,2760,2130);
+                game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 getBox(Game::coupleSeqStart+9,Game::coupleSeqStart+9);
                 break;
@@ -133,11 +133,18 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 
             case Game::thinkerSeqStart+14:
                 // Закрыть сапёра
-//                disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
                 delete game->voltorbgame;
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 getBox(Game::thinkerSeqStart+15,Game::thinkerSeqStart+18);
+                break;
+
+            case Game::snakeSeqStart+14:
+                // Стреляем змей
+                game->player->canShoot = true;
+                for (int i = 0; i < 2; ++i) {
+                    game->snake[i]->start();
+                }
                 break;
             }
 
