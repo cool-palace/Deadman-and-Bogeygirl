@@ -56,10 +56,13 @@ public:
     const static QVector<Riddle> riddles;
 
     const static QVector<Speechline> speech;
+
+    constexpr static int worldSize = 2760;
     constexpr static int unicornSeqStart = 24;
     constexpr static int kalinaSeqStart = 34;
-    constexpr static int coupleSeqStart = 55;
-    constexpr static int thinkerSeqStart = 65;
+    constexpr static int coupleSeqStart = 56;
+    constexpr static int thinkerSeqStart = 66;
+    constexpr static int kidsSeqStart = 85;
 
 
 public slots:

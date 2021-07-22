@@ -86,10 +86,6 @@ void Game::displayMainMenu(){
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
     connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
-    //connect(playButton,SIGNAL(clicked()),this,SLOT(snacks_game()));
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(asmr()));
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(outside()));
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(dye_game()));
     scene->addItem(playButton);
 
     // create the quit button
@@ -130,11 +126,7 @@ void Game::outside() {
     // clear the screen
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg-big.png")));
-//    QBrush brush;
-//    brush.setStyle(Qt::Dense1Pattern);
-//    brush.setColor(QColor(0,0,0,100));
-//    setBackgroundBrush(brush);
-    scene->setSceneRect(0,0,2760,2130);
+    scene->setSceneRect(0,0,worldSize,worldSize);
     setSceneRect(980,0,800,600);
     currentViewPos = {980, 0};
 
@@ -146,39 +138,39 @@ void Game::outside() {
     scene->addItem(cave);
 
     tree = new Tree();
-    int txPos = scene->width()/2 - tree->boundingRect().width()*tree->scale()/2;
-    int tyPos = 600;
+    int txPos = 2123;
+    int tyPos = 1920;
     tree -> setPos(txPos,tyPos);
     scene->addItem(tree);
 
-//    kids = new Kids();
-//    int kxPos = scene->width()/2 - kids->boundingRect().width()*kids->scale()/2;
-//    int kyPos = 600;
-//    kids -> setPos(kxPos,kyPos);
-//    scene->addItem(kids);
+    kids = new Kids();
+    int kxPos = scene->width()/2 - kids->boundingRect().width()*kids->scale()/2;
+    int kyPos = 600;
+    kids -> setPos(kxPos,kyPos);
+    scene->addItem(kids);
 
-//    kb = new RedWhite();
-//    kb->setPos(2170,1441);
-//    scene->addItem(kb);
-//    kb->hide();
+    kb = new RedWhite();
+    kb->setPos(2170,1441);
+    scene->addItem(kb);
+    kb->hide();
 
-//    unicorn = new Unicorn();
-//    int uxPos = scene->width()/2 - unicorn->boundingRect().width()*unicorn->scale()/2;
-//    int uyPos = 600;
-//    unicorn->setPos(uxPos,uyPos);
-//    scene->addItem(unicorn);
+    unicorn = new Unicorn();
+    int uxPos = 469;
+    int uyPos = 409;
+    unicorn->setPos(uxPos,uyPos);
+    scene->addItem(unicorn);
 
-//    couple = new Couple();
-//    int cpxPos = scene->width()/2 - couple->boundingRect().width()*couple->scale()/2;
-//    int cpyPos = 600;
-//    couple->setPos(cpxPos,cpyPos);
-//    scene->addItem(couple);
+    couple = new Couple();
+    int cpxPos = 457;
+    int cpyPos = 1539;
+    couple->setPos(cpxPos,cpyPos);
+    scene->addItem(couple);
 
-//    thinker = new Thinker();
-//    int thxPos = scene->width()/2 - thinker->boundingRect().width()*thinker->scale()/2;
-//    int thyPos = 600;
-//    thinker->setPos(thxPos,thyPos);
-//    scene->addItem(thinker);
+    thinker = new Thinker();
+    int thxPos = 700;
+    int thyPos = 1963;
+    thinker->setPos(thxPos,thyPos);
+    scene->addItem(thinker);
 
     // create a dialog box
     dialogbox = new DialogBox();
@@ -356,11 +348,12 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Очень вкусно, намного лучше предыдущего!"},
     {":/images/player.png", "Это лучший сырок, который я пробовала!"},
     {":/images/kalina.png", "Похоже, ты ещё не расположила все сырки по местам."}, // 51
+    {":/images/kalina.png", "На каждом месте должно быть не больше одного сырка."},
     {":/images/kalina.png", "Распробуй сырки получше, пока мне кажется, что что-то не совсем правильно."}, //
-    {":/images/kalina.png", "Всё правильно!"}, //53
+    {":/images/kalina.png", "Всё правильно!"}, //54
     {":/images/kalina.png", "Спасибо за обзор на сырки! Вот тебе мел за помощь!"}, //
 
-    {":/images/player.png", "Привет, у вас случайно нет мела?"}, // 55
+    {":/images/player.png", "Привет, у вас случайно нет мела?"}, // 56
     {":/images/couple.png", "Ну да, есть немного) Паровоз, паровоз..."},
     {":/images/player.png", "А поделитесь со мной? Мне очень надо."},
     {":/images/couple.png", "Хорошо) Паровоз, паровоз..."},
@@ -369,9 +362,9 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Эх, не могут просто так отдать..."},
     {":/images/couple.png", "Мы любим песню про паровоз, давай под неё, чтобы было смешнее)"},
     {":/images/couple.png", "Отлично станцевала, молодец)))"},
-    {":/images/couple.png", "Держи, заслужила) Вышло очень забавно)))"}, // 64
+    {":/images/couple.png", "Держи, заслужила) Вышло очень забавно)))"}, // 65
 
-    {":/images/thinker.png", "Если я открою эту клетку, то могу победить. С другой стороны, риск слишком велик... Стоит ли всё же делать этот ход?"}, // 65
+    {":/images/thinker.png", "Если я открою эту клетку, то могу победить. С другой стороны, риск слишком велик... Стоит ли всё же делать этот ход?"}, // 66
     {":/images/thinker.png", "Как же сложно делать выбор..."},
     {":/images/player.png", "Что ты делаешь?"},
     {":/images/thinker.png", "Я играю в одну игру, но уже битый час стою на одном месте, не в силах сходить..."},
@@ -381,7 +374,7 @@ const QVector<Speechline> Game::speech = {
     {":/images/thinker.png", "А в чём заключается победа? Это тоже философский вопрос. Аристотель говорил, что рассудительный стремится к отсутствию страданий, а не к наслаждению. Тогда, выходит, настоящая победа состоит в том, чтобы не проиграть."},
     {":/images/player.png", "Что за бред... Это просто игра!"},
     {":/images/player.png", "Строишь всякие рассуждения, просто чтобы оправдаться за то, что ты боишься. Ты не философ, ты филофоб!"},
-    {":/images/player.png", "Давай я тебе покажу, как надо!"}, //75
+    {":/images/player.png", "Давай я тебе покажу, как надо!"}, //+10
     {":/images/player.png", "Ничего, попробую ещё раз!"},
     {":/images/player.png", "Теперь следующий уровень!"},
     {":/images/player.png", "И ещё один разок!"},
@@ -389,6 +382,26 @@ const QVector<Speechline> Game::speech = {
     {":/images/thinker.png", "Спасибо, ты и правда помогла мне взглянуть на вещи под другим углом."},
     {":/images/thinker.png", "\"Несчастная судьба многих людей — следствие несделанного ими выбора. Они ни живые, ни мертвые. Жизнь оказывается бременем, бесцельным занятием, а дела — лишь средством защиты от мук бытия в царстве теней.\""},
     {":/images/thinker.png", "Это Эрих Фромм. Я так много думал, но никогда бы мне не пришла в голову мысль о том, что я сам окажусь в подобной ловушке разума."},
-    {":/images/thinker.png", "Возьми немного мела в подарок."}, // 81
+    {":/images/thinker.png", "Возьми немного мела в подарок."}, // +18
+
+    {":/images/kids.png", "Привет, пойдём гулять!"}, // 85
+    {":/images/player.png", "А куда вы идёте?"},
+    {":/images/kids.png", "Мы идём в красное и белое!"},
+    {":/images/player.png", "<i>А вам не рано ещё?</i>"},
+    {":/images/kids.png", "Мы хотим купить колы и чипсов, только есть одна проблема."},
+    {":/images/player.png", "Какая?"},
+    {":/images/kids.png", "Красное и белое скрывается от посторонних глаз, его можно найти только по запаху."},
+    {":/images/kids.png", "Поэтому мы ищем компанию, может быть, кто-то поможет и проводит нас!"},
+    {":/images/player.png", "Хорошо, давайте пойдём вместе. Мне всё равно надо осмотреться здесь."},
+    {":/images/kids.png", "Ура!"},
+    {":/images/player.png", "<i>Какие хорошие дети...</i>"}, //+10
+    {":/images/player.png", "Смотрите, собачка!"},  // +11
+    {":/images/player.png", "Привет! Пойдём с нами!"},
+    {":/images/dog.png", "Гав!"},
+    {":/images/kids.png", "Собачка, помоги нам найти красное и белое!"},
+    {":/images/dog.png", "Гав! Гав!"},   // +15
+    {":/images/kids.png", "Ура! Мы дошли до красного и белого!"},
+    {":/images/kids.png", "Спасибо, что погуляла с нами! Возьми этот мел."}, //+17
+
                                          };
 

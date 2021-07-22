@@ -68,14 +68,21 @@ void SnackGame::checkAnswer() {
 
     for (int i = 0; i < 5; ++i) {
         QList<QGraphicsItem *> colliding_items = snack_slots[i]->collidingItems();
-        if (colliding_items.size() < 3) {
+        for (int j = 0; j < colliding_items.size(); ++j) {
+            if (colliding_items[j]->zValue() < 10) {
+                colliding_items.removeAt(j);
+                --j;
+            }
+        }
+        if (colliding_items.size() == 0) {
             emit result(Game::kalinaSeqStart+17,Game::kalinaSeqStart+17);
             all_placed = false;
             return;
+        } else if (colliding_items.size() > 1) {
+            emit result(Game::kalinaSeqStart+18,Game::kalinaSeqStart+18);
+            all_placed = false;
+            return;
         }
-//        for (int j = 0; j < colliding_items.size(); ++j) {
-//            qDebug() << colliding_items[j] << Qt::endl;
-//        }
     }
 
     if (!all_placed) return;
@@ -85,11 +92,11 @@ void SnackGame::checkAnswer() {
             && snack_slots[2]->collidesWithItem(snacks[4])
             && snack_slots[3]->collidesWithItem(snacks[0])
             && snack_slots[4]->collidesWithItem(snacks[3])) {
-        emit result(Game::kalinaSeqStart+19,Game::kalinaSeqStart+19);
+        emit result(Game::kalinaSeqStart+20,Game::kalinaSeqStart+20);
         qDebug() << "right";
         return;
     }
-    emit result(Game::kalinaSeqStart+18,Game::kalinaSeqStart+18);
+    emit result(Game::kalinaSeqStart+19,Game::kalinaSeqStart+19);
     qDebug() << "wrong";
 
 }

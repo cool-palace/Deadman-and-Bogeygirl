@@ -111,7 +111,7 @@ void Player::keyPressEvent(QKeyEvent *event){
             } else if (dynamic_cast<Kids*>(colliding_items[i])) {
                 if (childItems().empty()) {
                     setImmobile();
-                    emit dialogCall(17,20);
+                    emit dialogCall(Game::kidsSeqStart,Game::kidsSeqStart+10);
                 }
 
 //            } else if (dynamic_cast<Dog*>(colliding_items[i])) {
@@ -120,11 +120,11 @@ void Player::keyPressEvent(QKeyEvent *event){
 
             } else if (dynamic_cast<RedWhite*>(colliding_items[i])) {
                 setImmobile();
-                emit dialogCall(22,23);
+                emit dialogCall(Game::kidsSeqStart+16,Game::kidsSeqStart+17);
 
             } else if (dynamic_cast<Unicorn*>(colliding_items[i])) {
                 setImmobile();
-                emit dialogCall(24,27);
+                emit dialogCall(Game::unicornSeqStart,Game::unicornSeqStart+3);
 
             } else if (dynamic_cast<Couple*>(colliding_items[i])) {
                 setImmobile();
@@ -153,12 +153,3 @@ void Player::keyPressEvent(QKeyEvent *event){
     }
 
 }
-
-//template <typename T> void Player::react(T* object) { qDebug() << "template";};
-
-//template <> void Player::react(Deadman* object) {
-//    setImmobile();
-//    if (game->dialogbox->end == 0) {
-//        emit dialogCall(0,1);
-//    } else emit dialogCall(2,2);
-//};

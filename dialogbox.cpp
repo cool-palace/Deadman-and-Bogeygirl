@@ -57,33 +57,40 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 //                game->riddlebox->hide();
                 break;
 
-            case 20:
+            case Game::kidsSeqStart+10:
                 // Гуляем и ловим собак
                 game->kids->setParentItem(game->player);
                 game->kids->setScale(1);
                 game->kids->setPos(20,3);
                 for (int i = 0; i < 1; ++i) {
                     game->dog[i] = new Dog();
-                    game->dog[i]->setPos(rand()%2400+180,rand()%1800+250);
+                    game->dog[i]->setPos(300,2000);
                     game->scene->addItem(game->dog[i]);
                 }
                 break;
-            case 21:
+
+            case Game::kidsSeqStart+15:
+//                game->dog[0]->setParentItem(game->player);
+//                game->dog[0]->setScale(1);
+//                game->dog[0]->setPos(-23,10);
                 game->kb->show();
                 break;
-            case 23: {
+
+            case Game::kidsSeqStart+17: {
                 QList<QGraphicsItem *> child_items = game->player->childItems();
                 for (int i = 0; i < child_items.size(); ++i) {
                     child_items[i]->setParentItem(0);
+                    child_items[i]->hide();
                 }
                 break; }
+
             case 27:
                 emit dyegameCall();
                 break;
             case 32:
                 // Закрыть красители
                 delete game->dyegame;
-                game->scene->setSceneRect(0,0,2760,2130);
+                game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 getBox(33,33);
                 break;
@@ -92,12 +99,12 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 emit snackgameCall();
                 break;
 
-            case Game::kalinaSeqStart+19:
+            case Game::kalinaSeqStart+20:
                 // Зыкрыть сырки
                 delete game->snackgame;
-                game->scene->setSceneRect(0,0,2760,2130);
+                game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
-                getBox(Game::kalinaSeqStart+20,Game::kalinaSeqStart+20);
+                getBox(Game::kalinaSeqStart+21,Game::kalinaSeqStart+21);
                 break;
 
             case Game::coupleSeqStart+7:
@@ -128,7 +135,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 // Закрыть сапёра
 //                disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
                 delete game->voltorbgame;
-                game->scene->setSceneRect(0,0,2760,2130);
+                game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 getBox(Game::thinkerSeqStart+15,Game::thinkerSeqStart+18);
                 break;

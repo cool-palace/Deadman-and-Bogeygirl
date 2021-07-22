@@ -68,32 +68,30 @@ DyeGame::~DyeGame() {
 void DyeGame::checkAnswer() {
 
     QList<QGraphicsItem *> colliding_items = dye_slot->collidingItems();
-//    for (int i = 0; i < colliding_items.size(); ++i) {
-//        qDebug() << colliding_items[i];
-//    }
-    // Два объекта сталкиваются со слотом изначально, поэтому при правильном решении должно быть всего 4
-    if (colliding_items.size() < 3) {
+    for (int i = 0; i < colliding_items.size(); ++i) {
+        if (colliding_items[i]->zValue() < 10) {
+            colliding_items.removeAt(i);
+            --i;
+        }
+    }
+
+    switch (colliding_items.size()) {
+    case 0:
         emit result(Game::unicornSeqStart+4,Game::unicornSeqStart+4);
-        return;
-    }
-    if (colliding_items.size() < 4) {
+        break;
+    case 1:
         emit result(Game::unicornSeqStart+5,Game::unicornSeqStart+5);
-        return;
-    }
-    if (colliding_items.size() > 4) {
+        break;
+    case 2:
+        if (dyes[2]->collidesWithItem(dye_slot) && dyes[3]->collidesWithItem(dye_slot)) {
+            emit result(Game::unicornSeqStart+8,Game::unicornSeqStart+8);
+            qDebug() << "right";
+        } else emit result(Game::unicornSeqStart+7,Game::unicornSeqStart+7);
+        break;
+    default:
         emit result(Game::unicornSeqStart+6,Game::unicornSeqStart+6);
-        return;
+        break;
     }
-
-    if (dyes[2]->collidesWithItem(dye_slot)
-            && dyes[3]->collidesWithItem(dye_slot)) {
-        emit result(Game::unicornSeqStart+8,Game::unicornSeqStart+8);
-        qDebug() << "right";
-        return;
-    }
-    emit result(Game::unicornSeqStart+7,Game::unicornSeqStart+7);
-    qDebug() << "wrong";
-
 }
 
 void DyeGame::reset() {

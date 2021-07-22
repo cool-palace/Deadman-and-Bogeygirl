@@ -16,10 +16,6 @@ Chalk::Chalk(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 
 Chalk::~Chalk() {
     delete cracks;
-//    for (int i = 0; i < crushSound.size(); ++i) {
-//        delete crushSound[i];
-//    }
-    qDebug() << "chalk deleted";
 }
 
 void Chalk::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -34,7 +30,6 @@ void Chalk::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             // Добавить выбор загадки потом
             if (cracksCount == 4) {
                 emit cracked(&game->riddles[0]);
-                //setAcceptHoverEvents(false);
                 delete this;
                 return;
             }

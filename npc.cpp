@@ -3,7 +3,7 @@
 Couple::Couple(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/images/couple.png"));
-    setScale(2);
+//    setScale(2);
 }
 
 Deadman::Deadman(QGraphicsItem *parent): QGraphicsPixmapItem(parent)

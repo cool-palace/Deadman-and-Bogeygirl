@@ -1,5 +1,6 @@
 #include "dog.h"
 #include "game.h"
+#include "qmath.h"
 
 extern Game * game;
 
@@ -23,23 +24,26 @@ Dog::~Dog(){
 void Dog::move(){
 
     QList<QGraphicsItem *> colliding_items = collidingItems();
-    if (colliding_items.size() > 0) {
-        for (int i = 0, n = colliding_items.size(); i < n; ++i) {
-            if (dynamic_cast<Player*>(colliding_items[i])){
-                emit game->player->dialogCall(21,21);
-                this->setParentItem(colliding_items[i]);
-                setScale(1);
-                setPos(60,10-caught_count*(boundingRect().height()+1)*scale());
-                ++caught_count;
-                disconnect(timer,SIGNAL(timeout()),this,SLOT(move()));
-                return;
-            }
+    for (int i = 0, n = colliding_items.size(); i < n; ++i) {
+        if (dynamic_cast<Player*>(colliding_items[i]) || dynamic_cast<Kids*>(colliding_items[i])){
+            emit game->player->dialogCall(Game::kidsSeqStart+11,Game::kidsSeqStart+15);
+            this->setParentItem(game->player);
+            setScale(1);
+            setPos(-23,10);
+            ++caught_count;
+            disconnect(timer,SIGNAL(timeout()),this,SLOT(move()));
+            return;
         }
     }
 
-    int x_diff = rand() % 30 - 15;
-    int y_diff = rand() % 30 - 15;
-    QPointF diff = {(qreal)x_diff, (qreal)y_diff};
+    int theta = rand() % 360;
+    double x_diff = 20 * qSin(qDegreesToRadians((double) theta));
+    double y_diff = 20 * qCos(qDegreesToRadians((double) theta));
+
+
+//    int x_diff = rand() % 30 - 15;
+//    int y_diff = rand() % 30 - 15;
+    QPointF diff = {x_diff, y_diff};
 
     if (x()+x_diff < 0) {
         diff.setX(-x());
