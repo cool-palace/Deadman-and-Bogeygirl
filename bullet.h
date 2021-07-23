@@ -21,7 +21,12 @@ public:
 public slots:
     void move();
 
+signals:
+    void hitTarget();
+    void dialogCall(int start, int end);
+
 private:
+    //static int snakesShot;
     directions direction = LEFT;
     QTimer * timer;
 };

@@ -16,7 +16,6 @@
 #include "dyegame.h"
 #include "dancegame.h"
 #include "voltorbgame.h"
-#include "dog.h"
 #include "redwhite.h"
 
 class Game: public QGraphicsView{
@@ -54,6 +53,26 @@ public:
     Snake * snake[2];
     QVector<QMediaPlayer *> crushSound {5};
 
+    enum Progress {
+        START,
+        INTRO_COMPLETE,
+        DOG_QUEST_COMPLETE,
+        FIRST_RIDDLE_SOLVED,
+        UNICORN_QUEST_COMPLETE,
+        SECOND_RIDDLE_SOLVED,
+        DANCE_QUEST_COMPLETE,
+        THIRD_RIDDLE_SOLVED,
+        SNAKES_DEFEATED,
+        AFTER_SNAKES_DIALOG_OVER,
+        TREE_QUEST_COMPLETE,
+        FOURTH_RIDDLE_SOLVED,
+        PHILOPHOBE_QUEST_COMPLETE,
+        FIFTH_RIDDLE_SOLVED,
+        OUTSIDE_EMPTINESS_DISCOVERED,
+        WITCH_DEFEATED
+    };
+
+    Progress progress = START;
 
     const static QVector<Riddle> riddles;
 

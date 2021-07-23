@@ -157,8 +157,14 @@ void Player::keyPressEvent(QKeyEvent *event){
             emit dialogCall(Game::thinkerSeqStart,Game::thinkerSeqStart+10);
 
         } else if (dynamic_cast<Snake*>(colliding_items[i])) {
-            setImmobile();
-            emit dialogCall(Game::snakeSeqStart,Game::snakeSeqStart+14);
+            Snake * snake = dynamic_cast<Snake*>(colliding_items[i]);
+            if (!snake->moving && !snake->dead) {
+                setImmobile();
+                emit dialogCall(Game::snakeSeqStart,Game::snakeSeqStart+14);
+            } else if (snake->dead) {
+                setImmobile();
+                emit dialogCall(Game::snakeSeqStart+16+snake->id,Game::snakeSeqStart+16+snake->id);
+            }
 
         } else if (dynamic_cast<Exit*>(colliding_items[i])) {
             emit goingOut();

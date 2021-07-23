@@ -19,6 +19,7 @@ public:
 signals:
     void clicked();
 private:
+    static int snakesShot;
     QGraphicsTextItem* text;
     QBrush brush;
 };

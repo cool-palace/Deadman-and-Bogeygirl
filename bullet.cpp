@@ -1,5 +1,5 @@
 #include "bullet.h"
-#include "dog.h"
+#include "npc.h"
 #include <QDebug>
 #include "game.h"
 
@@ -25,6 +25,8 @@ Bullet::~Bullet() {
     qDebug() << "bullet deleted";
 };
 
+//int Bullet::snakesShot = 0;
+
 void Bullet::move(){
     int step = 15;
 
@@ -46,7 +48,10 @@ void Bullet::move(){
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
         if (dynamic_cast<Snake*>(colliding_items[i])){
-            delete colliding_items[i];
+            Snake * snake = dynamic_cast<Snake*>(colliding_items[i]);
+            connect(this,SIGNAL(hitTarget()),snake,SLOT(shot()));
+            emit hitTarget();
+            //++snakesShot;
             delete this;
             return;
         }

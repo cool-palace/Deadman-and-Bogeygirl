@@ -18,7 +18,6 @@ SOURCES += \
     dancegame.cpp \
     dialogbox.cpp \
     digit.cpp \
-    dog.cpp \
     dye.cpp \
     dyegame.cpp \
     game.cpp \
@@ -41,8 +40,8 @@ HEADERS += \
     chalk.h \
     dancegame.h \
     dialogbox.h \
+    dialogs.h \
     digit.h \
-    dog.h \
     dye.h \
     dyegame.h \
     game.h \

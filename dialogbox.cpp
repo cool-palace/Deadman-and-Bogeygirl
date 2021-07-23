@@ -70,9 +70,6 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 break;
 
             case Game::kidsSeqStart+15:
-//                game->dog[0]->setParentItem(game->player);
-//                game->dog[0]->setScale(1);
-//                game->dog[0]->setPos(-23,10);
                 game->kb->show();
                 break;
 
@@ -82,6 +79,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                     child_items[i]->setParentItem(0);
                     child_items[i]->hide();
                 }
+                getBox(Game::kidsSeqStart+18,Game::kidsSeqStart+18);
                 break; }
 
             case Game::unicornSeqStart+3:
@@ -178,7 +176,7 @@ void DialogBox::getBox(int in_start, int in_end) {
         line->setPos(xPos+10,yPos+10);
     } else {
         avatar->setPos(xPos,yPos);
-        line->setPlainText(game->speech[start].line);
+        line->setHtml(game->speech[start].line);
         line->setPos(xPos+150,yPos+10);
     }
 

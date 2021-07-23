@@ -11,7 +11,6 @@ class Player : public QObject, public QGraphicsPixmapItem{
 public:
     Player(QGraphicsItem * parent=0);
     void keyPressEvent(QKeyEvent * event);
-    bool isMovable = true;
     void setMovable();
     void setImmobile();
     enum directions {
@@ -20,17 +19,19 @@ public:
         LEFT,
         RIGHT
     };
-    bool canShoot = true;
-    directions direction = LEFT;
+    bool canShoot = false;
 
-public slots:
-    //void dialog();
+    directions direction = LEFT;
 
 signals:
 //    void dialogCall(int i);
     void dialogCall(int start, int end);
     void goingOut();
     void goingIn();
+
+private:
+    bool isMovable = true;
+
 };
 
 #endif // PLAYER_H
