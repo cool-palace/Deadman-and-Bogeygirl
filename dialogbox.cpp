@@ -20,6 +20,7 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
 
     setRect(0,450,800,150);
     setBrush(brush);
+    setZValue(1);
 
     line = new QGraphicsTextItem(this);
     avatar = new QGraphicsPixmapItem(this);
@@ -36,7 +37,6 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
 DialogBox::~DialogBox() {
     delete line;
     delete avatar;
-    qDebug() << "db del";
 }
 
 void DialogBox::keyPressEvent(QKeyEvent *event){
@@ -46,20 +46,14 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             hide();
             game->player->setFocus();
             switch (end) {
-            case 1:
-                // Первый диалог
-                emit chalkCall();
-//                qDebug() << "Trying to get the chalk";
-                break;
-            case 4:
-                // Закрыть загадку
-                //game->exit->show();
-                delete game->riddlebox;
-//                game->riddlebox->hide();
+            case Game::deadmanSeq1Start+30:
+                game->exit->show();
+                game->progress = Game::INTRO_COMPLETE;
                 break;
 
             case Game::kidsSeqStart+10:
                 // Гуляем и ловим собак
+                game->progress = Game::DOG_QUEST_STARTED;
                 game->kids->setParentItem(game->player);
                 game->kids->setPos(60,9);
                 for (int i = 0; i < 1; ++i) {
@@ -74,13 +68,48 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 break;
 
             case Game::kidsSeqStart+17: {
-                QList<QGraphicsItem *> child_items = game->player->childItems();
-                for (int i = 0; i < child_items.size(); ++i) {
-                    child_items[i]->setParentItem(0);
-                    child_items[i]->hide();
-                }
+                delete game->dog;
+                delete game->kids;
+                game->progress = Game::DOG_QUEST_COMPLETE;
                 getBox(Game::kidsSeqStart+18,Game::kidsSeqStart+18);
                 break; }
+
+            case Game::deadmanSeq2Start+4: case Game::deadmanSeq3Start:
+                case Game::deadmanSeq4Start: case Game::deadmanSeq6Start:
+                case Game::deadmanSeq7Start+1:
+                // Открыть мел
+                emit chalkCall();
+                break;
+            case Game::deadmanSeq2Start+10:
+                // Закрыть загадку
+                game->exit->show();
+                delete game->riddlebox;
+                switch (game->progress) {
+                case Game::DOG_QUEST_COMPLETE:
+                    game->progress = Game::FIRST_RIDDLE_SOLVED;
+                    getBox(Game::deadmanSeq2Start+11,Game::deadmanSeq2Start+13);
+                    break;
+                case Game::UNICORN_QUEST_COMPLETE:
+                    game->progress = Game::SECOND_RIDDLE_SOLVED;
+                    getBox(Game::deadmanSeq3Start+1,Game::deadmanSeq3Start+11);
+                    break;
+                case Game::DANCE_QUEST_COMPLETE:
+                    game->progress = Game::THIRD_RIDDLE_SOLVED;
+                    getBox(Game::deadmanSeq4Start+1,Game::deadmanSeq4Start+17);
+                    break;
+                case Game::TREE_QUEST_COMPLETE:
+                    game->progress = Game::FOURTH_RIDDLE_SOLVED;
+                    getBox(Game::deadmanSeq6Start+1,Game::deadmanSeq6Start+10);
+                    break;
+                case Game::PHILOPHOBE_QUEST_COMPLETE:
+                    game->progress = Game::FIFTH_RIDDLE_SOLVED;
+                    game->portal->show();
+                    getBox(Game::deadmanSeq7Start+2,Game::deadmanSeq7Start+2);
+                    break;
+                default:
+                    break;
+                }
+                break;
 
             case Game::unicornSeqStart+3:
                 emit dyegameCall();
@@ -90,19 +119,8 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 delete game->dyegame;
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
-                getBox(Game::unicornSeqStart+9,Game::unicornSeqStart+16);
-                break;
-
-            case Game::kalinaSeqStart+6:
-                emit snackgameCall();
-                break;
-
-            case Game::kalinaSeqStart+20:
-                // Зыкрыть сырки
-                delete game->snackgame;
-                game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
-                game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
-                getBox(Game::kalinaSeqStart+21,Game::kalinaSeqStart+21);
+                game->progress = Game::UNICORN_QUEST_COMPLETE;
+                getBox(Game::unicornSeqStart+9,Game::unicornSeqStart+17);
                 break;
 
             case Game::coupleSeqStart+7:
@@ -116,7 +134,40 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 delete game->dancegame;
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
+                game->progress = Game::DANCE_QUEST_COMPLETE;
                 getBox(Game::coupleSeqStart+9,Game::coupleSeqStart+9);
+                break;
+
+            case Game::snakeSeqStart+14:
+                // Стреляем змей
+                game->player->canShoot = true;
+                for (int i = 0; i < 2; ++i) {
+                    game->snake[i]->start();
+                }
+                game->progress = Game::SNAKE_FIGHT_STARTED;
+                break;
+
+            case Game::snakeSeqStart+18:
+                // Стреляем змей
+                game->player->canShoot = true;
+                game->progress = Game::SNAKES_DEFEATED;
+                break;
+
+            case Game::deadmanSeq5Start+9:
+                game->progress = Game::AFTER_SNAKES_DIALOG_OVER;
+                break;
+
+            case Game::kalinaSeqStart+6:
+                emit snackgameCall();
+                break;
+
+            case Game::kalinaSeqStart+20:
+                // Зыкрыть сырки
+                delete game->snackgame;
+                game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
+                game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
+                game->progress = Game::TREE_QUEST_COMPLETE;
+                getBox(Game::kalinaSeqStart+21,Game::kalinaSeqStart+21);
                 break;
 
             case Game::thinkerSeqStart+10:
@@ -134,15 +185,22 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 delete game->voltorbgame;
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
+                game->progress = Game::PHILOPHOBE_QUEST_COMPLETE;
                 getBox(Game::thinkerSeqStart+15,Game::thinkerSeqStart+18);
                 break;
 
-            case Game::snakeSeqStart+14:
-                // Стреляем змей
-                game->player->canShoot = true;
-                for (int i = 0; i < 2; ++i) {
-                    game->snake[i]->start();
-                }
+            case Game::witchSeqStart+1:
+                game->witch->show();
+                getBox(Game::witchSeqStart+2,Game::witchSeqStart+6);
+                break;
+
+            case Game::witchSeqStart+6:
+                game->witch->start();
+                break;
+
+            case Game::witchSeqStart+25:
+                game->setBackgroundBrush(QBrush(QImage(":/images/cave-bg-bright.png")));
+                game->progress = Game::DEADMAN_REVIVED;
                 break;
             }
 
@@ -185,3 +243,8 @@ void DialogBox::getBox(int in_start, int in_end) {
     grabMouse();
 }
 
+void DialogBox::monologueCall() {
+    game->progress = Game::OUTSIDE_EMPTINESS_DISCOVERED;
+    getBox(Game::deadmanSeq7Start+26,Game::deadmanSeq7Start+27);
+    delete game->timer;
+}

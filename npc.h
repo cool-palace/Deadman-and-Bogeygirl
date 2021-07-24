@@ -76,4 +76,29 @@ public:
     Unicorn(QGraphicsItem *parent = nullptr);
 };
 
+class Witch : public QObject, public QGraphicsPixmapItem
+{
+    Q_OBJECT
+public:
+    Witch(QGraphicsItem *parent = nullptr);
+    ~Witch();
+    bool dead = false;
+    bool moving = false;
+    int lives = 10;
+
+public slots:
+    void start();
+    void move();
+    void shoot();
+    void shot();
+    void recover();
+
+private:
+    bool direction_up = true;
+    int step = 20;
+    QTimer * move_timer;
+    QTimer * shoot_timer;
+    QTimer * hurt_timer;
+};
+
 #endif // NPC_H

@@ -18,6 +18,7 @@ public:
 
 public slots:
     void getBox(int start, int end);
+    void monologueCall();
 
 signals:
     void chalkCall();
@@ -25,6 +26,7 @@ signals:
     void dyegameCall();
     void dancegameCall();
     void voltorbgameCall();
+
 
 private:
     QGraphicsTextItem * line;

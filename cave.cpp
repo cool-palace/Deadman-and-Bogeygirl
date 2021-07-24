@@ -17,3 +17,9 @@ Exit::Exit(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     // set graphic
     setPixmap(QPixmap(":/images/exit.png"));
 }
+
+Portal::Portal(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
+{
+    // set graphic
+    setPixmap(QPixmap(":/images/portal.png"));
+}

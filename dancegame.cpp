@@ -24,7 +24,7 @@ DanceGame::DanceGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
     conditions->setPos(50,40);
 
     sprite = new QGraphicsPixmapItem(this);
-    sprite->setPixmap(QPixmap(":/images/player.png"));
+    sprite->setPixmap(QPixmap(":/images/player-left.png"));
     sprite->setScale(3);
     pxPos = game->scene->width()/2 - sprite->boundingRect().width()*sprite->scale()/2;
     pyPos = game->scene->height()/2 - sprite->boundingRect().height()*sprite->scale()/2;

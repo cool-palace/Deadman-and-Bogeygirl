@@ -21,4 +21,10 @@ public:
     Exit(QGraphicsItem *parent = nullptr);
 };
 
+class Portal : public QGraphicsPixmapItem
+{
+public:
+    Portal(QGraphicsItem *parent = nullptr);
+};
+
 #endif // CAVE_H

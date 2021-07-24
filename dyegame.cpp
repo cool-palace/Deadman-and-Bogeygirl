@@ -85,7 +85,6 @@ void DyeGame::checkAnswer() {
     case 2:
         if (dyes[2]->collidesWithItem(dye_slot) && dyes[3]->collidesWithItem(dye_slot)) {
             emit result(Game::unicornSeqStart+8,Game::unicornSeqStart+8);
-            qDebug() << "right";
         } else emit result(Game::unicornSeqStart+7,Game::unicornSeqStart+7);
         break;
     default:

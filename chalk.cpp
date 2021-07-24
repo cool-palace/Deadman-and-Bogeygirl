@@ -27,9 +27,29 @@ void Chalk::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         game->crushSound[cracksCount]->play();
 
         if (cracksCount < 5) {
-            // Добавить выбор загадки потом
             if (cracksCount == 4) {
-                emit cracked(&game->riddles[4]);
+                int riddle_number = 0;
+                switch (game->progress) {
+                case Game::DOG_QUEST_COMPLETE:
+                    riddle_number = 0;
+                    game->dialogbox->getBox(Game::deadmanSeq2Start+6,Game::deadmanSeq2Start+8);
+                    break;
+                case Game::UNICORN_QUEST_COMPLETE:
+                    riddle_number = 1;
+                    break;
+                case Game::DANCE_QUEST_COMPLETE:
+                    riddle_number = 2;
+                    break;
+                case Game::TREE_QUEST_COMPLETE:
+                    riddle_number = 3;
+                    break;
+                case Game::PHILOPHOBE_QUEST_COMPLETE:
+                    riddle_number = 4;
+                    break;
+                default:
+                    break;
+                }
+                emit cracked(&game->riddles[riddle_number]);
                 delete this;
                 return;
             }

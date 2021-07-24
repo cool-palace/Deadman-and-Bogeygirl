@@ -9,7 +9,7 @@
 class Player : public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
-    Player(QGraphicsItem * parent=0);
+    Player(QGraphicsItem * parent = nullptr);
     void keyPressEvent(QKeyEvent * event);
     void setMovable();
     void setImmobile();
@@ -23,6 +23,9 @@ public:
 
     directions direction = LEFT;
 
+public slots:
+    void shrink_bullet();
+
 signals:
 //    void dialogCall(int i);
     void dialogCall(int start, int end);
@@ -30,6 +33,7 @@ signals:
     void goingIn();
 
 private:
+    qreal bullet_size = 1;
     bool isMovable = true;
 
 };

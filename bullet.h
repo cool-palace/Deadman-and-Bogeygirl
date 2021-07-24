@@ -9,7 +9,7 @@ class Bullet : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Bullet(int dir, QGraphicsItem *parent = nullptr);
+    Bullet(int dir, qreal size, QGraphicsItem *parent = nullptr);
     ~Bullet();
     enum directions {
         UP,
@@ -17,6 +17,7 @@ public:
         LEFT,
         RIGHT
     };
+    static int bullet_count;
 
 public slots:
     void move();
@@ -26,9 +27,27 @@ signals:
     void dialogCall(int start, int end);
 
 private:
-    //static int snakesShot;
     directions direction = LEFT;
     QTimer * timer;
+};
+
+class Spell : public QGraphicsTextItem
+{
+    Q_OBJECT
+public:
+    Spell(QGraphicsItem *parent = nullptr);
+    ~Spell();
+
+public slots:
+    void move();
+
+signals:
+    void hitTarget();
+
+private:
+    QTimer * timer;
+    const QVector<QString> spells = {"<i>мукакбы</i>", "<i>нукакбы</i>", "<i>молкакбы</i>"};
+
 };
 
 #endif // BULLET_H

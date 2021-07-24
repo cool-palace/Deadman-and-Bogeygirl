@@ -72,13 +72,9 @@ void RiddleBox::checkAnswer() {
     for (int i = 0; i < answer.size(); ++i) {
         s.setNum(digits[i]->value);
         if (s != answer[i]) {
-            emit result(3,3);
-            qDebug() << "wrong";
+            emit result(Game::deadmanSeq2Start+9,Game::deadmanSeq2Start+9);
             return;
         }
     }
-    emit result(4,4);
-    //delete this;
-    //return;
-    qDebug() << "right";
+    emit result(Game::deadmanSeq2Start+10,Game::deadmanSeq2Start+10);
 }

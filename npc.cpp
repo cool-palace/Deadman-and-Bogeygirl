@@ -1,5 +1,6 @@
 #include "npc.h"
 #include "game.h"
+#include "bullet.h"
 #include "qmath.h"
 
 extern Game * game;
@@ -11,8 +12,11 @@ Couple::Couple(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 
 Deadman::Deadman(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/deadman.png"));
-    setScale(3);
+    if (game->progress != Game::START && game->progress != Game::OUTSIDE_EMPTINESS_DISCOVERED) {
+        setPixmap(QPixmap(":/images/deadman.png"));
+    } else if (game->progress == Game::START) {
+        setPixmap(QPixmap(":/images/dirt.png"));
+    } else setPixmap(QPixmap(":/images/deadman.png"));
 }
 
 Dog::Dog(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
@@ -189,4 +193,61 @@ Tree::Tree(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 Unicorn::Unicorn(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/images/unicorn.png"));
+}
+
+Witch::Witch(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
+{
+    setPixmap(QPixmap(":/images/witch.png"));
+
+    // make/connect a timer to move() the bullet every so often
+    move_timer = new QTimer(this);
+    connect(move_timer,SIGNAL(timeout()),this,SLOT(move()));
+    shoot_timer = new QTimer(this);
+    connect(shoot_timer,SIGNAL(timeout()),this,SLOT(shoot()));
+    hurt_timer = new QTimer(this);
+    hurt_timer->setSingleShot(true);
+}
+
+Witch::~Witch(){
+    delete move_timer;
+    delete shoot_timer;
+    delete hurt_timer;
+}
+
+void Witch::start() {
+    // start the timer
+    move_timer->start(100);
+    shoot_timer->start(1000);
+}
+
+void Witch::move() {
+if (direction_up) {
+        if (pos().y() - step > 0) {
+           setPos(pos().x(), pos().y() - step);
+        } else {
+            setPos(pos().x(), 0);
+            direction_up = false;
+        }
+    } else if (pos().y() + step + boundingRect().height() < game->scene->height()) {
+        setPos(pos().x(), pos().y() + step);
+     } else {
+         setPos(pos().x(), game->scene->height() - boundingRect().height());
+         direction_up = true;
+     }
+}
+
+void Witch::shoot() {
+     Spell * spell = new Spell();
+     spell->setPos(x()+boundingRect().width() - 50,y()+boundingRect().height()/2);
+     game->scene->addItem(spell);
+}
+
+void Witch::shot() {
+     setPixmap(QPixmap(":/images/witch-hurt.png"));
+     hurt_timer->start(50);
+     connect(hurt_timer,SIGNAL(timeout()),this,SLOT(recover()));
+}
+
+void Witch::recover() {
+     setPixmap(QPixmap(":/images/witch.png"));
 }

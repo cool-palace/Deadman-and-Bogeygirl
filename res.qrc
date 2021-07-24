@@ -42,6 +42,13 @@
         <file>snake-1-shot.png</file>
         <file>snake-2.png</file>
         <file>snake-2-shot.png</file>
+        <file>cave-bg.png</file>
+        <file>dirt.png</file>
+        <file>portal.png</file>
+        <file>bg-big-dark.png</file>
+        <file>witch.png</file>
+        <file>witch-hurt.png</file>
+        <file>cave-bg-bright.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>crush-1.wav</file>

@@ -7,6 +7,7 @@
 #include "player.h"
 #include "npc.h"
 #include "dialogbox.h"
+//#include "dialogs.h"
 #include "chalk.h"
 #include "riddlebox.h"
 #include "cave.h"
@@ -39,6 +40,7 @@ public:
     Exit * exit;
     Cave * cave;
     Entrance * entrance;
+    Portal * portal;
     SnackGame * snackgame;
     DyeGame * dyegame;
     DanceGame * dancegame;
@@ -51,17 +53,21 @@ public:
     Couple * couple;
     Thinker * thinker;
     Snake * snake[2];
+    Witch * witch;
     QVector<QMediaPlayer *> crushSound {5};
+    QTimer * timer;
 
     enum Progress {
         START,
         INTRO_COMPLETE,
+        DOG_QUEST_STARTED,
         DOG_QUEST_COMPLETE,
         FIRST_RIDDLE_SOLVED,
         UNICORN_QUEST_COMPLETE,
         SECOND_RIDDLE_SOLVED,
         DANCE_QUEST_COMPLETE,
         THIRD_RIDDLE_SOLVED,
+        SNAKE_FIGHT_STARTED,
         SNAKES_DEFEATED,
         AFTER_SNAKES_DIALOG_OVER,
         TREE_QUEST_COMPLETE,
@@ -69,6 +75,7 @@ public:
         PHILOPHOBE_QUEST_COMPLETE,
         FIFTH_RIDDLE_SOLVED,
         OUTSIDE_EMPTINESS_DISCOVERED,
+        DEADMAN_REVIVED,
         WITCH_DEFEATED
     };
 
@@ -79,12 +86,22 @@ public:
     const static QVector<Speechline> speech;
 
     constexpr static int worldSize = 2760;
-    constexpr static int unicornSeqStart = 24;
-    constexpr static int kalinaSeqStart = 41;
-    constexpr static int coupleSeqStart = 63;
-    constexpr static int thinkerSeqStart = 73;
-    constexpr static int kidsSeqStart = 92;
-    constexpr static int snakeSeqStart = 110;
+
+    constexpr static int deadmanSeq1Start = 0;
+    constexpr static int kidsSeqStart = deadmanSeq1Start + 31;
+    constexpr static int deadmanSeq2Start = kidsSeqStart + 19;
+    constexpr static int unicornSeqStart = deadmanSeq2Start + 14;
+    constexpr static int deadmanSeq3Start = unicornSeqStart + 18;
+    constexpr static int coupleSeqStart = deadmanSeq3Start + 12;
+    constexpr static int deadmanSeq4Start = coupleSeqStart + 10;
+    constexpr static int snakeSeqStart = deadmanSeq4Start + 18;
+    constexpr static int deadmanSeq5Start = snakeSeqStart + 19;
+    constexpr static int kalinaSeqStart = deadmanSeq5Start + 10;
+    constexpr static int deadmanSeq6Start = kalinaSeqStart + 22;
+    constexpr static int thinkerSeqStart = deadmanSeq6Start + 11;
+    constexpr static int deadmanSeq7Start = thinkerSeqStart + 19;
+    constexpr static int witchSeqStart = deadmanSeq7Start + 28;
+    constexpr static int deadmanSeq8Start = witchSeqStart + 26;
 
 public slots:
     void start();
