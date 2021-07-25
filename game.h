@@ -76,7 +76,8 @@ public:
         FIFTH_RIDDLE_SOLVED,
         OUTSIDE_EMPTINESS_DISCOVERED,
         DEADMAN_REVIVED,
-        WITCH_DEFEATED
+        WITCH_DEFEATED,
+        DEADMANS_FAREWELL
     };
 
     Progress progress = START;

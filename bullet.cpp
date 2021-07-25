@@ -60,6 +60,7 @@ void Bullet::move(){
             if (game->progress == Game::DEADMAN_REVIVED) {
                 --witch->lives;
                 if (witch->lives == 0) {
+                    game->progress = Game::WITCH_DEFEATED;
                     delete witch;
                     game->deadman->show();
                 }

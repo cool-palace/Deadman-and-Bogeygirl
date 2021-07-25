@@ -46,7 +46,7 @@ private:
     QString score_str = "<p style=\"text-align:center;\">Счёт:<br>%1</p>";
     QString level_str = "<p style=\"text-align:center;\">Уровень: %1</p>";
     int level = 1;
-    int points = 1;
+    long int points = 1;
 
 };
 

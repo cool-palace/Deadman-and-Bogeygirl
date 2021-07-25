@@ -7,21 +7,21 @@ extern Game * game;
 
 Couple::Couple(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/couple.png"));
+    setPixmap(QPixmap(":/images/couple-sprite.png"));
 }
 
 Deadman::Deadman(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
     if (game->progress != Game::START && game->progress != Game::OUTSIDE_EMPTINESS_DISCOVERED) {
-        setPixmap(QPixmap(":/images/deadman.png"));
+        setPixmap(QPixmap(":/images/deadman-sprite.png"));
     } else if (game->progress == Game::START) {
         setPixmap(QPixmap(":/images/dirt.png"));
-    } else setPixmap(QPixmap(":/images/deadman.png"));
+    } else setPixmap(QPixmap(":/images/deadman-alive-sprite.png"));
 }
 
 Dog::Dog(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/dog.png"));
+    setPixmap(QPixmap(":/images/dog-sprite.png"));
 
     // make/connect a timer to move() the bullet every so often
     timer = new QTimer(this);
@@ -91,12 +91,12 @@ void Dog::move(){
 
 Kids::Kids(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/kids.png"));
+    setPixmap(QPixmap(":/images/kids-sprite.png"));
 }
 
 Snake::Snake(int id, QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent), id(id)
 {
-    QString str = ":/images/snake-%1.png";
+    QString str = ":/images/snake-%1-sprite.png";
     setPixmap(QPixmap(str.arg(id+1)));
 
     // make/connect a timer to move() the bullet every so often
@@ -182,22 +182,22 @@ void Snake::shot() {
 
 Thinker::Thinker(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/thinker.png"));
+    setPixmap(QPixmap(":/images/thinker-sprite.png"));
 }
 
 Tree::Tree(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/kalina.png"));
+    setPixmap(QPixmap(":/images/kalina-sprite.png"));
 }
 
 Unicorn::Unicorn(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/unicorn.png"));
+    setPixmap(QPixmap(":/images/unicorn-sprite.png"));
 }
 
 Witch::Witch(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/images/witch.png"));
+    setPixmap(QPixmap(":/images/witch-sprite.png"));
 
     // make/connect a timer to move() the bullet every so often
     move_timer = new QTimer(this);
@@ -234,6 +234,15 @@ if (direction_up) {
          setPos(pos().x(), game->scene->height() - boundingRect().height());
          direction_up = true;
      }
+
+    QList<QGraphicsItem *> colliding_items = collidingItems();
+
+    for (int i = 0; i < colliding_items.size(); ++i) {
+        if (dynamic_cast<Player*>(colliding_items.value(i))) {
+            colliding_items[i]->setPos(game->scene->width() - colliding_items[i]->boundingRect().width(), colliding_items[i]->y());
+        }
+    }
+
 }
 
 void Witch::shoot() {
@@ -249,5 +258,5 @@ void Witch::shot() {
 }
 
 void Witch::recover() {
-     setPixmap(QPixmap(":/images/witch.png"));
+     setPixmap(QPixmap(":/images/witch-sprite.png"));
 }

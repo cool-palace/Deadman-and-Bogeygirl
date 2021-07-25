@@ -14,7 +14,6 @@
         <file>syrok-small-4.png</file>
         <file>syrok-small-5.png</file>
         <file>kalina.png</file>
-        <file>kids.png</file>
         <file>dog.png</file>
         <file>kb.png</file>
         <file>dye-small-1.png</file>
@@ -23,7 +22,6 @@
         <file>dye-small-4.png</file>
         <file>dye-small-5.png</file>
         <file>unicorn.png</file>
-        <file>couple.png</file>
         <file>thinker.png</file>
         <file>tile.png</file>
         <file>tile-yellow.png</file>
@@ -49,6 +47,30 @@
         <file>witch.png</file>
         <file>witch-hurt.png</file>
         <file>cave-bg-bright.png</file>
+        <file>player.png</file>
+        <file>player-annoyed.png</file>
+        <file>player-fear.png</file>
+        <file>player-smile.png</file>
+        <file>player-frown.png</file>
+        <file>player-sad.png</file>
+        <file>deadman-sprite.png</file>
+        <file>deadman-alive.png</file>
+        <file>deadman-frown.png</file>
+        <file>deadman-uneasy.png</file>
+        <file>couple-sprite.png</file>
+        <file>dog-sprite.png</file>
+        <file>kalina-sprite.png</file>
+        <file>kids-sprite.png</file>
+        <file>snake-1-sprite.png</file>
+        <file>snake-2-sprite.png</file>
+        <file>thinker-sprite.png</file>
+        <file>witch-sprite.png</file>
+        <file>unicorn-sprite.png</file>
+        <file>couple-boy.png</file>
+        <file>couple-girl.png</file>
+        <file>kids-boy.png</file>
+        <file>kids-girl.png</file>
+        <file>deadman-alive-sprite.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>crush-1.wav</file>

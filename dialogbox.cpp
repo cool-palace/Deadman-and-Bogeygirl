@@ -202,6 +202,12 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 game->setBackgroundBrush(QBrush(QImage(":/images/cave-bg-bright.png")));
                 game->progress = Game::DEADMAN_REVIVED;
                 break;
+
+            case Game::deadmanSeq8Start+16:
+                game->progress = Game::DEADMANS_FAREWELL;
+                game->deadman->setParentItem(game->player);
+                game->deadman->setPos(game->player->boundingRect().width(),0);
+                break;
             }
 
 

@@ -120,7 +120,7 @@ void Player::keyPressEvent(QKeyEvent *event){
             setImmobile();
             switch (game->progress) {
             case Game::START:
-                game->deadman->setPixmap(QPixmap(":/images/deadman.png"));
+                game->deadman->setPixmap(QPixmap(":/images/deadman-sprite.png"));
                 game->deadman->setPos(game->scene->width()/2 - game->deadman->boundingRect().width()/2, 100);
                 emit dialogCall(Game::deadmanSeq1Start+4,Game::deadmanSeq1Start+30);
                 break;
@@ -142,7 +142,7 @@ void Player::keyPressEvent(QKeyEvent *event){
             case Game::PHILOPHOBE_QUEST_COMPLETE:
                 emit dialogCall(Game::deadmanSeq7Start,Game::deadmanSeq7Start+1);
                 break;
-            case Game::DEADMAN_REVIVED:
+            case Game::WITCH_DEFEATED:
                 emit dialogCall(Game::deadmanSeq8Start,Game::deadmanSeq8Start+16);
                 break;
             }
@@ -163,7 +163,12 @@ void Player::keyPressEvent(QKeyEvent *event){
             if (game->progress == Game::FIFTH_RIDDLE_SOLVED) {
                 setImmobile();
                 emit dialogCall(Game::deadmanSeq7Start+3,Game::deadmanSeq7Start+24);
-            } else game->displayMainMenu();
+            } else if (game->progress == Game::WITCH_DEFEATED) {
+                setImmobile();
+            } else if (game->progress == Game::DEADMANS_FAREWELL) {
+                game->displayMainMenu();
+                return;
+            }
 
         } else if (dynamic_cast<Kids*>(colliding_items.at(i))) {
             if (childItems().empty()) {
@@ -173,16 +178,21 @@ void Player::keyPressEvent(QKeyEvent *event){
 
         } else if (dynamic_cast<RedWhite*>(colliding_items.at(i))) {
             setImmobile();
-            emit dialogCall(Game::kidsSeqStart+16,Game::kidsSeqStart+17);
-            break;
+            if (game->progress == Game::DOG_QUEST_STARTED) {
+                emit dialogCall(Game::kidsSeqStart+16,Game::kidsSeqStart+17);
+            }
 
         } else if (dynamic_cast<Unicorn*>(colliding_items.at(i))) {
             setImmobile();
-            emit dialogCall(Game::unicornSeqStart,Game::unicornSeqStart+3);
+            if (game->progress == Game::FIRST_RIDDLE_SOLVED) {
+                emit dialogCall(Game::unicornSeqStart,Game::unicornSeqStart+3);
+            }
 
         } else if (dynamic_cast<Couple*>(colliding_items.at(i))) {
             setImmobile();
-            emit dialogCall(Game::coupleSeqStart,Game::coupleSeqStart+7);
+            if (game->progress == Game::SECOND_RIDDLE_SOLVED) {
+                emit dialogCall(Game::coupleSeqStart,Game::coupleSeqStart+7);
+            }
 
         } else if (dynamic_cast<Snake*>(colliding_items.at(i))) {
             Snake * snake = dynamic_cast<Snake*>(colliding_items.at(i));
@@ -190,17 +200,20 @@ void Player::keyPressEvent(QKeyEvent *event){
                 setImmobile();
                 emit dialogCall(Game::snakeSeqStart,Game::snakeSeqStart+14);
             } else if (snake->dead) {
-                setImmobile();
                 emit dialogCall(Game::snakeSeqStart+16+snake->id,Game::snakeSeqStart+16+snake->id);
             }
 
         } else if (dynamic_cast<Tree*>(colliding_items.at(i))) {
             setImmobile();
-            emit dialogCall(Game::kalinaSeqStart,Game::kalinaSeqStart+6);
+            if (game->progress == Game::AFTER_SNAKES_DIALOG_OVER) {
+                emit dialogCall(Game::kalinaSeqStart,Game::kalinaSeqStart+6);
+            }
 
         } else if (dynamic_cast<Thinker*>(colliding_items.at(i))) {
             setImmobile();
-            emit dialogCall(Game::thinkerSeqStart,Game::thinkerSeqStart+10);
+            if (game->progress == Game::FOURTH_RIDDLE_SOLVED) {
+                emit dialogCall(Game::thinkerSeqStart,Game::thinkerSeqStart+10);
+            }
 
         } else if (dynamic_cast<Exit*>(colliding_items.at(i))) {
             emit goingOut();
