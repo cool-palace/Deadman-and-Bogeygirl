@@ -6,6 +6,7 @@
 #include "dye.h"
 #include "button.h"
 #include <QBrush>
+#include <QMediaPlayer>
 
 class DyeGame : public QObject, public QGraphicsPixmapItem
 {
@@ -30,6 +31,8 @@ private:
     QGraphicsTextItem * text;
     Button * confirmButton;
     Button * resetButton;
+    QMediaPlayer * correctSound;
+    QMediaPlayer * wrongSound;
 };
 
 #endif // DYEGAME_H

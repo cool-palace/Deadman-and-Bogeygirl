@@ -16,7 +16,7 @@ DanceGame::DanceGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
     cond_bg->setBrush(brush);
 
     conditions = new QGraphicsTextItem(this); //
-    QString cond = "Чтобы танцевать, нажимай на стрелки на клавиатуре в такт ритму, подсвечивающиеся подсказки указывают правильное направление. Для полного танца нужно набрать 16 очков.";
+    QString cond = "Чтобы танцевать, нажимай на стрелки на клавиатуре в такт ритму, подсвечивающиеся подсказки указывают правильное направление.<br>Для полного танца нужно набрать 16 очков.";
     QString str1 = "<p style=\"text-align:center;\">%1</p>";
     conditions->setHtml(str1.arg(cond));
     conditions->setFont({"Comic Sans", 14});
@@ -82,6 +82,12 @@ DanceGame::DanceGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
     // start the timer
     timer->start(500);
 
+    correctSound = new QMediaPlayer();
+    correctSound->setMedia(QUrl("qrc:/sounds/correct.wav"));
+
+    wrongSound = new QMediaPlayer();
+    wrongSound->setMedia(QUrl("qrc:/sounds/wrong.wav"));
+
     setEnabled(true);
     grabKeyboard();
 
@@ -93,6 +99,9 @@ DanceGame::~DanceGame() {
     delete conditions;
     delete score;
     delete timer;
+    delete correctSound;
+    delete wrongSound;
+
     for (int i = 0; i < 4; ++i) {
         delete directions[i];
     }
@@ -107,32 +116,47 @@ void DanceGame::keyPressEvent(QKeyEvent * event) {
         if (tact == 2 || tact == 6 || tact == 9 || tact == 13) {
             ++correctCount;
             moved_in_this_tact = true;
-        } else correctCount = 0;
+        } else {
+            correctCount = 0;
+            wrongSound->play();
+        }
     }
     else if (event->key() == Qt::Key_Right || event->key() == Qt::Key_D){
         sprite->setPos(sprite->x()+20,sprite->y());
         if (tact == 3 || tact == 7 || tact == 11 || tact == 15) {
             ++correctCount;
             moved_in_this_tact = true;
-        } else correctCount = 0;
+        } else {
+            correctCount = 0;
+            wrongSound->play();
+        }
     }
     else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_W){
         sprite->setPos(sprite->x(),sprite->y()-20);
         if (tact == 0 || tact == 4 || tact == 8 || tact == 12) {
             ++correctCount;
             moved_in_this_tact = true;
-        } else correctCount = 0;
+        } else {
+            correctCount = 0;
+            wrongSound->play();
+        }
     }
     else if (event->key() == Qt::Key_Down || event->key() == Qt::Key_S){
         sprite->setPos(sprite->x(),sprite->y()+20);
         if (tact == 1 || tact == 5 || tact == 10 || tact == 14) {
             ++correctCount;
             moved_in_this_tact = true;
-        } else correctCount = 0;
+        } else {
+            correctCount = 0;
+            wrongSound->play();
+        }
     }
     score->setHtml(score_str.arg(correctCount));
 
-    if (correctCount == 16) emit result(Game::coupleSeqStart+8,Game::coupleSeqStart+8);
+    if (correctCount == 16) {
+        emit result(Game::coupleSeqStart+8,Game::coupleSeqStart+8);
+        correctSound->play();
+    }
 }
 
 void DanceGame::change() {

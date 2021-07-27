@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 #include <QWidget>
 #include <QGraphicsScene>
+#include <QMediaPlaylist>
 #include "player.h"
 #include "npc.h"
 #include "dialogbox.h"
@@ -26,8 +27,7 @@ public:
     Game(QWidget * parent=0);
 
     // public methods
-    void displayMainMenu();
-//    void keyPressEvent(QKeyEvent * event);
+    void save();
 
     // public attributes
     QGraphicsScene * scene;
@@ -55,6 +55,17 @@ public:
     Snake * snake[2];
     Witch * witch;
     QVector<QMediaPlayer *> crushSound {5};
+
+    Button* playButton;
+    Button* quitButton;
+    Button* lastButton;
+
+    QGraphicsPixmapItem * treasure_back;
+    QGraphicsTextItem * treasure_text;
+
+    QMediaPlaylist * music;
+    QMediaPlayer * current_music;
+
     QTimer * timer;
 
     enum Progress {
@@ -112,7 +123,8 @@ public slots:
     void dye_game();
     void dance_game();
     void voltorb_game();
-
+    void deadmans_note();
+    void displayMainMenu();
 };
 
 #endif // GAME_H

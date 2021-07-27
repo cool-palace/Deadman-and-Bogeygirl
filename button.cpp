@@ -10,7 +10,7 @@ Button::Button(QString name, QGraphicsItem *parent): QGraphicsRectItem(parent){
 
     text = new QGraphicsTextItem(name,this);
 
-    if (name != "Больше" && name != "Меньше" && name != "Готово" && name != "Сбросить") {
+    if (name != "Больше" && name != "Меньше" && name != "Готово" && name != "Сбросить" && name != "Понятно") {
         setRect(0,0,200,50);
         // draw the text
         QFont titleFont("Comic Sans",16);

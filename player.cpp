@@ -12,6 +12,13 @@ int step = 24;
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
     // set graphic
     setPixmap(QPixmap(":/images/player-left.png"));
+    bulletSound = new QMediaPlayer();
+    bulletSound->setMedia(QUrl("qrc:/sounds/bullet.wav"));
+    bulletSound->setVolume(5);
+}
+
+Player::~Player() {
+    delete bulletSound;
 }
 
 void Player::setMovable() {
@@ -28,7 +35,14 @@ void Player::keyPressEvent(QKeyEvent *event){
         if (game->progress == Game::OUTSIDE_EMPTINESS_DISCOVERED
                 || game->progress == Game::DEADMAN_REVIVED) direction = LEFT;
 
+        if (bulletSound->state() == QMediaPlayer::PlayingState){
+            bulletSound->setPosition(0);
+        } else if (bulletSound->state() == QMediaPlayer::StoppedState){
+            bulletSound->play();
+        }
+
         Bullet * bullet = new Bullet(direction, bullet_size);
+
         switch (direction) {
         case UP:
             bullet->setPos(x()+boundingRect().width()/2,y()-bullet->boundingRect().height());
@@ -162,7 +176,7 @@ void Player::keyPressEvent(QKeyEvent *event){
         } else if (dynamic_cast<Portal*>(colliding_items.at(i))) {
             if (game->progress == Game::FIFTH_RIDDLE_SOLVED) {
                 setImmobile();
-                emit dialogCall(Game::deadmanSeq7Start+3,Game::deadmanSeq7Start+24);
+                emit dialogCall(Game::deadmanSeq7Start+3,Game::deadmanSeq7Start+25);
             } else if (game->progress == Game::WITCH_DEFEATED) {
                 setImmobile();
             } else if (game->progress == Game::DEADMANS_FAREWELL) {
@@ -235,9 +249,9 @@ void Player::keyPressEvent(QKeyEvent *event){
 }
 
 void Player::shrink_bullet() {
-    bullet_size *= 0.99;
-    if (bullet_size < 0.4) {
-        game->dialogbox->getBox(Game::witchSeqStart+7, Game::witchSeqStart+25);
+    bullet_size *= 0.995;
+    if (bullet_size < 0.2) {
+        game->dialogbox->getBox(Game::witchSeqStart+7, Game::witchSeqStart+10);
         disconnect(game->timer,SIGNAL(timeout()),this,SLOT(shrink_bullet()));
         bullet_size = 5;
     }

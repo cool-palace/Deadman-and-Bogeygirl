@@ -48,12 +48,20 @@ SnackGame::SnackGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
     confirmButton->setPos(boundingRect().width()/2 - confirmButton->boundingRect().width()/2, 475);
 
     connect(confirmButton,SIGNAL(clicked()),this,SLOT(checkAnswer()));
+
+    correctSound = new QMediaPlayer();
+    correctSound->setMedia(QUrl("qrc:/sounds/correct.wav"));
+
+    wrongSound = new QMediaPlayer();
+    wrongSound->setMedia(QUrl("qrc:/sounds/wrong.wav"));
 }
 
 SnackGame::~SnackGame() {
     delete cond_bg;
     delete conditions;
     delete confirmButton;
+    delete correctSound;
+    delete wrongSound;
 
     for (int i = 0; i < 5; ++i) {
         delete snacks[i];
@@ -93,10 +101,9 @@ void SnackGame::checkAnswer() {
             && snack_slots[3]->collidesWithItem(snacks[0])
             && snack_slots[4]->collidesWithItem(snacks[3])) {
         emit result(Game::kalinaSeqStart+20,Game::kalinaSeqStart+20);
-        qDebug() << "right";
+        correctSound->play();
         return;
     }
     emit result(Game::kalinaSeqStart+19,Game::kalinaSeqStart+19);
-    qDebug() << "wrong";
-
+    wrongSound->play();
 }

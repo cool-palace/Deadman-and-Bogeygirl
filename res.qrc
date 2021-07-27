@@ -78,5 +78,18 @@
         <file>crush-3.wav</file>
         <file>crush-4.wav</file>
         <file>crush-5.wav</file>
+        <file>correct.wav</file>
+        <file>wrong.wav</file>
+        <file>bullet.wav</file>
+        <file>title_screen.mp3</file>
+        <file>cave_theme.mp3</file>
+        <file>outside_theme.mp3</file>
+        <file>solving_riddles.mp3</file>
+        <file>minigame.mp3</file>
+        <file>snake_fight.mp3</file>
+        <file>deadman_revived.mp3</file>
+        <file>empty_world.mp3</file>
+        <file>witch_fight.mp3</file>
+        <file>sunken_heart.mp3</file>
     </qresource>
 </RCC>

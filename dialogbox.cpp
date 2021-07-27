@@ -31,17 +31,27 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
 
     setEnabled(true);
 
+    timer = new QTimer(this);
+    timer->setSingleShot(true);
+    connect(timer,SIGNAL(timeout()),this,SLOT(dialog_recharge()));
+
     hide();
 }
 
 DialogBox::~DialogBox() {
     delete line;
     delete avatar;
+    delete timer;
+}
+
+void DialogBox::dialog_recharge() {
+    ready_to_change = true;
 }
 
 void DialogBox::keyPressEvent(QKeyEvent *event){
 
-    if (event->key() == Qt::Key_Space) {
+    if (event->key() == Qt::Key_Space && ready_to_change) {
+
         if (start == end) {
             hide();
             game->player->setFocus();
@@ -49,6 +59,9 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case Game::deadmanSeq1Start+30:
                 game->exit->show();
                 game->progress = Game::INTRO_COMPLETE;
+                game->music->setCurrentIndex(1);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 break;
 
             case Game::kidsSeqStart+10:
@@ -71,6 +84,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 delete game->dog;
                 delete game->kids;
                 game->progress = Game::DOG_QUEST_COMPLETE;
+                game->save();
                 getBox(Game::kidsSeqStart+18,Game::kidsSeqStart+18);
                 break; }
 
@@ -84,26 +98,42 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 // Закрыть загадку
                 game->exit->show();
                 delete game->riddlebox;
+                game->music->setCurrentIndex(1);
+                game->current_music->play();
                 switch (game->progress) {
                 case Game::DOG_QUEST_COMPLETE:
                     game->progress = Game::FIRST_RIDDLE_SOLVED;
+                    game->save();
                     getBox(Game::deadmanSeq2Start+11,Game::deadmanSeq2Start+13);
                     break;
                 case Game::UNICORN_QUEST_COMPLETE:
                     game->progress = Game::SECOND_RIDDLE_SOLVED;
+                    game->save();
                     getBox(Game::deadmanSeq3Start+1,Game::deadmanSeq3Start+11);
                     break;
                 case Game::DANCE_QUEST_COMPLETE:
                     game->progress = Game::THIRD_RIDDLE_SOLVED;
+                    game->save();
                     getBox(Game::deadmanSeq4Start+1,Game::deadmanSeq4Start+17);
                     break;
                 case Game::TREE_QUEST_COMPLETE:
                     game->progress = Game::FOURTH_RIDDLE_SOLVED;
+                    game->save();
+                    game->music->setCurrentIndex(6);
+                    game->current_music->setVolume(25);
+                    game->current_music->play();
                     getBox(Game::deadmanSeq6Start+1,Game::deadmanSeq6Start+10);
                     break;
                 case Game::PHILOPHOBE_QUEST_COMPLETE:
                     game->progress = Game::FIFTH_RIDDLE_SOLVED;
+                    //game->save();
+                    game->deadman->setParentItem(game->player);
+                    game->deadman->setPos(game->player->boundingRect().width()+10,0);
+                    game->exit->hide();
                     game->portal->show();
+                    game->music->setCurrentIndex(6);
+                    game->current_music->setVolume(25);
+                    game->current_music->play();
                     getBox(Game::deadmanSeq7Start+2,Game::deadmanSeq7Start+2);
                     break;
                 default:
@@ -117,9 +147,13 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case Game::unicornSeqStart+8:
                 // Закрыть красители
                 delete game->dyegame;
+                game->music->setCurrentIndex(2);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 game->progress = Game::UNICORN_QUEST_COMPLETE;
+                game->save();
                 getBox(Game::unicornSeqStart+9,Game::unicornSeqStart+17);
                 break;
 
@@ -130,16 +164,23 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 
             case Game::coupleSeqStart+8:
                 // Закрыть танец
+                game->music->setCurrentIndex(2);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
                 delete game->dancegame;
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 game->progress = Game::DANCE_QUEST_COMPLETE;
+                game->save();
                 getBox(Game::coupleSeqStart+9,Game::coupleSeqStart+9);
                 break;
 
             case Game::snakeSeqStart+14:
                 // Стреляем змей
+                game->music->setCurrentIndex(5);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 game->player->canShoot = true;
                 for (int i = 0; i < 2; ++i) {
                     game->snake[i]->start();
@@ -149,12 +190,16 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 
             case Game::snakeSeqStart+18:
                 // Стреляем змей
-                game->player->canShoot = true;
+                game->music->setCurrentIndex(2);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 game->progress = Game::SNAKES_DEFEATED;
+                game->save();
                 break;
 
             case Game::deadmanSeq5Start+9:
                 game->progress = Game::AFTER_SNAKES_DIALOG_OVER;
+                game->save();
                 break;
 
             case Game::kalinaSeqStart+6:
@@ -164,9 +209,13 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case Game::kalinaSeqStart+20:
                 // Зыкрыть сырки
                 delete game->snackgame;
+                game->music->setCurrentIndex(2);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 game->progress = Game::TREE_QUEST_COMPLETE;
+                game->save();
                 getBox(Game::kalinaSeqStart+21,Game::kalinaSeqStart+21);
                 break;
 
@@ -183,10 +232,20 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case Game::thinkerSeqStart+14:
                 // Закрыть сапёра
                 delete game->voltorbgame;
+                game->music->setCurrentIndex(2);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
                 game->progress = Game::PHILOPHOBE_QUEST_COMPLETE;
+                game->save();
                 getBox(Game::thinkerSeqStart+15,Game::thinkerSeqStart+18);
+                break;
+
+            case Game::deadmanSeq7Start+25:
+                game->deadman->setParentItem(0);
+                game->deadman->setPos(game->player->x()+game->player->boundingRect().width()+10,game->player->y());
+                game->exit->show();
                 break;
 
             case Game::witchSeqStart+1:
@@ -195,7 +254,17 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 break;
 
             case Game::witchSeqStart+6:
+                game->music->setCurrentIndex(8);
+                game->current_music->setVolume(100);
+                game->current_music->play();
                 game->witch->start();
+                break;
+
+            case Game::witchSeqStart+10:
+                game->music->setCurrentIndex(9);
+                game->current_music->setVolume(100);
+                game->current_music->play();
+                getBox(Game::witchSeqStart+11,Game::witchSeqStart+25);
                 break;
 
             case Game::witchSeqStart+25:
@@ -205,6 +274,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 
             case Game::deadmanSeq8Start+16:
                 game->progress = Game::DEADMANS_FAREWELL;
+                game->save();
                 game->deadman->setParentItem(game->player);
                 game->deadman->setPos(game->player->boundingRect().width(),0);
                 break;
@@ -220,6 +290,8 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 }
 
 void DialogBox::getBox(int in_start, int in_end) {
+    ready_to_change = false;
+    timer->start(750);
 
     start = in_start;
     end = in_end;

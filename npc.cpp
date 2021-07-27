@@ -12,7 +12,8 @@ Couple::Couple(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 
 Deadman::Deadman(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    if (game->progress != Game::START && game->progress != Game::OUTSIDE_EMPTINESS_DISCOVERED) {
+    if (game->progress != Game::START && game->progress != Game::OUTSIDE_EMPTINESS_DISCOVERED
+            && game->progress != Game::DEADMANS_FAREWELL) {
         setPixmap(QPixmap(":/images/deadman-sprite.png"));
     } else if (game->progress == Game::START) {
         setPixmap(QPixmap(":/images/dirt.png"));

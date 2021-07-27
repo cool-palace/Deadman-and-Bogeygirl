@@ -10,6 +10,12 @@ RiddleBox::RiddleBox(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(pa
     setPixmap(QPixmap(":/images/parchment.png"));
     setPos(50, 10);
     hide();
+
+    correctSound = new QMediaPlayer();
+    correctSound->setMedia(QUrl("qrc:/sounds/correct.wav"));
+
+    wrongSound = new QMediaPlayer();
+    wrongSound->setMedia(QUrl("qrc:/sounds/wrong.wav"));
 }
 
 void RiddleBox::showRiddle(const Riddle * riddle) {
@@ -65,6 +71,8 @@ RiddleBox::~RiddleBox() {
     delete[] digits;
     delete question;
     delete confirmButton;
+    delete correctSound;
+    delete wrongSound;
 }
 
 void RiddleBox::checkAnswer() {
@@ -72,9 +80,11 @@ void RiddleBox::checkAnswer() {
     for (int i = 0; i < answer.size(); ++i) {
         s.setNum(digits[i]->value);
         if (s != answer[i]) {
+            wrongSound->play();
             emit result(Game::deadmanSeq2Start+9,Game::deadmanSeq2Start+9);
             return;
         }
     }
     emit result(Game::deadmanSeq2Start+10,Game::deadmanSeq2Start+10);
+    correctSound->play();
 }

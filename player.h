@@ -4,12 +4,13 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
-//#include <QMediaPlayer>
+#include <QMediaPlayer>
 
 class Player : public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
     Player(QGraphicsItem * parent = nullptr);
+    ~Player();
     void keyPressEvent(QKeyEvent * event);
     void setMovable();
     void setImmobile();
@@ -33,6 +34,7 @@ signals:
     void goingIn();
 
 private:
+    QMediaPlayer * bulletSound;
     qreal bullet_size = 1;
     bool isMovable = true;
 

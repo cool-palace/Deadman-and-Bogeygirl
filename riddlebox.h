@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
-#include <QSpinBox>
+#include <QMediaPlayer>
 #include "riddle.h"
 #include "digit.h"
 #include "button.h"
@@ -31,6 +31,8 @@ private:
     Button * confirmButton;
     Digit ** digits;
     QString answer;
+    QMediaPlayer * correctSound;
+    QMediaPlayer * wrongSound;
 };
 
 #endif // RIDDLEBOX_H

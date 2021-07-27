@@ -9,7 +9,12 @@ Chalk::Chalk(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     setPixmap(QPixmap(":/images/asmr.png"));
     cracks = new QGraphicsPixmapItem(this);
     cracks->setPixmap(QPixmap(":/images/cracks.png"));
+    cracks->setPos(0,5);
     cracks->setOpacity(0);
+
+    game->music->setCurrentIndex(3);
+    game->current_music->setVolume(30);
+    game->current_music->play();
 
     setAcceptHoverEvents(true);
 }

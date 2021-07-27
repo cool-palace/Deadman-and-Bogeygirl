@@ -7,6 +7,7 @@
 #include <QBrush>
 #include <QPen>
 #include <QFont>
+#include <QMediaPlayer>
 
 class VoltorbGame : public QObject, public QGraphicsPixmapItem
 {
@@ -47,6 +48,8 @@ private:
     QString level_str = "<p style=\"text-align:center;\">Уровень: %1</p>";
     int level = 1;
     long int points = 1;
+    QMediaPlayer * correctSound;
+    QMediaPlayer * wrongSound;
 
 };
 

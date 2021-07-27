@@ -6,6 +6,7 @@
 #include <QBrush>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QMediaPlayer>
 
 class DanceGame : public QObject, public QGraphicsPixmapItem
 {
@@ -32,7 +33,8 @@ private:
     QGraphicsRectItem * score_bg;
     QGraphicsTextItem * score;
     QString score_str = "<p style=\"text-align:center;\">Счёт: %1</p>";
-
+    QMediaPlayer * correctSound;
+    QMediaPlayer * wrongSound;
     int correctCount = 0;
     int tact = 0;
     int pxPos, pyPos;

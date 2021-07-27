@@ -21,7 +21,7 @@ DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
     cond_bg->setBrush(brush);
 
     conditions = new QGraphicsTextItem(this); //
-    QString cond = "Всего флаконов с чернилами два, и они стоят рядом друг с другом.<br>При этом в крайних флаконах налито одно и то же,<br>а в самом большом и самом маленьком флаконах — разные жидкости.";
+    QString cond = "Всего флаконов с чернилами два, и они стоят рядом друг с другом.<br>При этом известно, что в крайних флаконах налито одно и то же,<br>а в самом большом и самом маленьком флаконах — разные жидкости.";
     QString str1 = "<p style=\"text-align:center;\">%1</p>";
     conditions->setHtml(str1.arg(cond));
     conditions->setFont({"Comic Sans", 14});
@@ -50,6 +50,12 @@ DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
     resetButton->setPos(600, 475);
     connect(resetButton,SIGNAL(clicked()),this,SLOT(reset()));
 
+    correctSound = new QMediaPlayer();
+    correctSound->setMedia(QUrl("qrc:/sounds/correct.wav"));
+
+    wrongSound = new QMediaPlayer();
+    wrongSound->setMedia(QUrl("qrc:/sounds/wrong.wav"));
+
 }
 
 DyeGame::~DyeGame() {
@@ -59,6 +65,8 @@ DyeGame::~DyeGame() {
     delete text;
     delete confirmButton;
     delete resetButton;
+    delete correctSound;
+    delete wrongSound;
 
     for (int i = 0; i < 5; ++i) {
         delete dyes[i];
@@ -85,7 +93,11 @@ void DyeGame::checkAnswer() {
     case 2:
         if (dyes[2]->collidesWithItem(dye_slot) && dyes[3]->collidesWithItem(dye_slot)) {
             emit result(Game::unicornSeqStart+8,Game::unicornSeqStart+8);
-        } else emit result(Game::unicornSeqStart+7,Game::unicornSeqStart+7);
+            correctSound->play();
+        } else {
+            emit result(Game::unicornSeqStart+7,Game::unicornSeqStart+7);
+            wrongSound->play();
+        }
         break;
     default:
         emit result(Game::unicornSeqStart+6,Game::unicornSeqStart+6);

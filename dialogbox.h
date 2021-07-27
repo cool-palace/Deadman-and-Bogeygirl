@@ -19,6 +19,7 @@ public:
 public slots:
     void getBox(int start, int end);
     void monologueCall();
+    void dialog_recharge();
 
 signals:
     void chalkCall();
@@ -32,6 +33,8 @@ private:
     QGraphicsTextItem * line;
     QGraphicsPixmapItem * avatar;
     QString right_aligned_str = "<p style=\"text-align:right;\">%1</p>";
+    QTimer * timer;
+    bool ready_to_change = true;
 };
 
 #endif // DIALOGBOX_H

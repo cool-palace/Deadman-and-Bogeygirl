@@ -137,6 +137,12 @@ VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem
             bomb_indicator[i]->setPos((i - 5)*65+offset_x+2,ind_offset_y+25+2);
         }
     }
+
+    correctSound = new QMediaPlayer();
+    correctSound->setMedia(QUrl("qrc:/sounds/correct.wav"));
+
+    wrongSound = new QMediaPlayer();
+    wrongSound->setMedia(QUrl("qrc:/sounds/wrong.wav"));
 }
 
 VoltorbGame::~VoltorbGame() {
@@ -145,6 +151,8 @@ VoltorbGame::~VoltorbGame() {
     delete score_bg;
     delete score;
     delete level_ind;
+    delete correctSound;
+    delete wrongSound;
 
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
@@ -183,10 +191,12 @@ void VoltorbGame::open(int value) {
         level = 1;
         level_ind->setHtml(level_str.arg(level));
         emit result(Game::thinkerSeqStart+11,Game::thinkerSeqStart+11);
+        wrongSound->play();
     } else {
         ++level;
         level_ind->setHtml(level_str.arg(level));
         result(Game::thinkerSeqStart+10+level, Game::thinkerSeqStart+10+level);
+        correctSound->play();
     }
 }
 

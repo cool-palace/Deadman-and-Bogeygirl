@@ -7,6 +7,7 @@
 #include "snack.h"
 #include <QBrush>
 #include <button.h>
+#include <QMediaPlayer>
 
 class SnackGame : public QObject, public QGraphicsPixmapItem
 {
@@ -29,6 +30,8 @@ private:
     QGraphicsRectItem * cond_bg;
     QGraphicsTextItem * conditions;
     Button * confirmButton;
+    QMediaPlayer * correctSound;
+    QMediaPlayer * wrongSound;
 };
 
 #endif // SNACKGAME_H
