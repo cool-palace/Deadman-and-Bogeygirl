@@ -3,17 +3,40 @@
 
 #include <QObject>
 #include <QGraphicsRectItem>
-#include "card.h"
 #include <QBrush>
 #include <QPen>
 #include <QFont>
 #include <QMediaPlayer>
+#include <QGraphicsSceneMouseEvent>
 
-class VoltorbGame : public QObject, public QGraphicsPixmapItem
-{
+class Card : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
-    VoltorbGame(QGraphicsItem* parent=NULL);
+    Card(int level, QGraphicsItem *parent = nullptr);
+
+public slots:
+    int val() { return value; }
+    void flip();
+    void change(int level);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
+signals:
+    void pointCardOpen(int);
+    void explode(int);
+
+private:
+    int value;
+    bool flipped = false;
+    bool flagged = false;
+};
+
+
+class VoltorbGame : public QObject, public QGraphicsPixmapItem {
+    Q_OBJECT
+public:
+    VoltorbGame(QGraphicsItem* parent = nullptr);
     ~VoltorbGame();
 
 public slots:
@@ -50,7 +73,6 @@ private:
     long int points = 1;
     QMediaPlayer * correctSound;
     QMediaPlayer * wrongSound;
-
 };
 
 #endif // VOLTORBGAME_H

@@ -3,7 +3,7 @@
 #include <QFont>
 #include <QDebug>
 
-Digit::Digit(int digit,  QGraphicsItem* parent) : QGraphicsTextItem(parent)
+Digit::Digit(int digit, QGraphicsItem* parent) : QGraphicsTextItem(parent)
 {
     if (digit < 0 || digit > 9) return;
     value = digit;

@@ -4,8 +4,81 @@
 
 extern Game * game;
 
-VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
-{
+Card::Card(int level, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {
+    change(level);
+}
+
+void Card::change(int level) {
+    setPixmap(QPixmap(":/images/tile.png"));
+    flipped = false;
+    flagged = false;
+
+    if (level > 3) level = 3;
+    int rng = rand() % 100;
+
+    switch (level) {
+    case 1:
+        if (rng < 25) value = 0; // 25%
+        else if (rng < 80 && rng >= 25) value = 1; // 55%
+        else if (rng < 95 && rng >= 80) value = 2; // 15%
+        else if (rng < 100 && rng >= 95) value = 3; // 5%
+        break;
+    case 2:
+        if (rng < 25) value = 0; // 25%
+        else if (rng < 70 && rng >= 25) value = 1; // 45%
+        else if (rng < 90 && rng >= 70) value = 2; // 20%
+        else if (rng < 100 && rng >= 90) value = 3; // 10%
+        break;
+    case 3:
+        if (rng < 25) value = 0; // 25%
+        else if (rng < 65 && rng >= 25) value = 1; // 40%
+        else if (rng < 85 && rng >= 65) value = 2; // 20%
+        else if (rng < 100 && rng >= 85) value = 3; // 15%
+        break;
+    }
+    setAcceptHoverEvents(true);
+}
+
+void Card::flip() {
+    flipped = true;
+    setAcceptHoverEvents(false);
+    QString str = ":/images/tile-%1.png";
+    setPixmap(QPixmap(str.arg(value)));
+}
+
+void Card::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    if (event->button() == Qt::LeftButton && !flipped) {
+        flip();
+        if (value > 1) emit pointCardOpen(value);
+        else if (value == 0) emit explode(value);
+    } else if (event->button() == Qt::RightButton && !flipped) {
+        if (!flagged) {
+            flagged = true;
+            setPixmap(QPixmap(":/images/tile-flag-yellow.png"));
+        } else {
+            flagged = false;
+            setPixmap(QPixmap(":/images/tile-yellow.png"));
+        }
+    }
+}
+
+void Card::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
+    if (!flagged) {
+        setPixmap(QPixmap(":/images/tile-yellow.png"));
+    } else setPixmap(QPixmap(":/images/tile-flag-yellow.png"));
+
+}
+
+void Card::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
+    if (!flagged) {
+        setPixmap(QPixmap(":/images/tile.png"));
+    } else setPixmap(QPixmap(":/images/tile-flag.png"));
+
+}
+
+VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/bg.png"));
 
     brush.setStyle(Qt::SolidPattern);
@@ -23,7 +96,7 @@ VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem
     QString cond = "Открой все бонусные карточки левой кнопкой мыши и избегай бомб,<br>иначе все очки сбросятся. Цель — пройти три уровня.<br>Правой кнопкой можно помечать опасные или бесполезные карточки.";
     QString str1 = "<p style=\"text-align:center;\">%1</p>";
     conditions->setHtml(str1.arg(cond));
-    conditions->setFont({"Comic Sans", 14});
+    conditions->setFont({"Calibri", 14});
     conditions->setTextWidth(700);
     conditions->setPos(50,40);
 
@@ -35,13 +108,13 @@ VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem
     score->setHtml(score_str.arg(points));
     score->setPos(50,150);
     score->setTextWidth(120);
-    score->setFont({"Comic Sans", 14});
+    score->setFont({"Calibri", 14});
 
     level_ind = new QGraphicsTextItem(this);
     level_ind->setHtml(level_str.arg(points));
     level_ind->setPos(50,200);
     level_ind->setTextWidth(120);
-    level_ind->setFont({"Comic Sans", 14});
+    level_ind->setFont({"Calibri", 14});
 
     offset_x = game->scene->width()/2 - 150 - 5 * 2;
     offset_y = 150;
@@ -60,10 +133,10 @@ VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem
             card[i][j] = new Card(level, this);
             card[i][j]->setPos(j*65+offset_x,i*65+offset_y);
 
-            if (card[i][j]->value > 0) {
-                points_row[i] += card[i][j]->value;
-                points_col[j] += card[i][j]->value;
-                if (card[i][j]->value > 1) {
+            if (card[i][j]->val() > 0) {
+                points_row[i] += card[i][j]->val();
+                points_col[j] += card[i][j]->val();
+                if (card[i][j]->val() > 1) {
                     ++pointCardsLeft;
                     connect(card[i][j],SIGNAL(pointCardOpen(int)),this,SLOT(increaseScore(int)));
                 }
@@ -112,7 +185,7 @@ VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem
 
         bomb_indicator[i] = new QGraphicsTextItem(this);
         bomb_indicator[i]->setTextWidth(58);
-        bomb_indicator[i]->setFont({"Comic Sans", 14});
+        bomb_indicator[i]->setFont({"Calibri", 14});
 
         bomb_pics[i] = new QGraphicsPixmapItem(this);
         bomb_pics[i]->setPixmap(QPixmap(":/images/bomb.png"));
@@ -169,12 +242,12 @@ VoltorbGame::~VoltorbGame() {
     }
 }
 
-void VoltorbGame::increaseScore(int val) {
-    points *= val;
+void VoltorbGame::increaseScore(int value) {
+    points *= value;
     score->setHtml(score_str.arg(points));
 
     --pointCardsLeft;
-    if (pointCardsLeft == 0) open(val);
+    if (pointCardsLeft == 0) open(value);
 }
 
 void VoltorbGame::open(int value) {
@@ -195,13 +268,12 @@ void VoltorbGame::open(int value) {
     } else {
         ++level;
         level_ind->setHtml(level_str.arg(level));
-        result(Game::thinkerSeqStart+10+level, Game::thinkerSeqStart+10+level);
+        emit result(Game::thinkerSeqStart+10+level, Game::thinkerSeqStart+10+level);
         correctSound->play();
     }
 }
 
 void VoltorbGame::reset() {
-
     for (int i = 0; i < 5; ++i) {
         points_row[i] = 0;
         points_col[i] = 0;
@@ -211,15 +283,15 @@ void VoltorbGame::reset() {
 
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
-            if (card[i][j]->value == 0) disconnect(card[i][j],SIGNAL(explode(int)),this,SLOT(open(int)));
-            if (card[i][j]->value > 0) disconnect(card[i][j],SIGNAL(pointCardOpen(int)),this,SLOT(increaseScore(int)));
+            if (card[i][j]->val() == 0) disconnect(card[i][j],SIGNAL(explode(int)),this,SLOT(open(int)));
+            if (card[i][j]->val() > 0) disconnect(card[i][j],SIGNAL(pointCardOpen(int)),this,SLOT(increaseScore(int)));
 
             card[i][j]->change(level);
 
-            if (card[i][j]->value > 0) {
-                points_row[i] += card[i][j]->value;
-                points_col[j] += card[i][j]->value;
-                if (card[i][j]->value > 1) {
+            if (card[i][j]->val() > 0) {
+                points_row[i] += card[i][j]->val();
+                points_col[j] += card[i][j]->val();
+                if (card[i][j]->val() > 1) {
                     ++pointCardsLeft;
                     connect(card[i][j],SIGNAL(pointCardOpen(int)),this,SLOT(increaseScore(int)));
                 }
@@ -241,5 +313,4 @@ void VoltorbGame::reset() {
             bomb_indicator[i]->setHtml(str.arg(bombs_col[i-5]));
         }
     }
-
 }

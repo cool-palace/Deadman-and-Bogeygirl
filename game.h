@@ -8,7 +8,6 @@
 #include "player.h"
 #include "npc.h"
 #include "dialogbox.h"
-//#include "dialogs.h"
 #include "chalk.h"
 #include "riddlebox.h"
 #include "cave.h"
@@ -18,7 +17,6 @@
 #include "dyegame.h"
 #include "dancegame.h"
 #include "voltorbgame.h"
-#include "redwhite.h"
 
 class Game: public QGraphicsView{
     Q_OBJECT

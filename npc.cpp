@@ -5,13 +5,32 @@
 
 extern Game * game;
 
-Couple::Couple(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
-{
+GameObject::GameObject(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {}
+
+Enemy::Enemy(QGraphicsItem *parent) : GameObject(parent) {}
+
+Cave::Cave(QGraphicsItem *parent) : GameObject(parent) {
+    setPixmap(QPixmap(":/images/cave.png"));
+}
+
+bool Cave::interact() {
+    game->player->setImmobile();
+    return true;
+}
+
+Couple::Couple(QGraphicsItem *parent): GameObject(parent) {
     setPixmap(QPixmap(":/images/couple-sprite.png"));
 }
 
-Deadman::Deadman(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
-{
+bool Couple::interact() {
+    game->player->setImmobile();
+    if (game->progress == Game::SECOND_RIDDLE_SOLVED) {
+        game->dialogbox->getBox(Game::coupleSeqStart,Game::coupleSeqStart+7);
+    }
+    return true;
+}
+
+Deadman::Deadman(QGraphicsItem *parent): GameObject(parent) {
     if (game->progress != Game::START && game->progress != Game::OUTSIDE_EMPTINESS_DISCOVERED
             && game->progress != Game::DEADMANS_FAREWELL) {
         setPixmap(QPixmap(":/images/deadman-sprite.png"));
@@ -20,24 +39,59 @@ Deadman::Deadman(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
     } else setPixmap(QPixmap(":/images/deadman-alive-sprite.png"));
 }
 
-Dog::Dog(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
-{
+bool Deadman::interact() {
+    game->player->setImmobile();
+    switch (game->progress) {
+    case Game::START:
+        game->deadman->setPixmap(QPixmap(":/images/deadman-sprite.png"));
+        game->deadman->setPos(game->scene->width()/2 - game->deadman->boundingRect().width()/2, 100);
+        game->dialogbox->getBox(Game::deadmanSeq1Start+4,Game::deadmanSeq1Start+30);
+        break;
+    case Game::DOG_QUEST_COMPLETE:
+        game->dialogbox->getBox(Game::deadmanSeq2Start,Game::deadmanSeq2Start+4);
+        break;
+    case Game::UNICORN_QUEST_COMPLETE:
+        game->dialogbox->getBox(Game::deadmanSeq3Start,Game::deadmanSeq3Start);
+        break;
+    case Game::DANCE_QUEST_COMPLETE:
+        game->dialogbox->getBox(Game::deadmanSeq4Start,Game::deadmanSeq4Start);
+        break;
+    case Game::SNAKES_DEFEATED:
+        game->dialogbox->getBox(Game::deadmanSeq5Start,Game::deadmanSeq5Start+9);
+        break;
+    case Game::TREE_QUEST_COMPLETE:
+        game->dialogbox->getBox(Game::deadmanSeq6Start,Game::deadmanSeq6Start);
+        break;
+    case Game::PHILOPHOBE_QUEST_COMPLETE:
+        game->dialogbox->getBox(Game::deadmanSeq7Start,Game::deadmanSeq7Start+1);
+        break;
+    case Game::WITCH_DEFEATED:
+        game->dialogbox->getBox(Game::deadmanSeq8Start,Game::deadmanSeq8Start+16);
+        break;
+    default:
+        break;
+    }
+    return true;
+}
+
+Dog::Dog(QGraphicsItem *parent): GameObject(parent) {
     setPixmap(QPixmap(":/images/dog-sprite.png"));
 
-    // make/connect a timer to move() the bullet every so often
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
-
-    // start the timer
     timer->start(100);
 }
 
-Dog::~Dog(){
+Dog::~Dog() {
     delete timer;
 }
 
-void Dog::move(){
+bool Dog::interact() {
 
+    return true;
+}
+
+void Dog::move() {
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
         if (dynamic_cast<Player*>(colliding_items[i]) || dynamic_cast<Kids*>(colliding_items[i])){
@@ -49,9 +103,9 @@ void Dog::move(){
         }
     }
 
-    int theta = rand() % 360;
-    double x_diff = 20 * qSin(qDegreesToRadians((double) theta));
-    double y_diff = 20 * qCos(qDegreesToRadians((double) theta));
+    qreal theta = static_cast<qreal>(rand() % 360);
+    qreal x_diff = 20 * qSin(qDegreesToRadians(theta));
+    qreal y_diff = 20 * qCos(qDegreesToRadians(theta));
 
     QPointF diff = {x_diff, y_diff};
 
@@ -90,35 +144,107 @@ void Dog::move(){
     if (can_move) setPos(newPos);
 }
 
-Kids::Kids(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
-{
+Entrance::Entrance(QGraphicsItem *parent) : GameObject(parent) {
+    setPixmap(QPixmap(":/images/cave-entrance.png"));
+}
+
+bool Entrance::interact() {
+    switch (game->progress) {
+    case Game::DOG_QUEST_STARTED: case Game::SNAKE_FIGHT_STARTED: case Game::FIFTH_RIDDLE_SOLVED:
+        game->player->setImmobile();
+        return true;
+    default:
+        emit game->player->goingIn();
+        return false;
+    }
+}
+
+Exit::Exit(QGraphicsItem *parent) : GameObject(parent) {
+    setPixmap(QPixmap(":/images/exit.png"));
+}
+
+bool Exit::interact() {
+    emit game->player->goingOut();
+    return false;
+}
+
+Kids::Kids(QGraphicsItem *parent): GameObject(parent) {
     setPixmap(QPixmap(":/images/kids-sprite.png"));
 }
 
-Snake::Snake(int id, QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent), id(id)
-{
+bool Kids::interact() {
+    if (game->player->childItems().empty()) {
+        game->player->setImmobile();
+        game->dialogbox->getBox(Game::kidsSeqStart,Game::kidsSeqStart+10);
+    }
+    return true;
+}
+
+Portal::Portal(QGraphicsItem *parent) : GameObject(parent) {
+    setPixmap(QPixmap(":/images/portal.png"));
+}
+
+bool Portal::interact() {
+    switch (game->progress) {
+    case Game::FIFTH_RIDDLE_SOLVED:
+        game->player->setImmobile();
+        game->dialogbox->getBox(Game::deadmanSeq7Start+3,Game::deadmanSeq7Start+25);
+        break;
+    case Game::WITCH_DEFEATED:
+        game->player->setImmobile();
+        break;
+    case Game::DEADMANS_FAREWELL:
+        game->displayMainMenu();
+        return false;
+        break;
+    default:
+        break;
+    }
+    return true;
+}
+
+RedWhite::RedWhite(QGraphicsItem *parent): GameObject(parent) {
+    setPixmap(QPixmap(":/images/kb.png"));
+}
+
+bool RedWhite::interact() {
+    game->player->setImmobile();
+    if (game->progress == Game::DOG_QUEST_STARTED) {
+        game->dialogbox->getBox(Game::kidsSeqStart+16,Game::kidsSeqStart+17);
+    }
+    return true;
+}
+
+Snake::Snake(int id, QGraphicsItem *parent): Enemy(parent), id(id) {
     QString str = ":/images/snake-%1-sprite.png";
     setPixmap(QPixmap(str.arg(id+1)));
 
-    // make/connect a timer to move() the bullet every so often
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
 }
 
-Snake::~Snake(){
+Snake::~Snake() {
     delete timer;
+}
+
+bool Snake::interact() {
+    if (!moving && !dead) {
+        game->player->setImmobile();
+        game->dialogbox->getBox(Game::snakeSeqStart,Game::snakeSeqStart+14);
+    } else if (dead) {
+        game->dialogbox->getBox(Game::snakeSeqStart+16+id,Game::snakeSeqStart+16+id);
+    }
+    return true;
 }
 
 int Snake::shotCount = 0;
 
 void Snake::start() {
-    // start the timer
     timer->start(100);
     moving = true;
 }
 
-void Snake::move(){
-
+void Snake::move() {
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
         if (dynamic_cast<Player*>(colliding_items[i])){
@@ -128,9 +254,9 @@ void Snake::move(){
         }
     }
 
-    int theta = rand() % 360;
-    double x_diff = 20 * qSin(qDegreesToRadians((double) theta));
-    double y_diff = 20 * qCos(qDegreesToRadians((double) theta));
+    qreal theta = static_cast<qreal>(rand() % 360);
+    qreal x_diff = 20 * qSin(qDegreesToRadians(theta));
+    qreal y_diff = 20 * qCos(qDegreesToRadians(theta));
 
     QPointF diff = {x_diff, y_diff};
 
@@ -181,26 +307,44 @@ void Snake::shot() {
     }
 }
 
-Thinker::Thinker(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
-{
+Thinker::Thinker(QGraphicsItem *parent): GameObject(parent) {
     setPixmap(QPixmap(":/images/thinker-sprite.png"));
 }
 
-Tree::Tree(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
-{
+bool Thinker::interact() {
+    game->player->setImmobile();
+    if (game->progress == Game::FOURTH_RIDDLE_SOLVED) {
+        game->dialogbox->getBox(Game::thinkerSeqStart,Game::thinkerSeqStart+10);
+    }
+    return true;
+}
+
+Tree::Tree(QGraphicsItem *parent): GameObject(parent) {
     setPixmap(QPixmap(":/images/kalina-sprite.png"));
 }
 
-Unicorn::Unicorn(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
-{
+bool Tree::interact() {
+    game->player->setImmobile();
+    if (game->progress == Game::AFTER_SNAKES_DIALOG_OVER) {
+        game->dialogbox->getBox(Game::kalinaSeqStart,Game::kalinaSeqStart+6);
+    }
+    return true;
+}
+
+Unicorn::Unicorn(QGraphicsItem *parent) : GameObject(parent) {
     setPixmap(QPixmap(":/images/unicorn-sprite.png"));
 }
 
-Witch::Witch(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
-{
-    setPixmap(QPixmap(":/images/witch-sprite.png"));
+bool Unicorn::interact() {
+    game->player->setImmobile();
+    if (game->progress == Game::FIRST_RIDDLE_SOLVED) {
+        game->dialogbox->getBox(Game::unicornSeqStart,Game::unicornSeqStart+3);
+    }
+    return true;
+}
 
-    // make/connect a timer to move() the bullet every so often
+Witch::Witch(QGraphicsItem *parent): Enemy(parent) {
+    setPixmap(QPixmap(":/images/witch-sprite.png"));
     move_timer = new QTimer(this);
     connect(move_timer,SIGNAL(timeout()),this,SLOT(move()));
     shoot_timer = new QTimer(this);
@@ -209,14 +353,18 @@ Witch::Witch(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
     hurt_timer->setSingleShot(true);
 }
 
-Witch::~Witch(){
+Witch::~Witch() {
     delete move_timer;
     delete shoot_timer;
     delete hurt_timer;
 }
 
+bool Witch::interact() {
+
+    return true;
+}
+
 void Witch::start() {
-    // start the timer
     move_timer->start(100);
     shoot_timer->start(1000);
 }
@@ -243,7 +391,6 @@ if (direction_up) {
             colliding_items[i]->setPos(game->scene->width() - colliding_items[i]->boundingRect().width(), colliding_items[i]->y());
         }
     }
-
 }
 
 void Witch::shoot() {

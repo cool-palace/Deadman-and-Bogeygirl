@@ -13,8 +13,6 @@ CONFIG += resources_big
 SOURCES += \
     bullet.cpp \
     button.cpp \
-    card.cpp \
-    cave.cpp \
     chalk.cpp \
     dancegame.cpp \
     dialogbox.cpp \
@@ -25,35 +23,28 @@ SOURCES += \
     main.cpp \
     npc.cpp \
     player.cpp \
-    redwhite.cpp \
     riddle.cpp \
     riddlebox.cpp \
     snack.cpp \
     snackgame.cpp \
-    speechline.cpp \
     voltorbgame.cpp
 
 HEADERS += \
     bullet.h \
     button.h \
-    card.h \
-    cave.h \
     chalk.h \
     dancegame.h \
     dialogbox.h \
-    dialogs.h \
     digit.h \
     dye.h \
     dyegame.h \
     game.h \
     npc.h \
     player.h \
-    redwhite.h \
     riddle.h \
     riddlebox.h \
     snack.h \
     snackgame.h \
-    speechline.h \
     voltorbgame.h
 
 FORMS +=
