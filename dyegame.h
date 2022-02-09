@@ -3,19 +3,36 @@
 
 #include <QObject>
 #include <QGraphicsRectItem>
-#include "dye.h"
 #include "button.h"
 #include <QBrush>
 #include <QMediaPlayer>
+#include <QGraphicsSceneMouseEvent>
+#include <QCursor>
 
-class DyeGame : public QObject, public QGraphicsPixmapItem
-{
+class Dye : public QObject, public QGraphicsPixmapItem {
+    Q_OBJECT
+public:
+    Dye(int id, QGraphicsItem *parent = nullptr);
+    ~Dye() override = default;
+
+public slots:
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+
+private:
+    QPointF m_shiftMouseCoords;
+};
+
+class DyeGame : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     DyeGame(QGraphicsItem *parent = nullptr);
     ~DyeGame();
 
-public slots:
+private slots:
     void checkAnswer();
     void reset();
 

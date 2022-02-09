@@ -4,19 +4,40 @@
 #include <QObject>
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
-#include "snack.h"
 #include <QBrush>
 #include <button.h>
 #include <QMediaPlayer>
 
-class SnackGame : public QObject, public QGraphicsPixmapItem
-{
+class Snack : public QObject, public QGraphicsPixmapItem {
+    Q_OBJECT
+public:
+    Snack(int id, QGraphicsItem * parent = nullptr);
+    ~Snack() override = default;
+
+public slots:
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+
+signals:
+    void degustation(int, int);
+
+private:
+    int taste;
+    static int last_taste;
+    QPointF m_shiftMouseCoords;
+};
+
+class SnackGame : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     SnackGame(QGraphicsItem* parent = nullptr);
-    ~SnackGame();
+    ~SnackGame() override;
 
-public slots:
+private slots:
     void checkAnswer();
 
 signals:

@@ -4,8 +4,67 @@
 
 extern Game * game;
 
-SnackGame::SnackGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
-{
+Snack::Snack(int id, QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(parent) {
+    QString str = ":/images/syrok-small-%1.png";
+    setPixmap(QPixmap(str.arg(id+1)));
+    switch (id) {
+    case 0:
+        taste = 4;
+        break;
+    case 1:
+        taste = 2;
+        break;
+    case 2:
+        taste = 1;
+        break;
+    case 3:
+        taste = 5;
+        break;
+    case 4:
+        taste = 3;
+        break;
+    }
+    setAcceptHoverEvents(true);
+}
+
+void Snack::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    setPos(mapToScene(event->pos() + m_shiftMouseCoords));
+}
+
+void Snack::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    m_shiftMouseCoords = pos() - mapToScene(event->pos());
+    setCursor(QCursor(Qt::ClosedHandCursor));
+}
+
+void Snack::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    setCursor(QCursor(Qt::ArrowCursor));
+    Q_UNUSED(event);
+}
+
+void Snack::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event);
+    if (last_taste == 0) {
+        emit degustation(Game::kalinaSeqStart+7,Game::kalinaSeqStart+7);
+    } else {
+        int taste_diff = taste - last_taste;
+        emit degustation(taste_diff+Game::kalinaSeqStart+12,taste_diff+Game::kalinaSeqStart+12);
+    }
+    last_taste = taste;
+}
+
+void Snack::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
+    setCursor(QCursor(Qt::OpenHandCursor));
+}
+
+void Snack::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
+    setCursor(QCursor(Qt::ArrowCursor));
+}
+
+int Snack::last_taste = 0;
+
+SnackGame::SnackGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/bg.png"));
 
     brush.setStyle(Qt::SolidPattern);
@@ -19,7 +78,7 @@ SnackGame::SnackGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
     QString cond = "Попробуй сырки двойным кликом и расположи их в порядке улучшения вкуса. При этом вкусовые ощущения от каждого сырка будут зависеть<br>от того, какой из них ты попробовала последним.";
     QString str1 = "<p style=\"text-align:center;\">%1</p>";
     conditions->setHtml(str1.arg(cond));
-    conditions->setFont({"Comic Sans", 14});
+    conditions->setFont({"Calibri", 14});
     conditions->setTextWidth(700);
     conditions->setPos(50,40);
 
@@ -37,7 +96,7 @@ SnackGame::SnackGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
         number[i] = new QGraphicsTextItem(this);
         QString str = "<p style=\"text-align:center;\">#%1</p>";
         number[i]->setHtml(str.arg(5 - i));
-        number[i]->setFont({"Comic Sans", 30});
+        number[i]->setFont({"Calibri", 30});
         number[i]->setTextWidth(136);
         number[i]->setPos(i*156+offset,320+20);
 
@@ -71,7 +130,6 @@ SnackGame::~SnackGame() {
 }
 
 void SnackGame::checkAnswer() {
-
     bool all_placed = true;
 
     for (int i = 0; i < 5; ++i) {

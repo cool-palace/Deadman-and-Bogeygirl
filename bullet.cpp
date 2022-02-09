@@ -5,18 +5,14 @@
 
 extern Game * game;
 
-Bullet::Bullet(int dir, qreal size, QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
-{
+Bullet::Bullet(int dir, qreal size, QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/bullet.png"));
     setScale(size);
 
     direction = static_cast<directions>(dir);
 
-    // make/connect a timer to move() the bullet every so often
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
-
-    // start the timer
     timer->start(50);
     ++bullet_count;
     show();
@@ -25,9 +21,9 @@ Bullet::Bullet(int dir, qreal size, QGraphicsItem *parent): QObject(), QGraphics
 Bullet::~Bullet() {
     delete timer;
     --bullet_count;
-};
+}
 
-void Bullet::move(){
+void Bullet::move() {
     int step = 15;
 
     switch (direction) {
@@ -47,24 +43,9 @@ void Bullet::move(){
 
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
-        if (dynamic_cast<Snake*>(colliding_items[i])){
-            Snake * snake = dynamic_cast<Snake*>(colliding_items[i]);
-            connect(this,SIGNAL(hitTarget()),snake,SLOT(shot()));
-            emit hitTarget();
-            delete this;
-            return;
-        } else if (dynamic_cast<Witch*>(colliding_items[i])) {
-            Witch * witch = dynamic_cast<Witch*>(colliding_items[i]);
-            connect(this,SIGNAL(hitTarget()),witch,SLOT(shot()));
-            emit hitTarget();
-            if (game->progress == Game::DEADMAN_REVIVED) {
-                --witch->lives;
-                if (witch->lives == 0) {
-                    game->progress = Game::WITCH_DEFEATED;
-                    delete witch;
-                    game->deadman->show();
-                }
-            }
+        Enemy * enemy = dynamic_cast<Enemy*>(colliding_items[i]);
+        if (enemy) {
+            enemy->shot();
             delete this;
             return;
         } else if (dynamic_cast<Spell*>(colliding_items[i])) {
@@ -82,39 +63,30 @@ void Bullet::move(){
 
 int Bullet::bullet_count = 0;
 
-Spell::Spell(QGraphicsItem *parent): QGraphicsTextItem(parent)
-{
-
+Spell::Spell(QGraphicsItem *parent): QGraphicsTextItem(parent) {
     setDefaultTextColor(Qt::white);
-    setFont({"Comic Sans", 16});
+    setFont({"Verdana", 16});
     setHtml(spells[rand()%3]);
 
-    // make/connect a timer to move() the bullet every so often
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
-
-    // start the timer
     timer->start(50);
     show();
 }
 
 Spell::~Spell() {
     delete timer;
-};
+}
 
-void Spell::move(){
+void Spell::move() {
     int step = 15;
-
     setPos(x()+step,y());
 
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
-        if (dynamic_cast<Player*>(colliding_items[i])){
-            game->player = dynamic_cast<Player*>(colliding_items[i]);
-            if (game->player->x()+game->player->boundingRect().width() + 100 < game->scene->width()) {
-                game->player->setPos(game->player->x()+100, game->player->y());
-            } else game->player->setPos(game->scene->width() - game->player->boundingRect().width(), game->player->y());
-
+        Player* player = dynamic_cast<Player*>(colliding_items[i]);
+        if (player) {
+            player->shot();
             delete this;
             return;
         }

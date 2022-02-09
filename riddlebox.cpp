@@ -2,11 +2,116 @@
 #include <QGraphicsScene>
 #include "game.h"
 #include <QDebug>
+#include <QtMath>
 
 extern Game * game;
 
-RiddleBox::RiddleBox(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(parent)
-{
+Chalk::Chalk(QGraphicsItem *parent) : QGraphicsPixmapItem(parent) {
+    setPixmap(QPixmap(":/images/asmr.png"));
+    cracks = new QGraphicsPixmapItem(this);
+    cracks->setPixmap(QPixmap(":/images/cracks.png"));
+    cracks->setPos(0,5);
+    cracks->setOpacity(0);
+
+    game->music->setCurrentIndex(3);
+    game->current_music->setVolume(30);
+    game->current_music->play();
+
+    setAcceptHoverEvents(true);
+}
+
+Chalk::~Chalk() {
+    delete cracks;
+}
+
+void Chalk::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    QPointF p = start - mapToScene(event->pos());
+    if (sqrt(p.x()*p.x() + p.y()*p.y()) > 300) {
+        start = mapToScene(event->pos());
+
+        game->crushSound[cracksCount]->play();
+
+        if (cracksCount < 5) {
+            if (cracksCount == 4) {
+                int riddle_number = 0;
+                switch (game->progress) {
+                case Game::DOG_QUEST_COMPLETE:
+                    riddle_number = 0;
+                    game->dialogbox->getBox(Game::deadmanSeq2Start+6,Game::deadmanSeq2Start+8);
+                    break;
+                case Game::UNICORN_QUEST_COMPLETE:
+                    riddle_number = 1;
+                    break;
+                case Game::DANCE_QUEST_COMPLETE:
+                    riddle_number = 2;
+                    break;
+                case Game::TREE_QUEST_COMPLETE:
+                    riddle_number = 3;
+                    break;
+                case Game::PHILOPHOBE_QUEST_COMPLETE:
+                    riddle_number = 4;
+                    break;
+                default:
+                    break;
+                }
+                emit cracked(game->riddles[riddle_number]);
+                delete this;
+                return;
+            }
+            ++cracksCount;
+            cracks->setOpacity(static_cast<qreal>(cracksCount)/5);
+        }
+    }
+}
+
+void Chalk::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    setCursor(QCursor(Qt::ClosedHandCursor));
+    start = mapToScene(event->pos());
+}
+
+void Chalk::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event);
+    setCursor(QCursor(Qt::OpenHandCursor));
+}
+
+void Chalk::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
+    setCursor(QCursor(Qt::OpenHandCursor));
+}
+
+void Chalk::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
+    setCursor(QCursor(Qt::ArrowCursor));
+}
+
+Digit::Digit(int digit, QGraphicsItem* parent) : QGraphicsTextItem(parent) {
+    if (digit < 0 || digit > 9) return;
+    value = digit;
+
+    setHtml(str.arg(value));
+    setFont({"Calibri", 60});
+    setTextWidth(100);
+    setPos(0,(120 - boundingRect().height())/2 + 30);
+
+    setEnabled(false);
+    setAcceptHoverEvents(false);
+}
+
+void Digit::increase() {
+    if (value < 9) {
+        ++value;
+    } else value = 0;
+    setHtml(str.arg(value));
+}
+
+void Digit::decrease() {
+    if (value > 0) {
+        --value;
+    } else value = 9;
+    setHtml(str.arg(value));
+}
+
+RiddleBox::RiddleBox(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/parchment.png"));
     setPos(50, 10);
     hide();
@@ -18,25 +123,23 @@ RiddleBox::RiddleBox(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(pa
     wrongSound->setMedia(QUrl("qrc:/sounds/wrong.wav"));
 }
 
-void RiddleBox::showRiddle(const Riddle * riddle) {
-
+void RiddleBox::showRiddle(const Riddle& riddle) {
     // writing the question
     question = new QGraphicsTextItem(this);
-    question->setHtml(riddle->question);
+    question->setHtml(riddle.question);
     question->setDefaultTextColor(Qt::black);
-    question->setFont({"Comic Sans", 18});
-//    qreal textWidth = (question->boundingRect().width()-200) / question->scale();
+    question->setFont({"Calibri", 18});
     qreal textWidth = 500;
     question->setTextWidth(textWidth);
 
     // memorizing the answer
-    answer = riddle->answer;
+    answer = riddle.answer;
 
-    int xPos = boundingRect().width()/2 - question->boundingRect().width()/2;
+    int xPos = static_cast<int>(boundingRect().width()/2 - question->boundingRect().width()/2);
     int yPos = 100;
     question->setPos(xPos,yPos);
 
-    digitsCount = riddle->answer.length();
+    digitsCount = riddle.answer.length();
 
     upButtons = new Button*[digitsCount];
     downButtons = new Button*[digitsCount];
@@ -62,7 +165,6 @@ void RiddleBox::showRiddle(const Riddle * riddle) {
     connect(confirmButton,SIGNAL(clicked()),this,SLOT(checkAnswer()));
 
     show();
-
 }
 
 RiddleBox::~RiddleBox() {
@@ -78,7 +180,7 @@ RiddleBox::~RiddleBox() {
 void RiddleBox::checkAnswer() {
     QString s;
     for (int i = 0; i < answer.size(); ++i) {
-        s.setNum(digits[i]->value);
+        s.setNum(digits[i]->val());
         if (s != answer[i]) {
             wrongSound->play();
             emit result(Game::deadmanSeq2Start+9,Game::deadmanSeq2Start+9);

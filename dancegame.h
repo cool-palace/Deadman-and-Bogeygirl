@@ -8,23 +8,23 @@
 #include <QKeyEvent>
 #include <QMediaPlayer>
 
-class DanceGame : public QObject, public QGraphicsPixmapItem
-{
+class DanceGame : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     DanceGame(QGraphicsItem *parent = nullptr);
-    ~DanceGame();
-    //QGraphicsTextItem * text[5] = {nullptr};
-    void keyPressEvent(QKeyEvent * event);
-    QTimer * timer;
+    ~DanceGame() override;
+
+public slots:
+    void keyPressEvent(QKeyEvent * event) override;
 
 signals:
     void result(int, int);
 
-public slots:
+private slots:
     void change();
 
 private:
+    QTimer * timer;
     QBrush brush;
     QGraphicsPixmapItem * sprite;
     QGraphicsRectItem * directions[4] = {nullptr};

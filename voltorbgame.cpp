@@ -67,7 +67,6 @@ void Card::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
     if (!flagged) {
         setPixmap(QPixmap(":/images/tile-yellow.png"));
     } else setPixmap(QPixmap(":/images/tile-flag-yellow.png"));
-
 }
 
 void Card::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
@@ -75,7 +74,6 @@ void Card::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
     if (!flagged) {
         setPixmap(QPixmap(":/images/tile.png"));
     } else setPixmap(QPixmap(":/images/tile-flag.png"));
-
 }
 
 VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {
@@ -92,7 +90,7 @@ VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem
     cond_bg->setRect(50,30, 700, 100);
     cond_bg->setBrush(brush);
 
-    conditions = new QGraphicsTextItem(this); //
+    conditions = new QGraphicsTextItem(this);
     QString cond = "Открой все бонусные карточки левой кнопкой мыши и избегай бомб,<br>иначе все очки сбросятся. Цель — пройти три уровня.<br>Правой кнопкой можно помечать опасные или бесполезные карточки.";
     QString str1 = "<p style=\"text-align:center;\">%1</p>";
     conditions->setHtml(str1.arg(cond));
@@ -116,7 +114,7 @@ VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem
     level_ind->setTextWidth(120);
     level_ind->setFont({"Calibri", 14});
 
-    offset_x = game->scene->width()/2 - 150 - 5 * 2;
+    offset_x = static_cast<int>(game->scene->width()/2 - 150 - 5 * 2);
     offset_y = 150;
 
     // Инициализируем исходные значения
@@ -149,7 +147,7 @@ VoltorbGame::VoltorbGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem
     }
 
     // Создаём индикаторы
-    ind_offset_x = game->scene->width()/2 + 150 + 5 * 3;
+    ind_offset_x = static_cast<int>(game->scene->width()/2 + 150 + 5 * 3);
     ind_offset_y = 5*65+offset_y;
 
     for (int i = 0; i < 10; ++i) {

@@ -8,21 +8,18 @@
 #include "player.h"
 #include "npc.h"
 #include "dialogbox.h"
-#include "chalk.h"
 #include "riddlebox.h"
-#include "cave.h"
 #include <QVector>
-#include <riddle.h>
 #include "snackgame.h"
 #include "dyegame.h"
 #include "dancegame.h"
 #include "voltorbgame.h"
 
-class Game: public QGraphicsView{
+class Game: public QGraphicsView {
     Q_OBJECT
 public:
     // constructors
-    Game(QWidget * parent=0);
+    Game(QWidget * parent = nullptr);
 
     // public methods
     void save();

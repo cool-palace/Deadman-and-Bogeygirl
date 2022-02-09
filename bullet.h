@@ -5,12 +5,11 @@
 #include <QGraphicsPixmapItem>
 #include <QTimer>
 
-class Bullet : public QObject, public QGraphicsPixmapItem
-{
+class Bullet : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     Bullet(int dir, qreal size, QGraphicsItem *parent = nullptr);
-    ~Bullet();
+    ~Bullet() override;
     enum directions {
         UP,
         DOWN,
@@ -31,12 +30,11 @@ private:
     QTimer * timer;
 };
 
-class Spell : public QGraphicsTextItem
-{
+class Spell : public QGraphicsTextItem {
     Q_OBJECT
 public:
     Spell(QGraphicsItem *parent = nullptr);
-    ~Spell();
+    ~Spell() override;
 
 public slots:
     void move();
@@ -47,7 +45,6 @@ signals:
 private:
     QTimer * timer;
     const QVector<QString> spells = {"<i>мукакбы</i>", "<i>нукакбы</i>", "<i>молкакбы</i>"};
-
 };
 
 #endif // BULLET_H

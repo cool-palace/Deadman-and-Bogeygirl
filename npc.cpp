@@ -1,11 +1,52 @@
 #include "npc.h"
 #include "game.h"
 #include "bullet.h"
-#include "qmath.h"
+#include <QtMath>
 
 extern Game * game;
 
 GameObject::GameObject(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {}
+
+void GameObject::random_movement() {
+    qreal theta = static_cast<qreal>(rand() % 360);
+    qreal x_diff = 20 * qSin(qDegreesToRadians(theta));
+    qreal y_diff = 20 * qCos(qDegreesToRadians(theta));
+
+    QPointF diff = {x_diff, y_diff};
+
+    if (x()+x_diff < 0) {
+        diff.setX(-x());
+    }
+    if (x()+x_diff > game->scene->width()) {
+        diff.setX(game->scene->width() - boundingRect().width()*scale() - x());
+    }
+    if (y()+y_diff < 0) {
+        diff.setY(-y());
+    }
+    if (y()+y_diff > game->scene->height()) {
+        diff.setY(game->scene->height() - boundingRect().height()*scale() - y());
+    }
+
+    bool can_move = true;
+    QPointF newPos = pos() + diff;
+    QGraphicsRectItem * rect = new QGraphicsRectItem(newPos.x(), newPos.y(),
+                                                     boundingRect().width()*scale(), boundingRect().height()*scale());
+    game->scene->addItem(rect);
+    rect->hide();
+
+    QList<QGraphicsItem *> colliding_items = rect->collidingItems();
+
+    if (colliding_items.size() > 1) {
+        for (int i = 1, n = colliding_items.size(); i < n; ++i) {
+            if (dynamic_cast<Cave*>(colliding_items[i])) {
+                can_move = false;
+            }
+        }
+    }
+    delete rect;
+
+    if (can_move) setPos(newPos);
+}
 
 Enemy::Enemy(QGraphicsItem *parent) : GameObject(parent) {}
 
@@ -87,61 +128,21 @@ Dog::~Dog() {
 }
 
 bool Dog::interact() {
-
     return true;
 }
 
 void Dog::move() {
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
-        if (dynamic_cast<Player*>(colliding_items[i]) || dynamic_cast<Kids*>(colliding_items[i])){
-            emit game->player->dialogCall(Game::kidsSeqStart+11,Game::kidsSeqStart+15);
-            this->setParentItem(game->player);;
+        if (dynamic_cast<Player*>(colliding_items[i]) || dynamic_cast<Kids*>(colliding_items[i])) {
+            game->dialogbox->getBox(Game::kidsSeqStart+11,Game::kidsSeqStart+15);
+            setParentItem(game->player);;
             setPos(-69,30);
             disconnect(timer,SIGNAL(timeout()),this,SLOT(move()));
             return;
         }
     }
-
-    qreal theta = static_cast<qreal>(rand() % 360);
-    qreal x_diff = 20 * qSin(qDegreesToRadians(theta));
-    qreal y_diff = 20 * qCos(qDegreesToRadians(theta));
-
-    QPointF diff = {x_diff, y_diff};
-
-    if (x()+x_diff < 0) {
-        diff.setX(-x());
-    }
-    if (x()+x_diff > game->scene->width()) {
-        diff.setX(game->scene->width() - boundingRect().width()*scale() - x());
-    }
-    if (y()+y_diff < 0) {
-        diff.setY(-y());
-    }
-    if (y()+y_diff > game->scene->height()) {
-        diff.setY(game->scene->height() - boundingRect().height()*scale() - y());
-    }
-
-    bool can_move = true;
-    QPointF newPos = pos() + diff;
-    QGraphicsRectItem * rect = new QGraphicsRectItem(newPos.x(), newPos.y(),
-                                                     boundingRect().width()*scale(), boundingRect().height()*scale());
-    game->scene->addItem(rect);
-    rect->hide();
-
-    colliding_items = rect->collidingItems();
-
-    if (colliding_items.size() > 1) {
-        for (int i = 1, n = colliding_items.size(); i < n; ++i){
-
-            if (dynamic_cast<Cave*>(colliding_items[i])) {
-                can_move = false;
-            }
-        }
-    }
-    delete rect;
-
-    if (can_move) setPos(newPos);
+    random_movement();
 }
 
 Entrance::Entrance(QGraphicsItem *parent) : GameObject(parent) {
@@ -196,7 +197,6 @@ bool Portal::interact() {
     case Game::DEADMANS_FAREWELL:
         game->displayMainMenu();
         return false;
-        break;
     default:
         break;
     }
@@ -248,51 +248,12 @@ void Snake::move() {
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
         if (dynamic_cast<Player*>(colliding_items[i])){
-            emit game->player->dialogCall(Game::snakeSeqStart+15,Game::snakeSeqStart+15);
+            game->dialogbox->getBox(Game::snakeSeqStart+15,Game::snakeSeqStart+15);
             setPos(x()+rand()%100, y()+rand()%100);
             return;
         }
     }
-
-    qreal theta = static_cast<qreal>(rand() % 360);
-    qreal x_diff = 20 * qSin(qDegreesToRadians(theta));
-    qreal y_diff = 20 * qCos(qDegreesToRadians(theta));
-
-    QPointF diff = {x_diff, y_diff};
-
-    if (x()+x_diff < 0) {
-        diff.setX(-x());
-    }
-    if (x()+x_diff > game->scene->width()) {
-        diff.setX(game->scene->width() - boundingRect().width()*scale() - x());
-    }
-    if (y()+y_diff < 0) {
-        diff.setY(-y());
-    }
-    if (y()+y_diff > game->scene->height()) {
-        diff.setY(game->scene->height() - boundingRect().height()*scale() - y());
-    }
-
-    bool can_move = true;
-    QPointF newPos = pos() + diff;
-    QGraphicsRectItem * rect = new QGraphicsRectItem(newPos.x(), newPos.y(),
-                                                     boundingRect().width()*scale(), boundingRect().height()*scale());
-    game->scene->addItem(rect);
-    rect->hide();
-
-    colliding_items = rect->collidingItems();
-
-    if (colliding_items.size() > 1) {
-        for (int i = 1, n = colliding_items.size(); i < n; ++i){
-
-            if (dynamic_cast<Cave*>(colliding_items[i])) {
-                can_move = false;
-            }
-        }
-    }
-    delete rect;
-
-    if (can_move) setPos(newPos);
+    random_movement();
 }
 
 void Snake::shot() {
@@ -303,7 +264,7 @@ void Snake::shot() {
         dead = true;
         disconnect(timer,SIGNAL(timeout()),this,SLOT(move()));
         ++shotCount;
-        if (Snake::shotCount == 2) emit game->player->dialogCall(Game::snakeSeqStart+18, Game::snakeSeqStart+18);
+        if (Snake::shotCount == 2) game->dialogbox->getBox(Game::snakeSeqStart+18, Game::snakeSeqStart+18);
     }
 }
 
@@ -351,6 +312,7 @@ Witch::Witch(QGraphicsItem *parent): Enemy(parent) {
     connect(shoot_timer,SIGNAL(timeout()),this,SLOT(shoot()));
     hurt_timer = new QTimer(this);
     hurt_timer->setSingleShot(true);
+    connect(hurt_timer,SIGNAL(timeout()),this,SLOT(recover()));
 }
 
 Witch::~Witch() {
@@ -400,9 +362,16 @@ void Witch::shoot() {
 }
 
 void Witch::shot() {
-     setPixmap(QPixmap(":/images/witch-hurt.png"));
-     hurt_timer->start(50);
-     connect(hurt_timer,SIGNAL(timeout()),this,SLOT(recover()));
+    lives -= game->progress == Game::DEADMAN_REVIVED ? 1 : 0;
+
+    if (lives > 0) {
+        setPixmap(QPixmap(":/images/witch-hurt.png"));
+        hurt_timer->start(50);
+    } else {
+        game->progress = Game::WITCH_DEFEATED;
+        delete this;
+        game->deadman->show();
+    }
 }
 
 void Witch::recover() {

@@ -4,8 +4,38 @@
 
 extern Game * game;
 
-DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
-{
+Dye::Dye(int id, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {
+    QString str = ":/images/dye-small-%1.png";
+    setPixmap(QPixmap(str.arg(id+1)));
+    setAcceptHoverEvents(true);
+}
+
+void Dye::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    this->setPos(mapToScene(event->pos() + m_shiftMouseCoords));
+}
+
+void Dye::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event);
+    m_shiftMouseCoords = pos() - mapToScene(event->pos());
+    setCursor(QCursor(Qt::ClosedHandCursor));
+}
+
+void Dye::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event);
+    setCursor(QCursor(Qt::ArrowCursor));
+}
+
+void Dye::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
+    setCursor(QCursor(Qt::OpenHandCursor));
+}
+
+void Dye::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
+    setCursor(QCursor(Qt::ArrowCursor));
+}
+
+DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/bg.png"));
 
     brush.setStyle(Qt::SolidPattern);
@@ -24,14 +54,14 @@ DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
     QString cond = "Всего флаконов с чернилами два, и они стоят рядом друг с другом.<br>При этом известно, что в крайних флаконах налито одно и то же,<br>а в самом большом и самом маленьком флаконах — разные жидкости.";
     QString str1 = "<p style=\"text-align:center;\">%1</p>";
     conditions->setHtml(str1.arg(cond));
-    conditions->setFont({"Comic Sans", 14});
+    conditions->setFont({"Calibri", 14});
     conditions->setTextWidth(700);
     conditions->setPos(50,40);
 
     text = new QGraphicsTextItem(this);
     QString str = "<p style=\"text-align:center;\">Найди чернила и помести их сюда.</p>";
     text->setHtml(str);
-    text->setFont({"Comic Sans", 12});
+    text->setFont({"Calibri", 12});
     text->setTextWidth(180);
     text->setPos(offset+10,270);
 
@@ -55,7 +85,6 @@ DyeGame::DyeGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
 
     wrongSound = new QMediaPlayer();
     wrongSound->setMedia(QUrl("qrc:/sounds/wrong.wav"));
-
 }
 
 DyeGame::~DyeGame() {
@@ -74,7 +103,6 @@ DyeGame::~DyeGame() {
 }
 
 void DyeGame::checkAnswer() {
-
     QList<QGraphicsItem *> colliding_items = dye_slot->collidingItems();
     for (int i = 0; i < colliding_items.size(); ++i) {
         if (colliding_items[i]->zValue() < 10) {

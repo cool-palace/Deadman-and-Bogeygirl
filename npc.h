@@ -14,6 +14,7 @@ public:
 
 public slots:
     virtual bool interact() = 0;
+    void random_movement();
 };
 
 class Enemy : public GameObject {
@@ -105,7 +106,7 @@ public slots:
 class RedWhite : public GameObject {
     Q_OBJECT
 public:
-    RedWhite(QGraphicsItem * parent=0);
+    RedWhite(QGraphicsItem * parent = nullptr);
 
 public slots:
     bool interact() override;

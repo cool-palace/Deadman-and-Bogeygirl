@@ -19,6 +19,14 @@ Player::~Player() {
     delete bulletSound;
 }
 
+void Player::enable_shooting() {
+    canShoot = true;
+}
+
+void Player::disable_shooting() {
+    canShoot = false;
+}
+
 void Player::setMovable() {
     isMovable = true;
 }
@@ -61,8 +69,7 @@ void Player::keyPressEvent(QKeyEvent *event) {
     QPointF diff = {0, 0};
     if (event->key() == Qt::Key_Left || event->key() == Qt::Key_A) {
         if (direction != LEFT) {
-            setPixmap(QPixmap(":/images/player-left.png"));
-            direction = LEFT;
+            set_direction(LEFT);
         }
         if (x() > 0) {
             if (x()-step > 0) {
@@ -71,8 +78,7 @@ void Player::keyPressEvent(QKeyEvent *event) {
         }
     } else if (event->key() == Qt::Key_Right || event->key() == Qt::Key_D) {
         if (direction != RIGHT) {
-            setPixmap(QPixmap(":/images/player-right.png"));
-            direction = RIGHT;
+            set_direction(RIGHT);
         }
         if (x() < game->scene->width() - boundingRect().width()*scale()) {
             if (x()+step < game->scene->width() - boundingRect().width()*scale()) {
@@ -117,10 +123,10 @@ void Player::keyPressEvent(QKeyEvent *event) {
     }
 
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
-        if (dynamic_cast<GameObject*>(colliding_items.at(i))) {
-            GameObject * npc = dynamic_cast<GameObject*>(colliding_items.at(i));
-            // interact() returns false on passages
-            if (!npc->interact()) return;
+        GameObject * npc = dynamic_cast<GameObject*>(colliding_items.at(i));
+        if (npc && !npc->interact()) {
+            // interact() returns false on passages and true on NPCs
+            return;
         }
     }
 
@@ -133,6 +139,21 @@ void Player::keyPressEvent(QKeyEvent *event) {
             QRectF newView = {game->currentViewPos.x(),game->currentViewPos.y(),800,600};
             game->setSceneRect(newView);
         }
+    }
+}
+
+void Player::shot() {
+    if (x()+boundingRect().width() + 100 < game->scene->width()) {
+        setPos(x()+100, y());
+    } else setPos(game->scene->width() - boundingRect().width(), y());
+}
+
+void Player::set_direction(directions dir) {
+    direction = dir;
+    if (dir == LEFT) {
+        setPixmap(QPixmap(":/images/player-left.png"));
+    } else if (dir == RIGHT) {
+        setPixmap(QPixmap(":/images/player-right.png"));
     }
 }
 

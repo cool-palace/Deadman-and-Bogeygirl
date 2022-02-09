@@ -13,37 +13,27 @@ CONFIG += resources_big
 SOURCES += \
     bullet.cpp \
     button.cpp \
-    chalk.cpp \
     dancegame.cpp \
     dialogbox.cpp \
-    digit.cpp \
-    dye.cpp \
     dyegame.cpp \
     game.cpp \
     main.cpp \
     npc.cpp \
     player.cpp \
-    riddle.cpp \
     riddlebox.cpp \
-    snack.cpp \
     snackgame.cpp \
     voltorbgame.cpp
 
 HEADERS += \
     bullet.h \
     button.h \
-    chalk.h \
     dancegame.h \
     dialogbox.h \
-    digit.h \
-    dye.h \
     dyegame.h \
     game.h \
     npc.h \
     player.h \
-    riddle.h \
     riddlebox.h \
-    snack.h \
     snackgame.h \
     voltorbgame.h
 

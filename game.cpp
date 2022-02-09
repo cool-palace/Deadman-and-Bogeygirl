@@ -110,7 +110,7 @@ void Game::start(){
 
     case OUTSIDE_EMPTINESS_DISCOVERED: {
         current_music->stop();
-        player->canShoot = true;
+        player->enable_shooting();
         player->setPos(scene->width() - player->boundingRect().width(), scene->height()/2-player->boundingRect().height()/2);
         deadman->hide();
         exit->hide();
@@ -160,9 +160,9 @@ void Game::displayMainMenu(){
     setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
     // create the title text
     QGraphicsTextItem* titleText = new QGraphicsTextItem(QString("Открыточка"));
-    QFont titleFont("Comic Sans",50);
+    QFont titleFont("Calibri",50);
     titleText->setFont(titleFont);
-    int txPos = this->width()/2 - titleText->boundingRect().width()/2;
+    int txPos = width()/2 - titleText->boundingRect().width()/2;
     int tyPos = 150;
     titleText->setPos(txPos,tyPos);
     scene->addItem(titleText);
@@ -174,7 +174,7 @@ void Game::displayMainMenu(){
     } else {
         playButton = new Button(QString("Заново"));
     }
-    int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
+    int bxPos = width()/2 - playButton->boundingRect().width()/2;
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
     connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
@@ -182,7 +182,7 @@ void Game::displayMainMenu(){
 
     // create the quit button
     quitButton = new Button(QString("Выйти"));
-    int qxPos = this->width()/2 - quitButton->boundingRect().width()/2;
+    int qxPos = width()/2 - quitButton->boundingRect().width()/2;
     int qyPos = 350;
     quitButton->setPos(qxPos,qyPos);
     connect(quitButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -190,7 +190,7 @@ void Game::displayMainMenu(){
 
     if (progress == DEADMANS_FAREWELL) {
         lastButton = new Button(QString("Клад"));
-        int lxPos = this->width()/2 - quitButton->boundingRect().width()/2;
+        int lxPos = width()/2 - quitButton->boundingRect().width()/2;
         int lyPos = 425;
         lastButton->setPos(lxPos,lyPos);
         connect(lastButton,SIGNAL(clicked()),this,SLOT(deadmans_note()));
@@ -224,7 +224,7 @@ void Game::asmr() {
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
     scene->addItem(dialogbox);
 
-    connect(chalk,SIGNAL(cracked(const Riddle *)),riddlebox,SLOT(showRiddle(const Riddle *)));
+    connect(chalk,SIGNAL(cracked(const Riddle&)),riddlebox,SLOT(showRiddle(const Riddle&)));
     connect(riddlebox,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
 
     if (progress == DOG_QUEST_COMPLETE) dialogbox->getBox(Game::deadmanSeq2Start+5,Game::deadmanSeq2Start+5);

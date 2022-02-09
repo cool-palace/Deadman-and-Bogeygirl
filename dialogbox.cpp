@@ -4,20 +4,16 @@
 #include <QRectF>
 #include <QKeyEvent>
 #include <QDebug>
-#include "redwhite.h"
 
-extern Game * game; // there is an external global object called game
+extern Game * game;
 
 int DialogBox::start = 0;
 int DialogBox::end = 0;
 
-DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (parent)
-{
-    // set the brush
+DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (parent) {
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::darkBlue);
-
     setRect(0,450,800,150);
     setBrush(brush);
     setZValue(1);
@@ -26,7 +22,7 @@ DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (par
     avatar = new QGraphicsPixmapItem(this);
 
     line->setDefaultTextColor(Qt::white);
-    line->setFont({"Comic Sans", 16});
+    line->setFont({"Calibri", 16});
     line->setTextWidth(640);
 
     setEnabled(true);
@@ -48,10 +44,8 @@ void DialogBox::dialog_recharge() {
     ready_to_change = true;
 }
 
-void DialogBox::keyPressEvent(QKeyEvent *event){
-
+void DialogBox::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Space && ready_to_change) {
-
         if (start == end) {
             hide();
             game->player->setFocus();
@@ -167,7 +161,6 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 game->music->setCurrentIndex(2);
                 game->current_music->setVolume(50);
                 game->current_music->play();
-                disconnect(game->dancegame->timer,SIGNAL(timeout()),this,SLOT(game->dancegame->change()));
                 delete game->dancegame;
                 game->scene->setSceneRect(0,0,Game::worldSize,Game::worldSize);
                 game->setSceneRect(game->currentViewPos.x(),game->currentViewPos.y(),800,600);
@@ -181,7 +174,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 game->music->setCurrentIndex(5);
                 game->current_music->setVolume(50);
                 game->current_music->play();
-                game->player->canShoot = true;
+                game->player->enable_shooting();
                 for (int i = 0; i < 2; ++i) {
                     game->snake[i]->start();
                 }
@@ -243,7 +236,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 break;
 
             case Game::deadmanSeq7Start+25:
-                game->deadman->setParentItem(0);
+                game->deadman->setParentItem(nullptr);
                 game->deadman->setPos(game->player->x()+game->player->boundingRect().width()+10,game->player->y());
                 game->exit->show();
                 break;
@@ -280,12 +273,10 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 break;
             }
 
-
         } else {
             ++start;
             getBox(start, end);
         }
-
     }
 }
 

@@ -14,12 +14,11 @@ public:
     QString line;
 };
 
-
 class DialogBox : public QObject, public QGraphicsRectItem {
     Q_OBJECT
 public:
     DialogBox(QGraphicsItem * parent = nullptr);
-    ~DialogBox();
+    ~DialogBox() override;
     static int start;
     static int end;
 
@@ -27,7 +26,7 @@ public slots:
     void getBox(int start, int end);
     void monologueCall();
     void dialog_recharge();
-    void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent * event) override;
 
 signals:
     void chalkCall();
