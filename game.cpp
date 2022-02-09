@@ -154,7 +154,7 @@ void Game::displayMainMenu() {
     setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
 
     // create the title text
-    QGraphicsTextItem* titleText = new QGraphicsTextItem(QString("Бабайка"));
+    QGraphicsTextItem* titleText = new QGraphicsTextItem(QString("Мертвец и Бабайка"));
     QFont titleFont("Calibri",50);
     titleText->setFont(titleFont);
     int txPos = width()/2 - titleText->boundingRect().width()/2;
