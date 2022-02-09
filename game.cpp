@@ -4,14 +4,11 @@
 #include <QGraphicsTextItem>
 #include "snackgame.h"
 
-Game::Game(QWidget* parent)
-{
-    // create the scene
+Game::Game(QWidget* parent) {
+    Q_UNUSED(parent);
     scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,800,600); // make the scene 800x600 instead of infinity by infinity (default)
+    scene->setSceneRect(0,0,800,600);
 
-    // make the newly created scene the scene to visualize (since Game is a QGraphicsView Widget,
-    // it can be used to visualize scenes)
     setScene(scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -34,8 +31,7 @@ Game::Game(QWidget* parent)
     current_music->setPlaylist(music);
 }
 
-void Game::start(){
-
+void Game::start() {
     if (progress == DEADMANS_FAREWELL) {
         progress = START;
     }
@@ -48,7 +44,6 @@ void Game::start(){
         current_music->play();
     }
 
-    // clear the screen
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/cave-bg.png")));
     scene->setSceneRect(0,0,800,600);
@@ -97,9 +92,9 @@ void Game::start(){
 
     switch (progress) {
 
-    case START: {
+    case START:
         dialogbox->getBox(deadmanSeq1Start,deadmanSeq1Start+3);
-        break; }
+        break;
 
     case Game::PHILOPHOBE_QUEST_COMPLETE: {
         portal = new Portal();
@@ -137,8 +132,7 @@ void Game::start(){
     show();
 }
 
-void Game::displayMainMenu(){
-
+void Game::displayMainMenu() {
     music->setCurrentIndex(0);
     current_music->setVolume(100);
     current_music->play();
@@ -158,8 +152,9 @@ void Game::displayMainMenu(){
 
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
+
     // create the title text
-    QGraphicsTextItem* titleText = new QGraphicsTextItem(QString("Открыточка"));
+    QGraphicsTextItem* titleText = new QGraphicsTextItem(QString("Бабайка"));
     QFont titleFont("Calibri",50);
     titleText->setFont(titleFont);
     int txPos = width()/2 - titleText->boundingRect().width()/2;
@@ -168,7 +163,6 @@ void Game::displayMainMenu(){
     scene->addItem(titleText);
 
     // create the play button
-
     if (progress != DEADMANS_FAREWELL) {
         playButton = new Button(QString("Читать"));
     } else {
@@ -188,6 +182,7 @@ void Game::displayMainMenu(){
     connect(quitButton,SIGNAL(clicked()),this,SLOT(close()));
     scene->addItem(quitButton);
 
+    /* Easter egg section
     if (progress == DEADMANS_FAREWELL) {
         lastButton = new Button(QString("Клад"));
         int lxPos = width()/2 - quitButton->boundingRect().width()/2;
@@ -196,10 +191,10 @@ void Game::displayMainMenu(){
         connect(lastButton,SIGNAL(clicked()),this,SLOT(deadmans_note()));
         scene->addItem(lastButton);
     }
+    */
 }
 
 void Game::asmr() {
-
     music->setCurrentIndex(3);
     current_music->play();
 
@@ -219,7 +214,6 @@ void Game::asmr() {
     riddlebox = new RiddleBox();
     scene->addItem(riddlebox);
 
-    // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
     scene->addItem(dialogbox);
@@ -231,7 +225,6 @@ void Game::asmr() {
 }
 
 void Game::outside() {
-
     if (progress != FIFTH_RIDDLE_SOLVED) {
         music->setCurrentIndex(2);
         current_music->play();
@@ -241,7 +234,6 @@ void Game::outside() {
         current_music->play();
     }
 
-    // clear the screen
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg-big.png")));
     scene->setSceneRect(0,0,worldSize,worldSize);
@@ -257,7 +249,6 @@ void Game::outside() {
     entrance->setPos(127,195);
     scene->addItem(cave);
 
-    // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
     scene->addItem(dialogbox);
@@ -295,13 +286,13 @@ void Game::outside() {
         connect(dialogbox,SIGNAL(dancegameCall()),this,SLOT(dance_game()));
         break; }
 
-    case THIRD_RIDDLE_SOLVED: {
+    case THIRD_RIDDLE_SOLVED:
         for (int i = 0; i < 2; ++i) {
             snake[i] = new Snake(i);
             snake[i]->setPos(2053 + snake[i]->boundingRect().width()*2*i, 400);
             scene->addItem(snake[i]);
         }
-        break; }
+        break;
 
     case AFTER_SNAKES_DIALOG_OVER: {
         tree = new Tree();
@@ -356,13 +347,12 @@ void Game::snacks_game() {
     current_music->setVolume(10);
     current_music->play();
 
-    // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+    scene->addItem(dialogbox);
 
     snackgame = new SnackGame();
     scene->addItem(snackgame);
-    scene->addItem(dialogbox);
 
     connect(snackgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
     show();
@@ -376,13 +366,12 @@ void Game::dye_game() {
     current_music->setVolume(10);
     current_music->play();
 
-    // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+    scene->addItem(dialogbox);
 
     dyegame = new DyeGame();
-    scene->addItem(dyegame);
-    scene->addItem(dialogbox);
+    scene->addItem(dyegame);    
 
     connect(dyegame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
     show();
@@ -396,16 +385,14 @@ void Game::dance_game() {
     current_music->setVolume(10);
     current_music->play();
 
-    // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+    scene->addItem(dialogbox);
 
     dancegame = new DanceGame();
     scene->addItem(dancegame);
     dancegame->setFlag(QGraphicsItem::ItemIsFocusable);
     dancegame->setFocus();
-
-    scene->addItem(dialogbox);
 
     connect(dancegame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
     show();
@@ -419,19 +406,18 @@ void Game::voltorb_game() {
     current_music->setVolume(10);
     current_music->play();
 
-    // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+    scene->addItem(dialogbox);
 
     voltorbgame = new VoltorbGame();
     scene->addItem(voltorbgame);
-
-    scene->addItem(dialogbox);
 
     connect(voltorbgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
     show();
 }
 
+/* A little easter egg
 void Game::deadmans_note() {
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg.png")));
@@ -442,16 +428,15 @@ void Game::deadmans_note() {
     scene->addItem(treasure_back);
 
     QGraphicsTextItem * treasure_text = new QGraphicsTextItem(treasure_back);
-    QString str = "<p style=\"text-align:center;\">Итак, клад ждёт тебя на Красрабе, дом 60, офис 71. Вторая от угла белая стеклянная дверь. Этаж 1, магазин Сеньорита.<br>Твой ориентир — зелёный кружок на красном фоне или виноград.<br>"
+    QString str = "<p style=\"text-align:center;\">Итак, клад ждёт тебя в секретном месте.<br>"
     "Не забудь взять с собой паспорт, а на месте назови номер и код.<br><br>"
-    "Номер состоит из следующих ключей: <br>"
-    "1. Две средние цифры года твоего рождения, повторённые дважды.<br>2. Четыре цифры, в которых средние две — это последние цифры твоего предыдущего номера телефона, а крайние их повторяют.<br>3. Номер дня недели, в который ты получила эту открытку.<br>4. Номер твоего дома.<br>5. Сумма порядковых алфавитных номеров всех букв из твоего имени, в которой цифры переставлены местами.<br><br>"
-    "Код — это две средние цифры из твоего почтового индекса и две последние цифры из номера твоей медкнижки.<br><br>"
+    "Номер состоит из первых четырёх ключей, которые ты разгадала: <br>0000449932467<br><br>"
+    "Код — это последний ключ: 2515.<br><br>"
     "Удачи!</p>";
 
     treasure_text->setHtml(str);
     treasure_text->setDefaultTextColor(Qt::black);
-    treasure_text->setFont({"Comic Sans", 13});
+    treasure_text->setFont({"Calibri", 13});
     treasure_text->setTextWidth(550);
     int xPos = treasure_back->boundingRect().width()/2 - treasure_text->boundingRect().width()/2;
     int yPos = 80;
@@ -464,8 +449,8 @@ void Game::deadmans_note() {
     quitButton->setPos(qxPos,qyPos);
     connect(quitButton,SIGNAL(clicked()),this,SLOT(displayMainMenu()));
     scene->addItem(quitButton);
-
 }
+*/
 
 void Game::save() {
     QFile save("save.txt");
@@ -477,18 +462,16 @@ void Game::save() {
 }
 
 const QVector<Riddle> Game::riddles = {
-    {"Две средние цифры года твоего рождения, повторённые дважды.", "0000"},
-    {"Средние две цифры — это последние цифры твоего предыдущего номера телефона, а цифры по краям их дублируют.", "4499"},
-    {"Первая цифра — номер дня недели,<br>в который ты получила эту открытку,<br>"
-      "а последние две — номер твоего дома.", "324"},
-    {"Для каждой буквы из своего имени<br>возьми их порядковые номера в алфавите и сложи их все вместе. В полученной сумме поменяй цифры местами.", "67"},
-    {"Две средние цифры из твоего почтового индекса и две последние цифры из номера твоей медкнижки.", "2515"}
-
-    };
+    {"Число, очень похожее на четыре одинаковые буквы", "0000"},
+    {"Средние две цифры — это количество дней в семи неделях, а цифры по краям их дублируют.", "4499"},
+    {"Это число является квадратом и состоит из разных цифр, сумма которых равна 9.", "324"},
+    {"Простое число, цифры в котором расположены по возрастанию, а их сумма равна 13.", "67"},
+    {"Если написать это число наоборот, то оно будет звучать, как номера последних карт при пересчёте колоды без джокеров.", "2515"}
+};
 
 const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Где я?.."}, //0//
-    {":/images/player.png", "Последнее, что я помню — это букет и та странная открытка.<br>Я открыла её, а дальше... Как я здесь оказалась?"},
+    {":/images/player.png", "Как я здесь оказалась? Ничего не помню..."},
     {":/images/player.png", "Здесь так темно и пусто... <br>Только чёрные стены и кучка земли..."},
     {":/images/player.png", "Надо осмотреться, может быть, получится найти выход."}, // +3
     {":/images/player-fear.png", "ААА!!! МЕРТВЕЦ!"}, // +4
@@ -755,24 +738,18 @@ const QVector<Speechline> Game::speech = {
     {":/images/deadman-alive.png", "Стоило мне довериться ему, и земля сама довела меня.<br>Без тебя я никогда бы не задумался и не решился на такое."},
     {":/images/player-annoyed.png", "Это всё очень хорошо, конечно, но я тут вообще-то сражаюсь, и мне нужна помощь."},
     {":/images/deadman-alive.png", "Я освещу эту мрачную пещеру своим сердцем. Твои силы должны увеличиться! Попробуй!"},
-    {":/images/player-annoyed.png", "<i>Как можно сердцем освещать? Ты что, поэт?</i>"},
+    {":/images/player-annoyed.png", "<i>Как можно сердцем освещать? Ты что, Данко, что ли?</i>"},
     {":/images/player.png", "<i>Ладно, неважно. Попробую выстрелить!</i>"}, // +25
 
     {":/images/deadman-alive.png", "Ты сделала это! Потрясающе! Теперь мы свободны, и сам этот мир теперь свободен."},
     {":/images/player-smile.png", "Спасибо, что пришёл. Я уже думала, ты не вернёшься."},
     {":/images/deadman-alive.png", "Это тебе спасибо, что помогла мне спастись. Забавно, что в конечном итоге ты здесь превратилась не в бабайку, а в чудесную фею."},
     {":/images/player.png", "Как ты думаешь, когда мы вернёмся,<br>мы сможем увидеться снова?"},
-    {":/images/deadman-alive.png", "Сложно сказать. Выйдя из портала мы окажемся там, где были до того, как сюда попали. Скорее всего, это будут разные места, возможно, даже разное время."},
+    {":/images/deadman-alive.png", "Сложно сказать. Выйдя из портала, мы окажемся там, где были до того, как сюда попали. Скорее всего, это будут разные места, возможно, даже разное время."},
     {":/images/deadman-alive.png", "Но если повезёт и наши пути пересекутся снова, то я бы хотел тебя увидеть там."},
-    {":/images/deadman-alive.png", "Я придумал! Я оставлю тебе особый клад в специальном месте."},
-    {":/images/player.png", "Особый клад?"},
-    {":/images/deadman-alive.png", "Это знак моей благодарности за то, что ты есть.<br>Слушай внимательно."},
-    {":/images/deadman-alive.png", "Проспект имени Газеты Красноярский Рабочий, дом 60, офис 71. Вторая от угла белая стеклянная дверь. Этаж 1, магазин Сеньорита. Твой ориентир — зелёный кружок на красном фоне или виноград."},
-    {":/images/deadman-alive.png", "Когда придёшь туда, назови номер — это четыре первых ключа подряд, и код — это последний ключ. И захвати с собой паспорт."},
-    {":/images/player-annoyed.png", "... Зачем так сложно?"},
-    {":/images/deadman-alive.png", "Разве так не интереснее?"},
-    {":/images/player-annoyed.png", "Я же не вспомню эти ключи уже!"},
-    {":/images/deadman-alive.png", "Не беспокойся, я всё записал на этот случай.<br>Посмотри потом в главном меню."},
-    {":/images/deadman-alive.png", "А теперь пойдём, нам пора возвращаться. Не об этом месте с тобою мечтали мы. Разве нет?)"},
-    {":/images/deadman-alive.png", "И кстати, с днём рождения! Надеюсь, отметишь там, как следует!"}, // + 16
+    {":/images/player-smile.png", "И я тебя, мертвец."},
+    {":/images/deadman-alive.png", "Но я же не мертвец уже."},
+    {":/images/player-smile.png", "Ну ты же меня бабайкой называешь."},
+    {":/images/deadman-alive.png", "Ну ладно, как скажешь)"},
+    {":/images/deadman-alive.png", "А теперь пойдём, нам пора возвращаться. Не об этом месте с тобою мечтали мы. Разве нет?)"}, // +10
 };

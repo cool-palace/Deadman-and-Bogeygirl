@@ -18,13 +18,8 @@
 class Game: public QGraphicsView {
     Q_OBJECT
 public:
-    // constructors
     Game(QWidget * parent = nullptr);
 
-    // public methods
-    void save();
-
-    // public attributes
     QGraphicsScene * scene;
     Player * player;
     Deadman * deadman;
@@ -55,8 +50,8 @@ public:
     Button* quitButton;
     Button* lastButton;
 
-    QGraphicsPixmapItem * treasure_back;
-    QGraphicsTextItem * treasure_text;
+//    QGraphicsPixmapItem * treasure_back;
+//    QGraphicsTextItem * treasure_text;
 
     QMediaPlaylist * music;
     QMediaPlayer * current_music;
@@ -111,6 +106,7 @@ public:
     constexpr static int deadmanSeq8Start = witchSeqStart + 26;
 
 public slots:
+    void save();
     void start();
     void asmr();
     void outside();
@@ -118,7 +114,7 @@ public slots:
     void dye_game();
     void dance_game();
     void voltorb_game();
-    void deadmans_note();
+//    void deadmans_note();
     void displayMainMenu();
 };
 

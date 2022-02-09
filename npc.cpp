@@ -107,7 +107,7 @@ bool Deadman::interact() {
         game->dialogbox->getBox(Game::deadmanSeq7Start,Game::deadmanSeq7Start+1);
         break;
     case Game::WITCH_DEFEATED:
-        game->dialogbox->getBox(Game::deadmanSeq8Start,Game::deadmanSeq8Start+16);
+        game->dialogbox->getBox(Game::deadmanSeq8Start,Game::deadmanSeq8Start+10);
         break;
     default:
         break;

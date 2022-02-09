@@ -265,7 +265,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event) {
                 game->progress = Game::DEADMAN_REVIVED;
                 break;
 
-            case Game::deadmanSeq8Start+16:
+            case Game::deadmanSeq8Start+10:
                 game->progress = Game::DEADMANS_FAREWELL;
                 game->save();
                 game->deadman->setParentItem(game->player);
